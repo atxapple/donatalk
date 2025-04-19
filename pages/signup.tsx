@@ -1,71 +1,107 @@
-import { useState }    from "react";
-import { useRouter }   from "next/router";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { styled } from "../styles/stitches.config";
 import { auth, firestore } from "../firebase/clientApp";
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import {
+  Wrapper,
+  Card,
+  Title,
+  Subtitle,
+  Field,
+  Label,
+  Input,
+  Textarea,
+  Button,
+  ErrorBox,
+} from "../components/SignupStyles";
+
 
 export default function Signup() {
   const router = useRouter();
   const [form, setForm] = useState({
-    fullName: "", email: "", password: "",
-    organization: "", pitch: "", donation: 50
+    fullName: "",
+    email: "",
+    password: "",
+    organization: "",
+    pitch: "",
+    donation: 50,
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const onChange = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
-
-  const signUpWithEmail = async () => {
-    try {
-      const userCred = await createUserWithEmailAndPassword(auth, form.email, form.password);
-      await updateProfile(userCred.user, { displayName: form.fullName });
-      // write profile doc
-      await setDoc(doc(firestore, "pitchers", userCred.user.uid), {
-        fullName: form.fullName.trim(),
-        email:    form.email.trim(),
-        organization: form.organization.trim() || null,
-        pitch:    form.pitch.trim(),
-        donation: Number(form.donation),
-        createdAt: Date.now()
-      });
-      router.push(`/pitcher/${userCred.user.uid}`);
-    } catch (e: any) {
-      setError(e.message);
-    }
+  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: name === "donation" ? Number(value) : value }));
   };
 
-  const signUpWithGoogle = async () => {
+  const signUpWithEmail = async () => {
+    if (!form.fullName || !form.email || !form.password) {
+      setError("Please fill out all required fields.");
+      return;
+    }
     try {
-      const provider = new GoogleAuthProvider();
-      const userCred = await signInWithPopup(auth, provider);
-      // if new user, create profile
-      const userRef = doc(firestore, "pitchers", userCred.user.uid);
-      await setDoc(userRef, {
-        fullName: userCred.user.displayName,
-        email:    userCred.user.email,
-        organization: null,
-        pitch:    form.pitch.trim(),
-        donation: Number(form.donation),
-        createdAt: Date.now()
-      }, { merge: true });
-      router.push(`/pitcher/${userCred.user.uid}`);
+      setLoading(true);
+      const { user } = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      await updateProfile(user, { displayName: form.fullName });
+      await setDoc(doc(firestore, "pitchers", user.uid), {
+        ...form,
+        createdAt: Date.now(),
+      });
+      router.push(`/pitcher/${user.uid}`);
     } catch (e: any) {
       setError(e.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h1 className="text-2xl mb-4">Pitcher Sign Up</h1>
-      {error && <p className="text-red-600">{error}</p>}
-      <input name="fullName" placeholder="Full Name"    onChange={onChange} className="input" />
-      <input name="email"    placeholder="Email Address" onChange={onChange} className="input" />
-      <input name="password" type="password" placeholder="Password" onChange={onChange} className="input" />
-      <input name="organization" placeholder="Company/Organization (opt.)" onChange={onChange} className="input" />
-      <textarea name="pitch" placeholder="Brief Description of Your Pitch" onChange={onChange} className="input h-24" />
-      <input name="donation" type="number" placeholder="Donation Amount per pitch ($)" value={form.donation}
-             onChange={onChange} className="input" />
-      <button onClick={signUpWithEmail}    className="btn w-full">Sign up with Email</button>
-      <button onClick={signUpWithGoogle}   className="btn w-full mt-2">Sign up with Google</button>
-    </div>
+    <Wrapper>
+      <Card>
+        <Title>Create Your Pitcher Profile</Title>
+        <Subtitle>Share your ideas and support a cause</Subtitle>
+
+        {error && <ErrorBox>{error}</ErrorBox>}
+
+        <Field>
+          <Label>Full Name</Label>
+          <Input name="fullName" value={form.fullName} onChange={onChange} />
+        </Field>
+
+        <Field>
+          <Label>Email Address</Label>
+          <Input name="email" type="email" value={form.email} onChange={onChange} />
+        </Field>
+
+        <Field>
+          <Label>Password</Label>
+          <Input name="password" type="password" value={form.password} onChange={onChange} />
+        </Field>
+
+        <Field>
+          <Label>Company / Organization (optional)</Label>
+          <Input name="organization" value={form.organization} onChange={onChange} />
+        </Field>
+
+        <Field>
+          <Label>Brief Description of Your Pitch</Label>
+          <Textarea name="pitch" rows={4} value={form.pitch} onChange={onChange} />
+        </Field>
+
+        <Field>
+          <Label>Donation Amount per pitch ($)</Label>
+          <Input name="donation" type="number" value={form.donation.toString()} onChange={onChange} />
+        </Field>
+
+        <Button onClick={signUpWithEmail} disabled={loading}>
+          {loading ? "Signing up..." : "Sign up with Email"}
+        </Button>
+      </Card>
+    </Wrapper>
   );
 }
