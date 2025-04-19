@@ -7,19 +7,110 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import {
-  Wrapper,
-  Card,
-  Title,
-  Subtitle,
-  Field,
-  Label,
-  Input,
-  Textarea,
-  Button,
-  ErrorBox,
-} from "../components/SignupStyles";
 
+const Wrapper = styled("div", {
+  minHeight: "100vh",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  padding: "$md",
+  backgroundColor: "$light",
+});
+
+const Card = styled("div", {
+  width: "100%",
+  maxWidth: "500px",
+  backgroundColor: "$white",
+  borderRadius: "$md",
+  boxShadow: "0 8px 20px rgba(0, 0, 0, 0.06)",
+  padding: "$md",
+  display: "flex",
+  flexDirection: "column",
+  gap: "$sm",
+  alignItems: "center",
+});
+
+const Logo = styled("img", {
+  width: "50px",
+  height: "50px",
+  marginBottom: "$sm",
+});
+
+const Title = styled("h1", {
+  fontSize: "$xl",
+  textAlign: "center",
+  color: "$dark",
+  marginBottom: "$xs",
+});
+
+const Subtitle = styled("p", {
+  textAlign: "center",
+  fontSize: "$base",
+  color: "$mediumgray",
+  marginBottom: "$sm",
+});
+
+const Field = styled("div", {
+  display: "flex",
+  flexDirection: "column",
+  gap: "4px",
+  width: "100%",
+});
+
+const Label = styled("label", {
+  fontWeight: "600",
+  color: "$dark",
+});
+
+const Input = styled("input", {
+  padding: "$sm",
+  fontSize: "$base",
+  borderRadius: "$sm",
+  border: "1px solid #ccc",
+  "&:focus": {
+    borderColor: "$heart",
+    outline: "none",
+  },
+});
+
+const Textarea = styled("textarea", {
+  padding: "$sm",
+  fontSize: "$base",
+  borderRadius: "$sm",
+  border: "1px solid #ccc",
+  resize: "vertical",
+  "&:focus": {
+    borderColor: "$heart",
+    outline: "none",
+  },
+});
+
+const Button = styled("button", {
+  backgroundColor: "$heart",
+  color: "white",
+  fontWeight: "600",
+  padding: "$sm",
+  borderRadius: "$sm",
+  border: "none",
+  transition: "background-color 0.3s",
+  marginTop: "$sm",
+  "&:hover": {
+    backgroundColor: "#d73c2c",
+  },
+  "&:disabled": {
+    backgroundColor: "$mediumgray",
+    cursor: "not-allowed",
+  },
+});
+
+const ErrorBox = styled("div", {
+  backgroundColor: "#fee",
+  color: "#a00",
+  padding: "$sm",
+  borderRadius: "$sm",
+  border: "1px solid #faa",
+  width: "100%",
+});
 
 export default function Signup() {
   const router = useRouter();
@@ -63,6 +154,7 @@ export default function Signup() {
   return (
     <Wrapper>
       <Card>
+        <Logo src="http://youngmok.com/public_data/DonaTalk_Logo_150.png" alt="DonaTalk Logo" />
         <Title>Create Your Pitcher Profile</Title>
         <Subtitle>Share your ideas and support a cause</Subtitle>
 
@@ -90,7 +182,7 @@ export default function Signup() {
 
         <Field>
           <Label>Brief Description of Your Pitch</Label>
-          <Textarea name="pitch" rows={4} value={form.pitch} onChange={onChange} />
+          <Textarea name="pitch" rows={3} value={form.pitch} onChange={onChange} />
         </Field>
 
         <Field>
@@ -99,7 +191,7 @@ export default function Signup() {
         </Field>
 
         <Button onClick={signUpWithEmail} disabled={loading}>
-          {loading ? "Signing up..." : "Sign up with Email"}
+          {loading ? "Signing up..." : "Sign up"}
         </Button>
       </Card>
     </Wrapper>
