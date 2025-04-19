@@ -144,10 +144,12 @@ export default function Signup() {
         createdAt: Date.now(),
       });
       router.push(`/pitcher/${user.uid}`);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setError(e.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
     }
   };
 
