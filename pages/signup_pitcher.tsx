@@ -156,7 +156,7 @@ export default function Signup() {
   return (
     <Wrapper>
       <Card>
-        <Logo src="http://youngmok.com/public_data/DonaTalk_Logo_150.png" alt="DonaTalk Logo" />
+        <Logo src="/images/DonaTalk_Logo_150.png" alt="DonaTalk Logo" />
         <Title>Create Your Pitcher Profile</Title>
         <Subtitle>Share your ideas and support a cause</Subtitle>
 
