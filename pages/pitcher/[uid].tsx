@@ -55,13 +55,37 @@ const Form = styled('form', {
   width: '100%',
 });
 
-const Input = styled('input', {
-  padding: '$md',
-  fontSize: '$md',
+const Textarea = styled('textarea', {
+  padding: '$sm',
+  fontSize: '$base',
+  fontFamily: 'inherit',
   borderRadius: '$sm',
   border: '1px solid #ccc',
   width: '100%',
   maxWidth: '550px',
+  resize: 'vertical',
+  '&::placeholder': {
+    fontFamily: 'inherit',
+    fontSize: '$base',
+  },
+  '&:focus': {
+    borderColor: '$heart',
+    outline: 'none',
+  },
+});
+
+const Input = styled('input', {
+  padding: '$sm',
+  fontSize: '$base',
+  fontFamily: 'inherit',
+  borderRadius: '$sm',
+  border: '1px solid #ccc',
+  width: '100%',
+  maxWidth: '550px',
+  '&::placeholder': {
+    fontFamily: 'inherit',
+    fontSize: '$base',
+  },
   '&:focus': {
     borderColor: '$heart',
     outline: 'none',
@@ -83,12 +107,22 @@ const Button = styled('button', {
   },
 });
 
-export default function PitcherPage({ pitcher }: { pitcher: any }) {
+type Pitcher = {
+  fullName: string;
+  pitch: string;
+  donation: number;
+};
+
+export default function PitcherPage({ pitcher }: { pitcher: Pitcher | null }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Thanks! We got your availability.');
+    alert('Thanks! We got your info.');
+    setName('');
+    setEmail('');
     setMessage('');
   };
 
@@ -100,27 +134,42 @@ export default function PitcherPage({ pitcher }: { pitcher: any }) {
         <Logo src="http://youngmok.com/public_data/DonaTalk_Logo_150.png" alt="DonaTalk Logo" />
         <Title>{pitcher.fullName} on DonaTalk</Title>
         <Paragraph>
-          Thanks for interest in listening to {pitcher.fullName}'s story. 
+          🙏 Thanks for interest in listening to {pitcher.fullName}&rsquo;s story.
         </Paragraph>
         <Paragraph>
-          "{pitcher.pitch}"
+          The story is about - &quot;{pitcher.pitch}&quot;
         </Paragraph>
         <Paragraph>
-          {pitcher.fullName} will donate <b> ${pitcher.donation} </b> to support your favorite a non-profit organization (you can choose later) after the meeting
+          {pitcher.fullName} will donate <strong>${pitcher.donation}</strong> to support your favorite non-profit organization
+          (you can choose later) after the meeting.
         </Paragraph>
         <Paragraph>
-          Want to hear the story? Share your available time or link (e.g. Calendly) below.
+          🚀 Ready to chat? Fill out the form to get started:
         </Paragraph>
 
         <Form onSubmit={handleSubmit}>
           <Input
             type="text"
-            placeholder="example 1: Mon 2pm - 5pm or Wed morning"
+            placeholder="Your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <Input
+            type="email"
+            placeholder="Your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <Textarea
+            placeholder="Available times. Example 1: Mon 2pm - 5pm or Wed morning, Example 2: calendly.com/abc-2"
+            rows={2}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             required
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Notify acceptance and availability</Button>
         </Form>
       </Container>
     </Wrapper>
@@ -143,7 +192,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         pitcher: docSnap.data(),
       },
     };
-  } catch (error) {
+  } catch (_error) {
     return {
       props: { pitcher: null },
     };
