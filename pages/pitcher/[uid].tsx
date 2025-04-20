@@ -131,7 +131,7 @@ export default function PitcherPage({ pitcher }: { pitcher: Pitcher | null }) {
   return (
     <Wrapper>
       <Container>
-        <Logo src="http://youngmok.com/public_data/DonaTalk_Logo_150.png" alt="DonaTalk Logo" />
+        <Logo src="/images/DonaTalk_Logo_150.png" alt="DonaTalk Logo" />
         <Title>{pitcher.fullName} on DonaTalk</Title>
         <Paragraph>
           🙏 Thanks for interest in listening to {pitcher.fullName}&rsquo;s story.
