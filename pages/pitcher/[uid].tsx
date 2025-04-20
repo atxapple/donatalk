@@ -192,7 +192,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         pitcher: docSnap.data(),
       },
     };
-  } catch (_error) {
+  } catch {
     return {
       props: { pitcher: null },
     };
