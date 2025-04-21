@@ -7,6 +7,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { Input, Textarea, Button, Field, Label } from "../components/ui";
 
 const Wrapper = styled("div", {
   minHeight: "100vh",
@@ -50,59 +51,6 @@ const Subtitle = styled("p", {
   marginBottom: "$sm",
 });
 
-const Field = styled("div", {
-  display: "flex",
-  flexDirection: "column",
-  gap: "4px",
-  width: "100%",
-});
-
-const Label = styled("label", {
-  fontWeight: "600",
-  color: "$dark",
-});
-
-const Input = styled("input", {
-  padding: "$sm",
-  fontSize: "$base",
-  borderRadius: "$sm",
-  border: "1px solid #ccc",
-  "&:focus": {
-    borderColor: "$heart",
-    outline: "none",
-  },
-});
-
-const Textarea = styled("textarea", {
-  padding: "$sm",
-  fontSize: "$base",
-  borderRadius: "$sm",
-  border: "1px solid #ccc",
-  resize: "vertical",
-  "&:focus": {
-    borderColor: "$heart",
-    outline: "none",
-  },
-});
-
-const Button = styled("button", {
-  backgroundColor: "$heart",
-  color: "white",
-  fontWeight: "600",
-  padding: "$sm",
-  borderRadius: "$sm",
-  border: "none",
-  transition: "background-color 0.3s",
-  marginTop: "$sm",
-  "&:hover": {
-    backgroundColor: "#d73c2c",
-  },
-  "&:disabled": {
-    backgroundColor: "$mediumgray",
-    cursor: "not-allowed",
-  },
-});
-
 const ErrorBox = styled("div", {
   backgroundColor: "#fee",
   color: "#a00",
@@ -139,8 +87,9 @@ export default function Signup() {
       setLoading(true);
       const { user } = await createUserWithEmailAndPassword(auth, form.email, form.password);
       await updateProfile(user, { displayName: form.fullName });
-      await setDoc(doc(firestore, "pitchers", user.uid), {
+      await setDoc(doc(firestore, "users", user.uid), {
         ...form,
+        role: "pitcher",
         createdAt: Date.now(),
       });
       router.push(`/pitcher/${user.uid}`);
