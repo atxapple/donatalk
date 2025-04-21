@@ -120,7 +120,7 @@ export default function Signup() {
     password: "",
     organization: "",
     pitch: "",
-    donation: 50,
+    donation: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -156,7 +156,7 @@ export default function Signup() {
   return (
     <Wrapper>
       <Card>
-        <Logo src="http://youngmok.com/public_data/DonaTalk_Logo_150.png" alt="DonaTalk Logo" />
+        <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
         <Title>Create Your Pitcher Profile</Title>
         <Subtitle>Share your ideas and support a cause</Subtitle>
 
