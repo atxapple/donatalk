@@ -200,7 +200,7 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
             required
           />
           <Textarea
-            placeholder="Introduce your pitch and availability"
+            placeholder="Available times. Example 1: Mon 2pm - 5pm or Wed morning, Example 2: calendly.com/abc-2"
             rows={3}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
