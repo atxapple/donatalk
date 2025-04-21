@@ -131,7 +131,7 @@ export default function PitcherPage({ pitcher }: { pitcher: Pitcher | null }) {
   return (
     <Wrapper>
       <Container>
-        <Logo src="/images/DonaTalk_Logo_150.png" alt="DonaTalk Logo" />
+        <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
         <Title>{pitcher.fullName} on DonaTalk</Title>
         <Paragraph>
           🙏 Thanks for interest in listening to {pitcher.fullName}&rsquo;s story.
@@ -180,7 +180,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { uid } = context.query;
 
   try {
-    const docRef = doc(firestore, 'pitchers', uid as string);
+    const docRef = doc(firestore, 'users', uid as string);
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) {
