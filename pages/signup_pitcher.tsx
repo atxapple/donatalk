@@ -1,158 +1,200 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import Head from "next/head";
-import { styled } from "../styles/stitches.config";
-import { auth, firestore } from "../firebase/clientApp";
-import {
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { Input, Textarea, Button, Field, Label } from "../components/ui";
+import { GetServerSideProps } from 'next';
+import { doc, getDoc } from 'firebase/firestore';
+import { firestore } from '../../firebase/clientApp';
+import { styled } from '../../styles/stitches.config';
+import { useState } from 'react';
 
-const Wrapper = styled("div", {
-  minHeight: "100vh",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: "$md",
-  backgroundColor: "$light",
+const Wrapper = styled('div', {
+  minHeight: '100vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: '$light',
+  padding: '$lg',
 });
 
-const Card = styled("div", {
-  width: "100%",
-  maxWidth: "500px",
-  backgroundColor: "$white",
-  borderRadius: "$md",
-  boxShadow: "0 8px 20px rgba(0, 0, 0, 0.06)",
-  padding: "$md",
-  display: "flex",
-  flexDirection: "column",
-  gap: "$sm",
-  alignItems: "center",
+const Container = styled('div', {
+  maxWidth: '700px',
+  width: '100%',
+  padding: '$lg',
+  fontSize: '$base',
+  color: '$dark',
+  backgroundColor: '$white',
+  borderRadius: '$md',
+  boxShadow: '0 8px 20px rgba(0, 0, 0, 0.05)',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
 });
 
-const Logo = styled("img", {
-  width: "50px",
-  height: "50px",
-  marginBottom: "$sm",
+const Logo = styled('img', {
+  width: '60px',
+  height: '60px',
+  marginBottom: '$md',
 });
 
-const Title = styled("h1", {
-  fontSize: "$xl",
-  textAlign: "center",
-  color: "$dark",
-  marginBottom: "$xs",
+const Title = styled('h1', {
+  fontSize: '$xl',
+  fontWeight: 'bold',
+  marginBottom: '$sm',
+  textAlign: 'center',
+  color: '$heart',
 });
 
-const Subtitle = styled("p", {
-  textAlign: "center",
-  fontSize: "$base",
-  color: "$mediumgray",
-  marginBottom: "$sm",
+const Paragraph = styled('p', {
+  marginBottom: '$md',
+  lineHeight: '1.6',
+  textAlign: 'center',
 });
 
-const ErrorBox = styled("div", {
-  backgroundColor: "#fee",
-  color: "#a00",
-  padding: "$sm",
-  borderRadius: "$sm",
-  border: "1px solid #faa",
-  width: "100%",
+const Form = styled('form', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '$sm',
+  width: '100%',
 });
 
-export default function SignupPitcher() {
-  const router = useRouter();
-  const [form, setForm] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    organization: "",
-    pitch: "",
-    donation: "",
-  });
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+const Textarea = styled('textarea', {
+  padding: '$sm',
+  fontSize: '$base',
+  fontFamily: 'inherit',
+  borderRadius: '$sm',
+  border: '1px solid #ccc',
+  width: '100%',
+  maxWidth: '550px',
+  resize: 'vertical',
+  '&::placeholder': {
+    fontFamily: 'inherit',
+    fontSize: '$base',
+  },
+  '&:focus': {
+    borderColor: '$heart',
+    outline: 'none',
+  },
+});
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: name === "donation" ? Number(value) : value }));
+const Input = styled('input', {
+  padding: '$sm',
+  fontSize: '$base',
+  fontFamily: 'inherit',
+  borderRadius: '$sm',
+  border: '1px solid #ccc',
+  width: '100%',
+  maxWidth: '550px',
+  '&::placeholder': {
+    fontFamily: 'inherit',
+    fontSize: '$base',
+  },
+  '&:focus': {
+    borderColor: '$heart',
+    outline: 'none',
+  },
+});
+
+const Button = styled('button', {
+  backgroundColor: '$heart',
+  color: 'white',
+  padding: '$sm',
+  fontWeight: '600',
+  borderRadius: '$sm',
+  border: 'none',
+  transition: 'background 0.2s',
+  width: '100%',
+  maxWidth: '550px',
+  '&:hover': {
+    backgroundColor: '#c0392b',
+  },
+});
+
+type Pitcher = {
+  fullName: string;
+  pitch: string;
+  donation: number;
+};
+
+export default function PitcherPage({ pitcher }: { pitcher: Pitcher | null }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert('Thanks! We got your info.');
+    setName('');
+    setEmail('');
+    setMessage('');
   };
 
-  const signUpWithEmail = async () => {
-    if (!form.fullName || !form.email || !form.password) {
-      setError("Please fill out all required fields.");
-      return;
-    }
-    try {
-      setLoading(true);
-      const { user } = await createUserWithEmailAndPassword(auth, form.email, form.password);
-      await updateProfile(user, { displayName: form.fullName });
-      await setDoc(doc(firestore, "pitchers", user.uid), {
-        ...form,
-        role: "pitcher", // 👈 add role here
-        createdAt: Date.now(),
-      });
-      router.push(`/pitcher/${user.uid}`);
-    } catch (e: unknown) {
-      if (e instanceof Error) {
-        setError(e.message);
-      } else {
-        setError("An unexpected error occurred.");
-      }
-    }
-  };
+  if (!pitcher) return <Wrapper><Container>Pitcher not found.</Container></Wrapper>;
 
   return (
-    <>
-      <Head>
-        <title>Sign up as Pitcher | DonaTalk</title>
-        <meta name="description" content="Create your pitcher profile and start sharing your ideas with donors." />
-      </Head>
+    <Wrapper>
+      <Container>
+        <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
+        <Title>{pitcher.fullName} on DonaTalk</Title>
+        <Paragraph>
+          🙏 Thanks for interest in listening to {pitcher.fullName}&rsquo;s story.
+        </Paragraph>
+        <Paragraph>
+          The story is about - &quot;{pitcher.pitch}&quot;
+        </Paragraph>
+        <Paragraph>
+          {pitcher.fullName} will donate <strong>${pitcher.donation}</strong> to support your favorite non-profit organization
+          (you can choose later) after the meeting.
+        </Paragraph>
+        <Paragraph>
+          🚀 Ready to chat? Fill out the form to get started:
+        </Paragraph>
 
-      <Wrapper>
-        <Card>
-          <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>Create Your Pitcher Profile</Title>
-          <Subtitle>Share your ideas and support a cause</Subtitle>
-
-          {error && <ErrorBox>{error}</ErrorBox>}
-
-          <Field>
-            <Label>Full Name</Label>
-            <Input name="fullName" value={form.fullName} onChange={onChange} />
-          </Field>
-
-          <Field>
-            <Label>Email Address</Label>
-            <Input name="email" type="email" value={form.email} onChange={onChange} />
-          </Field>
-
-          <Field>
-            <Label>Password</Label>
-            <Input name="password" type="password" value={form.password} onChange={onChange} />
-          </Field>
-
-          <Field>
-            <Label>Company / Organization (optional)</Label>
-            <Input name="organization" value={form.organization} onChange={onChange} />
-          </Field>
-
-          <Field>
-            <Label>Brief Description of Your Pitch</Label>
-            <Textarea name="pitch" rows={3} value={form.pitch} onChange={onChange} />
-          </Field>
-
-          <Field>
-            <Label>Donation Amount per pitch ($)</Label>
-            <Input name="donation" type="number" value={form.donation.toString()} onChange={onChange} />
-          </Field>
-
-          <Button onClick={signUpWithEmail} disabled={loading}>
-            {loading ? "Signing up..." : "Sign up"}
-          </Button>
-        </Card>
-      </Wrapper>
-    </>
+        <Form onSubmit={handleSubmit}>
+          <Input
+            type="text"
+            placeholder="Your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <Input
+            type="email"
+            placeholder="Your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <Textarea
+            placeholder="Available times. Example 1: Mon 2pm - 5pm or Wed morning, Example 2: calendly.com/abc-2"
+            rows={2}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            required
+          />
+          <Button type="submit">Notify acceptance and availability</Button>
+        </Form>
+      </Container>
+    </Wrapper>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { uid } = context.query;
+
+  try {
+    const docRef = doc(firestore, 'users', uid as string);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      return { props: { pitcher: null } };
+    }
+
+    return {
+      props: {
+        pitcher: docSnap.data(),
+      },
+    };
+  } catch {
+    return {
+      props: { pitcher: null },
+    };
+  }
+};
