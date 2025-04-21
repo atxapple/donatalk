@@ -61,22 +61,21 @@ const ErrorBox = styled("div", {
   width: "100%",
 });
 
-export default function SignupPitcher() {
+export default function SignupListener() {
   const router = useRouter();
   const [form, setForm] = useState({
     fullName: "",
     email: "",
     password: "",
-    organization: "",
-    pitch: "",
-    donation: "",
+    introOrLinkedIn: "",
+    donationPerMeeting: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: name === "donation" ? Number(value) : value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const signUpWithEmail = async () => {
@@ -88,12 +87,12 @@ export default function SignupPitcher() {
       setLoading(true);
       const { user } = await createUserWithEmailAndPassword(auth, form.email, form.password);
       await updateProfile(user, { displayName: form.fullName });
-      await setDoc(doc(firestore, "pitchers", user.uid), {
+      await setDoc(doc(firestore, "listeners", user.uid), {
         ...form,
-        role: "pitcher", // 👈 add role here
+        role: "listener",
         createdAt: Date.now(),
       });
-      router.push(`/pitcher/${user.uid}`);
+      router.push(`/listener/${user.uid}`);
     } catch (e: unknown) {
       if (e instanceof Error) {
         setError(e.message);
@@ -106,15 +105,15 @@ export default function SignupPitcher() {
   return (
     <>
       <Head>
-        <title>Sign up as Pitcher | DonaTalk</title>
-        <meta name="description" content="Create your pitcher profile and start sharing your ideas with donors." />
+        <title>Sign up as Listener | DonaTalk</title>
+        <meta name="description" content="Join as a listener and discover pitches that inspire donations." />
       </Head>
 
       <Wrapper>
         <Card>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>Create Your Pitcher Profile</Title>
-          <Subtitle>Share your ideas and support a cause</Subtitle>
+          <Title>Create Your Listener Profile</Title>
+          <Subtitle>Support meaningful ideas and causes</Subtitle>
 
           {error && <ErrorBox>{error}</ErrorBox>}
 
@@ -134,18 +133,13 @@ export default function SignupPitcher() {
           </Field>
 
           <Field>
-            <Label>Company / Organization (optional)</Label>
-            <Input name="organization" value={form.organization} onChange={onChange} />
+            <Label>Brief Intro or LinkedIn Page Link</Label>
+            <Textarea name="introOrLinkedIn" rows={3} value={form.introOrLinkedIn} onChange={onChange} />
           </Field>
 
           <Field>
-            <Label>Brief Description of Your Pitch</Label>
-            <Textarea name="pitch" rows={3} value={form.pitch} onChange={onChange} />
-          </Field>
-
-          <Field>
-            <Label>Donation Amount per pitch ($)</Label>
-            <Input name="donation" type="number" value={form.donation.toString()} onChange={onChange} />
+            <Label>Donation Request per Meeting ($)</Label>
+            <Input name="donationPerMeeting" type="number" value={form.donationPerMeeting} onChange={onChange} />
           </Field>
 
           <Button onClick={signUpWithEmail} disabled={loading}>
