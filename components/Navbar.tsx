@@ -11,22 +11,15 @@ const Nav = styled('nav', {
 });
 
 const Logo = styled('img', {
-  width: '88px',
-  height: '77px',
+  width: '197px',
+  height: '50px',
 });
 
-const NavLinks = styled('div', {
-  display: 'flex',
-  gap: '$lg',
-  alignItems: 'center',
-  fontSize: '$base',
-});
-
-// ✅ This is now a styled Next.js Link, NOT an <a>
 const NavLink = styled(Link, {
   color: '$dark',
   textDecoration: 'none',
   fontWeight: '500',
+  fontSize: '$base',
   cursor: 'pointer',
   '&:hover': {
     color: '$heart',
@@ -37,15 +30,9 @@ export default function Navbar() {
   return (
     <Nav>
       <NavLink href="/">
-        <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk" />
+        <Logo src="/Donatalk_logo_horizontal_197x50.png" alt="DonaTalk" />
       </NavLink>
-      <NavLinks>
-        <NavLink href="/">Home</NavLink>
-        <NavLink href="/about">About</NavLink>
-        <NavLink href="/signup_pitcher">Pitcher</NavLink>
-        <NavLink href="/signup_listener">Listener</NavLink>
-        <NavLink href="/login">Login</NavLink>
-      </NavLinks>
+      <NavLink href="/login">Login</NavLink>
     </Nav>
   );
 }
