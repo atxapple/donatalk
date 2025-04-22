@@ -182,7 +182,6 @@ export default function PitcherProfile() {
   }
 
   const requiredBalance = Math.ceil(pitcher.donation * 1.125 * 100) / 100;
-  const isFundLow = pitcher.credit_balance < pitcher.donation;
 
   return (
     <>
@@ -192,9 +191,8 @@ export default function PitcherProfile() {
       <PageWrapper>
         <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>My Profile</Title>
+          <Title>My Profile   </Title>
           <Subtitle>Welcome, {pitcher.fullName}</Subtitle>
-
           <InfoRow>
             <Label>Current Fund Balance ($):</Label>
             <Value>{pitcher.credit_balance.toFixed(2)}</Value>
@@ -214,8 +212,8 @@ export default function PitcherProfile() {
             <span style={{ color: '#e74c3c', marginRight: '0.3rem' }}>🚩</span>
             Fund balance must be at least
             <strong> ${requiredBalance.toFixed(2)} </strong>
-             (Donation amount + 12.5% process fee including tax),
-             or your shareable link will be inactive.
+            (Donation amount + 12.5% process fee including tax),
+            or your shareable link will be inactive.
           </p>
 
           <AddFundSection>
@@ -242,11 +240,7 @@ export default function PitcherProfile() {
 
           <ShareSection>
             <p>Please share the following link with your potential listeners:</p>
-            {isFundLow && (
-              <p style={{ color: '#e74c3c', fontWeight: 'bold', marginTop: '0.5rem' }}>
-                ⚠️ Your shareable link will be inactive if your available fund is smaller than your donation amount.
-              </p>
-            )}
+
             <SharableLink>
               {`${window.location.origin}/pitcher/${userId}`}
               <CopyButton onClick={handleCopy} aria-label="Copy link to clipboard">
@@ -265,6 +259,12 @@ export default function PitcherProfile() {
             <Label>Areas of Interest:</Label>
             <Value>{pitcher.areasOfInterest}</Value>
           </InfoRow>
+
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '0rem' }}>
+            <Button onClick={() => router.push('/pitcher/update-profile')}>
+              Edit Profile
+            </Button>
+          </div>
         </CardContainer>
       </PageWrapper>
     </>
