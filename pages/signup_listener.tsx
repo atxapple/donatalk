@@ -41,7 +41,7 @@ export default function SignupListener() {
         role: "listener",
         createdAt: Date.now(),
       });
-      router.push(`/listener/${user.uid}`);
+      router.push(`/listener/profile`);
     } catch (e: unknown) {
       if (e instanceof Error) {
         setError(e.message);

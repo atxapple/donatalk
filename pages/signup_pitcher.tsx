@@ -8,6 +8,13 @@ import { Input, Textarea, Button, Field, Label } from '../components/ui';
 import PageWrapper from '../components/layout/PageWrapper';
 import CardContainer from '../components/layout/CardContainer';
 import { Logo, Title, Subtitle, ErrorBox } from '../components/ui/shared';
+import { styled } from '../styles/stitches.config';
+
+const ProminentErrorBox = styled(ErrorBox, {
+  border: '2px solid #e74c3c',
+  fontWeight: 'bold',
+  backgroundColor: '#ffe5e5',
+});
 
 export default function SignupPitcher() {
   const router = useRouter();
@@ -36,54 +43,61 @@ export default function SignupPitcher() {
     try {
       setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
-      const user = userCredential.user;
+      const uid = userCredential.user.uid;
 
-      await setDoc(doc(firestore, 'pitchers', user.uid), {
+      await setDoc(doc(firestore, 'pitchers', uid), {
         fullName: form.fullName,
         email: form.email,
         areasOfInterest: form.areasOfInterest,
         donation: parseFloat(form.donation),
-        credit_balance: 0, // ✅ Add credit balance initialized to 0
+        credit_balance: 0, // ✅ Initialize credit balance to 0
         createdAt: Date.now(),
       });
 
-      router.push(`/pitcher/${user.uid}`);
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message);
+      router.push(`/pitcher/profile`);
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error(error.message);
+      setError(error.message || 'Error creating account.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSignup();
     }
   };
 
   return (
     <>
       <Head>
-        <title>Signup as Pitcher | DonaTalk</title>
-        <meta name="description" content="Create your Pitcher profile on DonaTalk." />
+        <title>Sign Up as Pitcher | DonaTalk</title>
+        <meta name="description" content="Sign up as a pitcher to share your cause on DonaTalk." />
       </Head>
 
       <PageWrapper>
         <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>Signup as Pitcher</Title>
-          <Subtitle>Share your cause and inspire support</Subtitle>
+          <Title>Sign Up as a Pitcher</Title>
+          <Subtitle>Share your cause and connect with supporters</Subtitle>
 
-          {error && <ErrorBox>{error}</ErrorBox>}
+          {error && <ProminentErrorBox>{error}</ProminentErrorBox>}
 
           <Field>
             <Label>Full Name</Label>
-            <Input name="fullName" value={form.fullName} onChange={onChange} />
+            <Input name="fullName" value={form.fullName} onChange={onChange} onKeyPress={handleKeyPress} />
           </Field>
 
           <Field>
             <Label>Email Address</Label>
-            <Input name="email" type="email" value={form.email} onChange={onChange} />
+            <Input name="email" type="email" value={form.email} onChange={onChange} onKeyPress={handleKeyPress} />
           </Field>
 
           <Field>
             <Label>Password</Label>
-            <Input name="password" type="password" value={form.password} onChange={onChange} />
+            <Input name="password" type="password" value={form.password} onChange={onChange} onKeyPress={handleKeyPress} />
           </Field>
 
           <Field>
@@ -93,11 +107,11 @@ export default function SignupPitcher() {
 
           <Field>
             <Label>Donation Request per Meeting ($)</Label>
-            <Input name="donation" type="number" value={form.donation} onChange={onChange} />
+            <Input name="donation" type="number" value={form.donation} onChange={onChange} onKeyPress={handleKeyPress} />
           </Field>
 
           <Button onClick={handleSignup} disabled={loading}>
-            {loading ? 'Signing up...' : 'Signup'}
+            {loading ? 'Creating Account...' : 'Sign Up'}
           </Button>
         </CardContainer>
       </PageWrapper>
