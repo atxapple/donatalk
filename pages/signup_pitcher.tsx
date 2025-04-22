@@ -1,25 +1,24 @@
-// pages/signup_pitcher.tsx
-import { useState } from "react";
-import { useRouter } from "next/router";
-import Head from "next/head";
-import { auth, firestore } from "../firebase/clientApp";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { Input, Textarea, Button, Field, Label } from "../components/ui";
-import PageWrapper from "../components/layout/PageWrapper";
-import CardContainer from "../components/layout/CardContainer";
-import { Logo, Title, Subtitle, ErrorBox } from "../components/ui/shared";
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, firestore } from '../firebase/clientApp';
+import { doc, setDoc } from 'firebase/firestore';
+import { Input, Textarea, Button, Field, Label } from '../components/ui';
+import PageWrapper from '../components/layout/PageWrapper';
+import CardContainer from '../components/layout/CardContainer';
+import { Logo, Title, Subtitle, ErrorBox } from '../components/ui/shared';
 
 export default function SignupPitcher() {
   const router = useRouter();
   const [form, setForm] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    areasOfInterest: "",
-    donation: "",
+    fullName: '',
+    email: '',
+    password: '',
+    areasOfInterest: '',
+    donation: '',
   });
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -27,42 +26,48 @@ export default function SignupPitcher() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const signUpWithEmail = async () => {
-    if (!form.fullName || !form.email || !form.password) {
-      setError("Please fill out all required fields.");
+  const handleSignup = async () => {
+    setError('');
+    if (!form.fullName || !form.email || !form.password || !form.areasOfInterest || !form.donation) {
+      setError('Please fill in all fields.');
       return;
     }
+
     try {
       setLoading(true);
-      const { user } = await createUserWithEmailAndPassword(auth, form.email, form.password);
-      await updateProfile(user, { displayName: form.fullName });
-      await setDoc(doc(firestore, "pitchers", user.uid), {
-        ...form,
-        role: "pitcher",
+      const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      const user = userCredential.user;
+
+      await setDoc(doc(firestore, 'pitchers', user.uid), {
+        fullName: form.fullName,
+        email: form.email,
+        areasOfInterest: form.areasOfInterest,
+        donation: parseFloat(form.donation),
+        credit_balance: 0, // ✅ Add credit balance initialized to 0
         createdAt: Date.now(),
       });
-      router.push(`/pitcher/deposit/${user.uid}`);
-    } catch (e: unknown) {
-      if (e instanceof Error) {
-        setError(e.message);
-      } else {
-        setError("An unexpected error occurred.");
-      }
+
+      router.push(`/pitcher/${user.uid}`);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
       <Head>
-        <title>Sign up as Pitcher | DonaTalk</title>
-        <meta name="description" content="Join DonaTalk as a pitcher and receive support for your cause." />
+        <title>Signup as Pitcher | DonaTalk</title>
+        <meta name="description" content="Create your Pitcher profile on DonaTalk." />
       </Head>
 
       <PageWrapper>
         <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>Create Your Pitcher Profile</Title>
-          <Subtitle>Share your story and inspire donations</Subtitle>
+          <Title>Signup as Pitcher</Title>
+          <Subtitle>Share your cause and inspire support</Subtitle>
 
           {error && <ErrorBox>{error}</ErrorBox>}
 
@@ -91,8 +96,8 @@ export default function SignupPitcher() {
             <Input name="donation" type="number" value={form.donation} onChange={onChange} />
           </Field>
 
-          <Button onClick={signUpWithEmail} disabled={loading}>
-            {loading ? "Signing up..." : "Sign up"}
+          <Button onClick={handleSignup} disabled={loading}>
+            {loading ? 'Signing up...' : 'Signup'}
           </Button>
         </CardContainer>
       </PageWrapper>
