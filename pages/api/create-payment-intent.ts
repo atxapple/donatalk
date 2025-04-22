@@ -1,8 +1,12 @@
-// pages/api/create-payment-intent.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {});
+
+interface RequestBody {
+  amount: number;
+  pitcherId: string;
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -10,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { amount, pitcherId } = req.body;
+    const { amount, pitcherId } = req.body as RequestBody;
 
     if (!amount || !pitcherId || amount <= 0) {
       return res.status(400).json({ error: 'Invalid request data' });
@@ -37,8 +41,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     return res.status(200).json({ url: session.url });
-  } catch (error: any) {
-    console.error('Error creating checkout session:', error);
-    return res.status(500).json({ error: error.message || 'Internal server error' });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Error creating checkout session:', err);
+    return res.status(500).json({ error: err.message || 'Internal server error' });
   }
 }

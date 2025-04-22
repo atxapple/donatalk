@@ -1,4 +1,3 @@
-// pages/login.tsx
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -38,8 +37,7 @@ export default function LoginPage() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleLogin = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault(); // Prevent default form behavior
+  const handleLogin = async () => {
     setError("");
     if (!form.email || !form.password) {
       setError("Please fill in all fields.");
@@ -52,20 +50,24 @@ export default function LoginPage() {
       const listenerDoc = await getDoc(doc(firestore, "listeners", user.uid));
 
       if (pitcherDoc.exists()) {
-        router.push(`/pitcher/${user.uid}`);
+        router.push(`/pitcher/profile`);
       } else if (listenerDoc.exists()) {
-        router.push(`/listener/${user.uid}`);
+        router.push(`/listener/profile`);
       } else {
         setError("No profile found. Please contact support.");
       }
-    } catch (err: any) {
-        if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
-          setError('Login failed. Please check your email and password, and try again.');
-        } else {
-          setError('Something went wrong. Please try again or contact support.');
-        }
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error(error.message);
+      setError("Invalid email or password. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleLogin();
     }
   };
 
@@ -84,40 +86,33 @@ export default function LoginPage() {
 
           {error && <ProminentErrorBox>{error}</ProminentErrorBox>}
 
-          <form onSubmit={handleLogin}> {/* ✅ Add form wrapper for Enter key */}
-            <Field>
-              <Label>Email Address</Label>
-              <Input
-                name="email"
-                type="email"
-                value={form.email}
-                onChange={onChange}
-                required
-                autoFocus
-              />
-            </Field>
+          <Field>
+            <Label>Email Address</Label>
+            <Input
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={onChange}
+              onKeyPress={handleKeyPress}
+            />
+          </Field>
 
-            <Field>
-              <Label>Password</Label>
-              <Input
-                name="password"
-                type="password"
-                value={form.password}
-                onChange={onChange}
-                required
-              />
-            </Field>
+          <Field>
+            <Label>Password</Label>
+            <Input
+              name="password"
+              type="password"
+              value={form.password}
+              onChange={onChange}
+              onKeyPress={handleKeyPress}
+            />
+          </Field>
 
-            {/* ✅ Login Button First */}
-            <Button type="submit" disabled={loading} style={{ marginTop: '1rem', width: '100%' }}>
-              {loading ? "Logging in..." : "Login"}
-            </Button>
+          <ForgotPassword href="#">Forgot password?</ForgotPassword>
 
-            {/* ✅ Forgot Password Link After */}
-            <div style={{ marginTop: '0.5rem', textAlign: 'center' }}>
-              <ForgotPassword href="#">Forgot password?</ForgotPassword>
-            </div>
-          </form>
+          <Button onClick={handleLogin} disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </Button>
         </CardContainer>
       </PageWrapper>
     </>
