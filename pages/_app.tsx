@@ -1,19 +1,39 @@
 import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import { globalCss } from '../styles/stitches.config';
+import dynamic from 'next/dynamic';
+import Footer from '../components/Footer';
+
+// ✅ Use dynamic to disable SSR for Navbar if hydration mismatch persists
+const Navbar = dynamic(() => import('../components/Navbar'), { ssr: false });
 
 const globalStyles = globalCss({
   '*': { margin: 0, padding: 0, boxSizing: 'border-box' },
   body: {
-    fontFamily: '$body',
-    backgroundColor: '$light',
-    color: '$dark',
+    fontFamily: 'Arial, sans-serif',
+    backgroundColor: '#fafafa',
+    color: '#333',
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
   },
-  button: {
-    cursor: 'pointer',
-  },
+  a: { textDecoration: 'none' },
 });
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps) {
   globalStyles();
-  return <Component {...pageProps} />;
+
+  return (
+    <>
+      <Head>
+        <title>DonaTalk</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      <Navbar />
+      <main style={{ flexGrow: 1 }}>
+        <Component {...pageProps} />
+      </main>
+      <Footer />
+    </>
+  );
 }
