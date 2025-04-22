@@ -1,65 +1,14 @@
+// pages/signup_listener.tsx
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { styled } from "../styles/stitches.config";
 import { auth, firestore } from "../firebase/clientApp";
-import {
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { Input, Textarea, Button, Field, Label } from "../components/ui";
-
-const Wrapper = styled("div", {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "flex-start",
-  paddingTop: "$xl",
-  paddingBottom: "$xl",
-});
-
-const Card = styled("div", {
-  width: "100%",
-  maxWidth: "500px",
-  backgroundColor: "$white",
-  borderRadius: "$md",
-  boxShadow: "0 8px 20px rgba(0, 0, 0, 0.06)",
-  padding: "$md",
-  display: "flex",
-  flexDirection: "column",
-  gap: "$sm",
-  alignItems: "center",
-  marginTop: "30px",
-});
-
-const Logo = styled("img", {
-  width: "50px",
-  height: "50px",
-  marginBottom: "$sm",
-});
-
-const Title = styled("h1", {
-  fontSize: "$xl",
-  textAlign: "center",
-  color: "$dark",
-  marginBottom: "$xs",
-});
-
-const Subtitle = styled("p", {
-  textAlign: "center",
-  fontSize: "$base",
-  color: "$mediumgray",
-  marginBottom: "$sm",
-});
-
-const ErrorBox = styled("div", {
-  backgroundColor: "#fee",
-  color: "#a00",
-  padding: "$sm",
-  borderRadius: "$sm",
-  border: "1px solid #faa",
-  width: "100%",
-});
+import PageWrapper from "../components/layout/PageWrapper";
+import CardContainer from "../components/layout/CardContainer";
+import { Logo, Title, Subtitle, ErrorBox } from "../components/ui/shared";
 
 export default function SignupListener() {
   const router = useRouter();
@@ -109,8 +58,8 @@ export default function SignupListener() {
         <meta name="description" content="Join as a listener and discover pitches that inspire donations." />
       </Head>
 
-      <Wrapper>
-        <Card>
+      <PageWrapper>
+        <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
           <Title>Create Your Listener Profile</Title>
           <Subtitle>Support meaningful ideas and causes</Subtitle>
@@ -145,8 +94,8 @@ export default function SignupListener() {
           <Button onClick={signUpWithEmail} disabled={loading}>
             {loading ? "Signing up..." : "Sign up"}
           </Button>
-        </Card>
-      </Wrapper>
+        </CardContainer>
+      </PageWrapper>
     </>
   );
 }

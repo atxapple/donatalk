@@ -1,66 +1,14 @@
+// pages/signup_pitcher.tsx
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { styled } from "../styles/stitches.config";
 import { auth, firestore } from "../firebase/clientApp";
-import {
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { Input, Textarea, Button, Field, Label } from "../components/ui";
-
-const Wrapper = styled('div', {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'flex-start',
-  paddingTop: '$xl',
-  paddingBottom: '$xl',
-});
-
-
-const Card = styled("div", {
-  width: "100%",
-  maxWidth: "500px",
-  backgroundColor: "$white",
-  borderRadius: "$md",
-  boxShadow: "0 8px 20px rgba(0, 0, 0, 0.06)",
-  padding: "$md",
-  display: "flex",
-  flexDirection: "column",
-  gap: "$sm",
-  alignItems: "center",
-  marginTop: '30px', // or a fixed px value like 60
-});
-
-const Logo = styled("img", {
-  width: "50px",
-  height: "50px",
-  marginBottom: "$sm",
-});
-
-const Title = styled("h1", {
-  fontSize: "$xl",
-  textAlign: "center",
-  color: "$dark",
-  marginBottom: "$xs",
-});
-
-const Subtitle = styled("p", {
-  textAlign: "center",
-  fontSize: "$base",
-  color: "$mediumgray",
-  marginBottom: "$sm",
-});
-
-const ErrorBox = styled("div", {
-  backgroundColor: "#fee",
-  color: "#a00",
-  padding: "$sm",
-  borderRadius: "$sm",
-  border: "1px solid #faa",
-  width: "100%",
-});
+import PageWrapper from "../components/layout/PageWrapper";
+import CardContainer from "../components/layout/CardContainer";
+import { Logo, Title, Subtitle, ErrorBox } from "../components/ui/shared";
 
 export default function SignupPitcher() {
   const router = useRouter();
@@ -68,8 +16,7 @@ export default function SignupPitcher() {
     fullName: "",
     email: "",
     password: "",
-    organization: "",
-    pitch: "",
+    areasOfInterest: "",
     donation: "",
   });
   const [error, setError] = useState("");
@@ -77,7 +24,7 @@ export default function SignupPitcher() {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: name === "donation" ? Number(value) : value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const signUpWithEmail = async () => {
@@ -91,10 +38,10 @@ export default function SignupPitcher() {
       await updateProfile(user, { displayName: form.fullName });
       await setDoc(doc(firestore, "pitchers", user.uid), {
         ...form,
-        role: "pitcher", // 👈 add role here
+        role: "pitcher",
         createdAt: Date.now(),
       });
-      router.push(`/pitcher/${user.uid}`);
+      router.push(`/pitcher/deposit/${user.uid}`);
     } catch (e: unknown) {
       if (e instanceof Error) {
         setError(e.message);
@@ -108,14 +55,14 @@ export default function SignupPitcher() {
     <>
       <Head>
         <title>Sign up as Pitcher | DonaTalk</title>
-        <meta name="description" content="Create your pitcher profile and start sharing your ideas with donors." />
+        <meta name="description" content="Join DonaTalk as a pitcher and receive support for your cause." />
       </Head>
 
-      <Wrapper>
-        <Card>
+      <PageWrapper>
+        <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
           <Title>Create Your Pitcher Profile</Title>
-          <Subtitle>Share your ideas and support a cause</Subtitle>
+          <Subtitle>Share your story and inspire donations</Subtitle>
 
           {error && <ErrorBox>{error}</ErrorBox>}
 
@@ -135,25 +82,20 @@ export default function SignupPitcher() {
           </Field>
 
           <Field>
-            <Label>Company / Organization (optional)</Label>
-            <Input name="organization" value={form.organization} onChange={onChange} />
+            <Label>Areas of Interest</Label>
+            <Textarea name="areasOfInterest" rows={3} value={form.areasOfInterest} onChange={onChange} />
           </Field>
 
           <Field>
-            <Label>Brief Description of Your Pitch</Label>
-            <Textarea name="pitch" rows={3} value={form.pitch} onChange={onChange} />
-          </Field>
-
-          <Field>
-            <Label>Donation Amount per pitch ($)</Label>
-            <Input name="donation" type="number" value={form.donation.toString()} onChange={onChange} />
+            <Label>Donation Request per Meeting ($)</Label>
+            <Input name="donation" type="number" value={form.donation} onChange={onChange} />
           </Field>
 
           <Button onClick={signUpWithEmail} disabled={loading}>
             {loading ? "Signing up..." : "Sign up"}
           </Button>
-        </Card>
-      </Wrapper>
+        </CardContainer>
+      </PageWrapper>
     </>
   );
 }
