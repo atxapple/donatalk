@@ -19,11 +19,10 @@ type Pitcher = {
   credit_balance: number;
 };
 
-
 const InfoRow = styled('div', {
   display: 'flex',
   justifyContent: 'space-between',
-  marginBottom: '0.75rem',
+  marginBottom: '1rem',
 });
 
 const Label = styled('div', {
@@ -36,7 +35,7 @@ const Value = styled('div', {
 });
 
 const ShareSection = styled('div', {
-  marginTop: '0.75rem',
+  marginTop: '1.5rem',
   padding: '1rem',
   backgroundColor: '$lightgray',
   borderRadius: '8px',
@@ -68,12 +67,12 @@ const CopyButton = styled('button', {
 });
 
 const AddFundSection = styled('div', {
-  marginTop: '0.5rem',
+  marginTop: '1rem',
   textAlign: 'center',
 });
 
 const AddFundButton = styled(Button, {
-  marginTop: '0.25rem',
+  marginTop: '1rem',
 });
 
 export default function PitcherProfile() {
@@ -90,29 +89,25 @@ export default function PitcherProfile() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUserId(user.uid);
-        fetchPitcherData(user.uid);
+        try {
+          const docRef = doc(firestore, 'pitchers', user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            setPitcher(docSnap.data() as Pitcher);
+          } else {
+            setError('Your profile was not found. Please contact support.');
+          }
+        } catch (err: unknown) {
+          const error = err as Error;
+          console.error(error.message);
+          setError('Failed to load profile. Please try again later.');
+        }
       } else {
         router.push('/login');
       }
     });
     return () => unsubscribe();
   }, [router]);
-
-  const fetchPitcherData = async (uid: string) => {
-    try {
-      const docRef = doc(firestore, 'pitchers', uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setPitcher(docSnap.data() as Pitcher);
-      } else {
-        setError('Your profile was not found. Please contact support.');
-      }
-    } catch (err: unknown) {
-      const error = err as Error;
-      console.error(error.message);
-      setError('Failed to load profile. Please try again later.');
-    }
-  };
 
   const handleCopy = () => {
     if (userId) {
@@ -134,7 +129,10 @@ export default function PitcherProfile() {
       const res = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: Math.round(parseFloat(fundAmount) * 100), pitcherId: userId }),
+        body: JSON.stringify({
+          amount: Math.round(parseFloat(fundAmount) * 100), // Convert dollars to cents
+          pitcherId: userId,
+        }),
       });
       const data = await res.json();
       if (data.url) {
@@ -150,12 +148,6 @@ export default function PitcherProfile() {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (router.query.payment === 'success' && userId) {
-      fetchPitcherData(userId);
-    }
-  }, [router.query.payment, userId]);
 
   if (error) {
     return (
@@ -189,7 +181,6 @@ export default function PitcherProfile() {
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
           <Title>My Profile</Title>
           <Subtitle>Welcome, {pitcher.fullName}</Subtitle>
-
           <InfoRow>
             <Label>Current Fund Balance ($):</Label>
             <Value>{pitcher.credit_balance || 0}</Value>
@@ -201,25 +192,27 @@ export default function PitcherProfile() {
           </InfoRow>
 
           <AddFundSection>
-            <Subtitle>Add Fund to Your Credit Balance</Subtitle>
+            <Subtitle>Add Fund to Your Fund Balance</Subtitle>
             {!showFundInput ? (
               <AddFundButton onClick={() => setShowFundInput(true)}>Add Fund</AddFundButton>
             ) : (
-              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginTop: '1rem' }}>
-                <Input
-                  type="number"
-                  placeholder="Enter amount ($)"
-                  value={fundAmount}
-                  onChange={(e) => setFundAmount(e.target.value)}
-                  min="0"
-                />
-                <Button onClick={handleAddFund} disabled={loading}>
-                  {loading ? 'Processing...' : 'Confirm Fund'}
-                </Button>
-                <Button onClick={() => { setShowFundInput(false); setFundAmount(''); }}>
-                  Cancel
-                </Button>
-              </div>
+              <>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginTop: '1rem' }}>
+                  <Input
+                    type="number"
+                    placeholder="Enter amount ($)"
+                    value={fundAmount}
+                    onChange={(e) => setFundAmount(e.target.value)}
+                    min="0"
+                  />
+                  <Button onClick={handleAddFund} disabled={loading}>
+                    {loading ? 'Processing...' : 'Confirm Fund'}
+                  </Button>
+                  <Button onClick={() => { setShowFundInput(false); setFundAmount(''); }}>
+                    Cancel
+                  </Button>
+                </div>
+              </>
             )}
           </AddFundSection>
 
@@ -227,7 +220,7 @@ export default function PitcherProfile() {
             <p>Please share the following link with your potential listeners:</p>
             {isFundLow && (
               <p style={{ color: '#e74c3c', fontWeight: 'bold', marginTop: '0.5rem' }}>
-                ⚠️ Your shareable link will be inactive if your available fund is smaller than your donation amount.
+                ⚠️ Your shareable link will be inactive if your available fund is smaller than donation amount.
               </p>
             )}
             <SharableLink>
