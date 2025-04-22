@@ -93,7 +93,7 @@ export default function PitcherProfile() {
           const docRef = doc(firestore, 'pitchers', user.uid);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
-            setPitcher(docSnap.data());
+            setPitcher(docSnap.data() as Pitcher);
           } else {
             setError('Your profile was not found. Please contact support.');
           }
