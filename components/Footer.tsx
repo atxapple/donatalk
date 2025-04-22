@@ -1,25 +1,27 @@
-import { useEffect, useState } from 'react';
 import { styled } from '../styles/stitches.config';
 
 const FooterContainer = styled('footer', {
-  marginTop: 'auto',
-  padding: '$md',
-  backgroundColor: '$light',
-  textAlign: 'center',
-  fontSize: '$sm',
-  color: '$mediumgray',
+  padding: '2rem 1rem',
+  backgroundColor: '#f9f9f9',
   borderTop: '1px solid #eee',
+  textAlign: 'center',
+  fontSize: '14px',
+  color: '#666',
+  marginTop: 'auto',
 });
 
 const FooterLinks = styled('div', {
-  marginTop: '$xs',
+  marginTop: '0.5rem',
   display: 'flex',
   justifyContent: 'center',
-  gap: '$lg',
+  flexWrap: 'wrap',
+  gap: '1.5rem',
+  fontSize: '14px',
+  color: '#666',
 });
 
 const FooterLink = styled('a', {
-  color: '$mediumgray',
+  color: '#666',
   textDecoration: 'none',
   '&:hover': {
     textDecoration: 'underline',
@@ -27,18 +29,13 @@ const FooterLink = styled('a', {
 });
 
 export default function Footer() {
-  const [year, setYear] = useState<number | null>(null);
-
-  useEffect(() => {
-    setYear(new Date().getFullYear());
-  }, []);
-
   return (
     <FooterContainer>
-      <div>© {year ?? '____'} DonaTalk</div>
+      <div>© 2025 DonaTalk. All rights reserved.</div>
       <FooterLinks>
-        <FooterLink href="/terms">Terms of Service</FooterLink>
-        <FooterLink href="/privacy">Privacy Policy</FooterLink>
+        <FooterLink href="https://donatalk.com/terms-of-service/">Terms of Service</FooterLink>
+        <FooterLink href="https://donatalk.com/privacy-policy/">Privacy Policy</FooterLink>
+        <FooterLink href="mailto://support@donatalk.com">Contact Us</FooterLink>
       </FooterLinks>
     </FooterContainer>
   );

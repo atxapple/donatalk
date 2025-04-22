@@ -10,14 +10,14 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 import { Input, Textarea, Button, Field, Label } from "../components/ui";
 
-const Wrapper = styled("div", {
-  minHeight: "100vh",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: "$md",
-  backgroundColor: "$light",
+const Wrapper = styled('div', {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'flex-start',
+  paddingTop: '$xl',
+  paddingBottom: '$xl',
 });
+
 
 const Card = styled("div", {
   width: "100%",
@@ -30,6 +30,7 @@ const Card = styled("div", {
   flexDirection: "column",
   gap: "$sm",
   alignItems: "center",
+  marginTop: '30px', // or a fixed px value like 60
 });
 
 const Logo = styled("img", {

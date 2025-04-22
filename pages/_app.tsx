@@ -29,11 +29,13 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>DonaTalk</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Navbar />
-      <main style={{ flexGrow: 1 }}>
-        <Component {...pageProps} />
-      </main>
-      <Footer />
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Navbar />
+        <main style={{ flexGrow: 1 }}>
+          <Component {...pageProps} />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }
