@@ -36,7 +36,7 @@ const Value = styled('div', {
 });
 
 const ShareSection = styled('div', {
-  marginTop: '0.75rem',
+  marginTop: '0.5rem',
   padding: '1rem',
   backgroundColor: '$lightgray',
   borderRadius: '8px',
@@ -88,7 +88,6 @@ export default function PitcherProfile() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      console.debug('[Auth Check] User detected:', user?.uid);
       if (user) {
         setUserId(user.uid);
         await fetchPitcherData(user.uid);
@@ -100,17 +99,14 @@ export default function PitcherProfile() {
   }, [router]);
 
   const fetchPitcherData = async (uid: string) => {
-    console.debug('[Fetch Data] Fetching data for user ID:', uid);
     try {
       const docRef = doc(firestore, 'pitchers', uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const pitcherData = docSnap.data() as Pitcher;
-        console.debug('[Fetch Data] Fetched pitcher data:', pitcherData);
         setPitcher(pitcherData);
       } else {
         setError('Your profile was not found. Please contact support.');
-        console.error('[Fetch Data] No document found for UID:', uid);
       }
     } catch (err: unknown) {
       const error = err as Error;
@@ -145,7 +141,6 @@ export default function PitcherProfile() {
         }),
       });
       const data = await res.json();
-      console.debug('[Add Fund] Payment Intent Response:', data);
       if (data.url) {
         window.location.href = data.url;
       } else {
@@ -162,10 +157,7 @@ export default function PitcherProfile() {
 
   useEffect(() => {
     if (router.query.payment === 'success' && userId) {
-      console.debug('[Payment Success Detected] Refreshing profile data...');
       fetchPitcherData(userId);
-    } else {
-      console.debug('[Payment Check] No success flag or missing userId:', router.query.payment, userId);
     }
   }, [router.query.payment, userId]);
 
@@ -189,6 +181,7 @@ export default function PitcherProfile() {
     );
   }
 
+  const requiredBalance = Math.ceil(pitcher.donation * 1.125 * 100) / 100;
   const isFundLow = pitcher.credit_balance < pitcher.donation;
 
   return (
@@ -204,16 +197,28 @@ export default function PitcherProfile() {
 
           <InfoRow>
             <Label>Current Fund Balance ($):</Label>
-            <Value>{pitcher.credit_balance || 0}</Value>
+            <Value>{pitcher.credit_balance.toFixed(2)}</Value>
           </InfoRow>
 
           <InfoRow>
             <Label>Donation per Meeting ($):</Label>
-            <Value>{pitcher.donation}</Value>
+            <Value>{pitcher.donation.toFixed(2)}</Value>
           </InfoRow>
 
+          <p style={{
+            marginTop: '0.0rem',
+            color: '#333',
+            fontSize: '16px',
+            textAlign: 'center'
+          }}>
+            <span style={{ color: '#e74c3c', marginRight: '0.3rem' }}>🚩</span>
+            Fund balance must be at least
+            <strong> ${requiredBalance.toFixed(2)} </strong>
+             (Donation amount + 12.5% process fee including tax),
+             or your shareable link will be inactive.
+          </p>
+
           <AddFundSection>
-            <Subtitle>Add Fund to Your Credit Balance</Subtitle>
             {!showFundInput ? (
               <AddFundButton onClick={() => setShowFundInput(true)}>Add Fund</AddFundButton>
             ) : (
