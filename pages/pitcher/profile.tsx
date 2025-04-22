@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -18,7 +19,6 @@ type Pitcher = {
   donation: number;
   credit_balance: number;
 };
-
 
 const InfoRow = styled('div', {
   display: 'flex',
@@ -88,9 +88,10 @@ export default function PitcherProfile() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      console.debug('[Auth Check] User detected:', user?.uid);
       if (user) {
         setUserId(user.uid);
-        fetchPitcherData(user.uid);
+        await fetchPitcherData(user.uid);
       } else {
         router.push('/login');
       }
@@ -99,17 +100,21 @@ export default function PitcherProfile() {
   }, [router]);
 
   const fetchPitcherData = async (uid: string) => {
+    console.debug('[Fetch Data] Fetching data for user ID:', uid);
     try {
       const docRef = doc(firestore, 'pitchers', uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        setPitcher(docSnap.data() as Pitcher);
+        const pitcherData = docSnap.data() as Pitcher;
+        console.debug('[Fetch Data] Fetched pitcher data:', pitcherData);
+        setPitcher(pitcherData);
       } else {
         setError('Your profile was not found. Please contact support.');
+        console.error('[Fetch Data] No document found for UID:', uid);
       }
     } catch (err: unknown) {
       const error = err as Error;
-      console.error(error.message);
+      console.error('[Fetch Data Error]', error.message);
       setError('Failed to load profile. Please try again later.');
     }
   };
@@ -134,9 +139,13 @@ export default function PitcherProfile() {
       const res = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: Math.round(parseFloat(fundAmount) * 100), pitcherId: userId }),
+        body: JSON.stringify({
+          amount: Math.round(parseFloat(fundAmount) * 100),
+          pitcherId: userId,
+        }),
       });
       const data = await res.json();
+      console.debug('[Add Fund] Payment Intent Response:', data);
       if (data.url) {
         window.location.href = data.url;
       } else {
@@ -144,7 +153,7 @@ export default function PitcherProfile() {
       }
     } catch (err: unknown) {
       const error = err as Error;
-      console.error(error.message);
+      console.error('[Add Fund Error]', error.message);
       alert('Error processing payment.');
     } finally {
       setLoading(false);
@@ -153,7 +162,10 @@ export default function PitcherProfile() {
 
   useEffect(() => {
     if (router.query.payment === 'success' && userId) {
+      console.debug('[Payment Success Detected] Refreshing profile data...');
       fetchPitcherData(userId);
+    } else {
+      console.debug('[Payment Check] No success flag or missing userId:', router.query.payment, userId);
     }
   }, [router.query.payment, userId]);
 
