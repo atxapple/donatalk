@@ -11,6 +11,14 @@ import { Input, Button } from '../../components/ui';
 import { styled } from '../../styles/stitches.config';
 import { ClipboardCopy } from 'lucide-react';
 
+type Pitcher = {
+  fullName: string;
+  email: string;
+  areasOfInterest: string;
+  donation: number;
+  credit_balance: number;
+};
+
 const InfoRow = styled('div', {
   display: 'flex',
   justifyContent: 'space-between',
@@ -59,7 +67,7 @@ const CopyButton = styled('button', {
 });
 
 const AddFundSection = styled('div', {
-  marginTop: '2rem',
+  marginTop: '1rem',
   textAlign: 'center',
 });
 
@@ -70,7 +78,7 @@ const AddFundButton = styled(Button, {
 export default function PitcherProfile() {
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
-  const [pitcher, setPitcher] = useState<any>(null);
+  const [pitcher, setPitcher] = useState<Pitcher | null>(null);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
   const [fundAmount, setFundAmount] = useState<string>('');
@@ -184,7 +192,7 @@ export default function PitcherProfile() {
           </InfoRow>
 
           <AddFundSection>
-            <Subtitle>Add Fund to Your Credit Balance</Subtitle>
+            <Subtitle>Add Fund to Your Fund Balance</Subtitle>
             {!showFundInput ? (
               <AddFundButton onClick={() => setShowFundInput(true)}>Add Fund</AddFundButton>
             ) : (
@@ -218,7 +226,7 @@ export default function PitcherProfile() {
             <p>Please share the following link with your potential listeners:</p>
             {isFundLow && (
               <p style={{ color: '#e74c3c', fontWeight: 'bold', marginTop: '0.5rem' }}>
-                ⚠️ Your shareable link will be inactive if your available fund is smaller than your donation amount.
+                ⚠️ Your shareable link will be inactive if your available fund is smaller than donation amount.
               </p>
             )}
             <SharableLink>
