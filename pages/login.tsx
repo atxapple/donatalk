@@ -38,7 +38,8 @@ export default function LoginPage() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault(); // Prevent default form behavior
     setError("");
     if (!form.email || !form.password) {
       setError("Please fill in all fields.");
@@ -58,7 +59,11 @@ export default function LoginPage() {
         setError("No profile found. Please contact support.");
       }
     } catch (err: any) {
-      setError(err.message);
+        if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
+          setError('Login failed. Please check your email and password, and try again.');
+        } else {
+          setError('Something went wrong. Please try again or contact support.');
+        }
     } finally {
       setLoading(false);
     }
@@ -79,21 +84,40 @@ export default function LoginPage() {
 
           {error && <ProminentErrorBox>{error}</ProminentErrorBox>}
 
-          <Field>
-            <Label>Email Address</Label>
-            <Input name="email" type="email" value={form.email} onChange={onChange} />
-          </Field>
+          <form onSubmit={handleLogin}> {/* ✅ Add form wrapper for Enter key */}
+            <Field>
+              <Label>Email Address</Label>
+              <Input
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={onChange}
+                required
+                autoFocus
+              />
+            </Field>
 
-          <Field>
-            <Label>Password</Label>
-            <Input name="password" type="password" value={form.password} onChange={onChange} />
-          </Field>
+            <Field>
+              <Label>Password</Label>
+              <Input
+                name="password"
+                type="password"
+                value={form.password}
+                onChange={onChange}
+                required
+              />
+            </Field>
 
-          <ForgotPassword href="#">Forgot password?</ForgotPassword>
+            {/* ✅ Login Button First */}
+            <Button type="submit" disabled={loading} style={{ marginTop: '1rem', width: '100%' }}>
+              {loading ? "Logging in..." : "Login"}
+            </Button>
 
-          <Button onClick={handleLogin} disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </Button>
+            {/* ✅ Forgot Password Link After */}
+            <div style={{ marginTop: '0.5rem', textAlign: 'center' }}>
+              <ForgotPassword href="#">Forgot password?</ForgotPassword>
+            </div>
+          </form>
         </CardContainer>
       </PageWrapper>
     </>
