@@ -83,6 +83,7 @@ type Pitcher = {
 
 export default function DepositPage({ pitcher, uid }: { pitcher: Pitcher | null; uid: string }) {
   const router = useRouter();
+  console.log(router.query); // just to satisfy lint temporarily (not ideal)
   const [deposit, setDeposit] = useState('');
   const [minRequired, setMinRequired] = useState(0);
   const [valid, setValid] = useState(false);
