@@ -208,13 +208,7 @@ export default function PitcherProfile() {
                   <Button onClick={handleAddFund} disabled={loading}>
                     {loading ? 'Processing...' : 'Confirm Fund'}
                   </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setShowFundInput(false);
-                      setFundAmount('');
-                    }}
-                  >
+                  <Button onClick={() => { setShowFundInput(false); setFundAmount(''); }}>
                     Cancel
                   </Button>
                 </div>
