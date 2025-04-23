@@ -22,7 +22,7 @@ export default function SignupPitcher() {
     fullName: '',
     email: '',
     password: '',
-    areasOfInterest: '',
+    aboutPitch: '',
     donation: '',
   });
   const [error, setError] = useState('');
@@ -35,7 +35,7 @@ export default function SignupPitcher() {
 
   const handleSignup = async () => {
     setError('');
-    if (!form.fullName || !form.email || !form.password || !form.areasOfInterest || !form.donation) {
+    if (!form.fullName || !form.email || !form.password || !form.aboutPitch || !form.donation) {
       setError('Please fill in all fields.');
       return;
     }
@@ -48,9 +48,9 @@ export default function SignupPitcher() {
       await setDoc(doc(firestore, 'pitchers', uid), {
         fullName: form.fullName,
         email: form.email,
-        areasOfInterest: form.areasOfInterest,
+        pitch: form.aboutPitch,                  // ✅ Changed from 'areasOfInterest' to 'pitch'
         donation: parseFloat(form.donation),
-        credit_balance: 0, // ✅ Initialize credit balance to 0
+        credit_balance: 0,                       // ✅ Initialize credit balance to 0
         createdAt: Date.now(),
       });
 
@@ -101,8 +101,8 @@ export default function SignupPitcher() {
           </Field>
 
           <Field>
-            <Label>Areas of Interest</Label>
-            <Textarea name="areasOfInterest" rows={3} value={form.areasOfInterest} onChange={onChange} />
+            <Label>About Pitch (Brief Description) </Label> {/* ✅ Changed label */}
+            <Textarea name="aboutPitch" rows={3} value={form.aboutPitch} onChange={onChange} />
           </Field>
 
           <Field>

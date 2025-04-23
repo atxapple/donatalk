@@ -14,7 +14,7 @@ import { styled } from '../../styles/stitches.config';
 type Pitcher = {
   fullName: string;
   email: string;
-  areasOfInterest: string;
+  pitch: string;
   donation: number;
 };
 
@@ -31,7 +31,7 @@ export default function PitcherUpdateProfile() {
   const [form, setForm] = useState<Pitcher>({
     fullName: '',
     email: '',
-    areasOfInterest: '',
+    pitch: '',
     donation: 0,
   });
   const [error, setError] = useState('');
@@ -82,7 +82,7 @@ export default function PitcherUpdateProfile() {
         const docRef = doc(firestore, 'pitchers', userId);
         await updateDoc(docRef, {
           fullName: form.fullName,
-          areasOfInterest: form.areasOfInterest,
+          pitch: form.pitch,
           donation: form.donation,
         });
         router.push('/pitcher/profile');
@@ -129,8 +129,8 @@ export default function PitcherUpdateProfile() {
             </Field>
 
             <Field>
-              <Label>Areas of Interest</Label>
-              <Textarea name="areasOfInterest" rows={3} value={form.areasOfInterest} onChange={onChange} />
+              <Label>About Pitch</Label>
+              <Textarea name="pitch" rows={3} value={form.pitch} onChange={onChange} />
             </Field>
 
             <Field>

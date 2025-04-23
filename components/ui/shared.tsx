@@ -28,3 +28,15 @@ export const ErrorBox = styled('div', {
   border: '1px solid #faa',
   width: '100%',
 });
+
+export const InfoBox = styled('div', {
+  padding: '1rem',
+  border: '1px solid #3498db', // blue border
+  backgroundColor: '#eaf6ff',   // light blue background
+  color: '#2c3e50',             // dark blue text
+  borderRadius: '8px',
+  fontSize: '15px',
+  lineHeight: '1.5',
+  textAlign: 'center',
+  marginTop: '1rem',
+});
