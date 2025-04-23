@@ -15,7 +15,7 @@ import { ClipboardCopy } from 'lucide-react';
 type Pitcher = {
   fullName: string;
   email: string;
-  areasOfInterest: string;
+  pitch: string;
   donation: number;
   credit_balance: number;
 };
@@ -256,8 +256,8 @@ export default function PitcherProfile() {
           </InfoRow>
 
           <InfoRow>
-            <Label>Areas of Interest:</Label>
-            <Value>{pitcher.areasOfInterest}</Value>
+            <Label>About Pitch:</Label>
+            <Value>{pitcher.pitch}</Value>
           </InfoRow>
 
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '0rem' }}>
