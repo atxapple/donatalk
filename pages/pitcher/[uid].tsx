@@ -6,7 +6,7 @@ import PageWrapper from '../../components/layout/PageWrapper';
 import CardContainer from '../../components/layout/CardContainer';
 import { Logo, Title, Subtitle, InfoBox } from '../../components/ui/shared';
 import { Input, Button } from '../../components/ui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Pitcher = {
   fullName: string;
@@ -40,18 +40,21 @@ const InputStyled = styled(Input, {
   width: '100%',
 });
 
-export default function PitcherPage({ pitcher }: { pitcher: Pitcher | null }) {
+export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null; uid: string }) {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [responseMessage, setResponseMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert('Thanks! We got your info.');
-    setName('');
-    setEmail('');
-    setMessage('');
-  };
+  if (!hydrated) {
+    return null; // Prevent hydration mismatch
+  }
 
   if (!pitcher) {
     return (
@@ -66,6 +69,38 @@ export default function PitcherPage({ pitcher }: { pitcher: Pitcher | null }) {
   const requiredBalance = Math.ceil(pitcher.donation * 1.125 * 100) / 100;
   const isActive = pitcher.credit_balance >= requiredBalance;
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/notifyPitcher', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pitcherId: uid,
+          listenerEmail: email,
+          listenerName: name,
+          listenerMessage: message,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setStatus('success');
+        setResponseMessage('✅ Notification sent successfully!');
+        setName('');
+        setEmail('');
+        setMessage('');
+      } else {
+        setStatus('error');
+        setResponseMessage(`❌ Failed: ${data.message}`);
+      }
+    } catch (error) {
+      setStatus('error');
+      setResponseMessage('❌ Error sending the email.');
+    }
+  };
+
   return (
     <PageWrapper>
       <CardContainer>
@@ -78,7 +113,7 @@ export default function PitcherPage({ pitcher }: { pitcher: Pitcher | null }) {
             <Subtitle>
               {pitcher.fullName} will donate <strong>${pitcher.donation.toFixed(2)}</strong> to support your favorite non-profit organization after the meeting.
             </Subtitle>
-            <Subtitle>🚀 Ready to chat? Fill out the form to get started:</Subtitle>
+            <Subtitle>🚀 Ready to chat? Fill out the form to notify the pitcher:</Subtitle>
             <Form onSubmit={handleSubmit}>
               <InputStyled
                 type="text"
@@ -95,18 +130,21 @@ export default function PitcherPage({ pitcher }: { pitcher: Pitcher | null }) {
                 required
               />
               <Textarea
-                placeholder="Available times. Example: Mon 2pm - 5pm or calendly link"
+                placeholder="Available times or message (e.g., 'Mon 2-5pm' or Calendly link)"
                 rows={2}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 required
               />
-              <Button type="submit">Notify acceptance and availability</Button>
+              <Button type="submit" disabled={status === 'loading'}>
+                {status === 'loading' ? 'Sending...' : 'Notify Acceptance and Availability'}
+              </Button>
+              {responseMessage && <p>{responseMessage}</p>}
             </Form>
           </>
         ) : (
           <InfoBox>
-            ℹ️ This link is currently inactive because the available fund is not sufficient to cover the donation and processing fee.  
+            ℹ️ This link is currently inactive because the available fund is not sufficient to cover the donation and processing fee.
             <br />
             Pitcher can add funds from their profile page to activate this link.
           </InfoBox>
@@ -124,13 +162,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) {
-      return { props: { pitcher: null } };
+      return { props: { pitcher: null, uid: uid as string } };
     }
 
     return {
-      props: { pitcher: docSnap.data() as Pitcher },
+      props: { pitcher: docSnap.data() as Pitcher, uid: uid as string },
     };
   } catch {
-    return { props: { pitcher: null } };
+    return { props: { pitcher: null, uid: uid as string } };
   }
 };
