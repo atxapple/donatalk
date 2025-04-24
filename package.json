@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.0",
+    "@sendgrid/mail": "^8.1.5",
     "@stitches/react": "^1.2.8",
     "@stripe/react-stripe-js": "^3.6.0",
     "@stripe/stripe-js": "^7.1.0",
