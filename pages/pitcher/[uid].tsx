@@ -13,6 +13,7 @@ type Pitcher = {
   pitch: string;
   donation: number;
   credit_balance: number;
+  email: string;
 };
 
 const Form = styled('form', {
@@ -42,9 +43,7 @@ const InputStyled = styled(Input, {
 
 export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null; uid: string }) {
   const [hydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
+  useEffect(() => setHydrated(true), []);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -52,9 +51,7 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [responseMessage, setResponseMessage] = useState('');
 
-  if (!hydrated) {
-    return null; // Prevent hydration mismatch
-  }
+  if (!hydrated) return null; // Prevent hydration mismatch
 
   if (!pitcher) {
     return (
@@ -73,19 +70,19 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
     e.preventDefault();
     setStatus('loading');
     try {
-      const res = await fetch('/api/notifyPitcher', {
+      const res = await fetch('/api/send-notification', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          pitcherId: uid,
-          listenerEmail: email,
+          pitcherEmail: pitcher.email,
           listenerName: name,
-          listenerMessage: message,
+          listenerEmail: email,
+          message: message,
         }),
       });
 
       const data = await res.json();
-      if (res.ok) {
+      if (res.ok && data.success) {
         setStatus('success');
         setResponseMessage('✅ Notification sent successfully!');
         setName('');
@@ -93,9 +90,10 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
         setMessage('');
       } else {
         setStatus('error');
-        setResponseMessage(`❌ Failed: ${data.message}`);
+        setResponseMessage(`❌ Failed to send: ${data.error || 'Unknown error'}`);
       }
     } catch (error) {
+      console.error('[Send Notification Error]', error);
       setStatus('error');
       setResponseMessage('❌ Error sending the email.');
     }
