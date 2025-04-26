@@ -1,21 +1,16 @@
-// app/layout.tsx
-// import './globals.css'; // Optional: your global CSS if any
-import { Metadata } from 'next';
+// /app/layout.tsx
+import '@/styles/globals.css'; // if you also have Tailwind or global CSS
+import { globalCss } from '../styles/stitches.config';  // ✅ Import your stitches config
 
-export const metadata: Metadata = {
-  title: 'PayPal Checkout Example',
-  description: 'A simple PayPal integration example with Next.js',
+export const metadata = {
+  title: 'DonaTalk',
+  description: 'Share your cause and connect with supporters',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head />
-      <body className="bg-gray-50 text-black">
+      <body>
         {children}
       </body>
     </html>
