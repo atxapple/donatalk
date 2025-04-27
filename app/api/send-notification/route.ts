@@ -37,7 +37,7 @@ export async function POST(req: Request) {
                   </p>
           
                   <p style="font-size: 16px; color: #333333;">Here’s their availability information:</p>
-                  <blockquote style="background-color:#f9f9f9; padding: 15px; border-left: 5px solid #2C3E50; border-radius: 6px; color: #2C3E50; white-space: pre-wrap;">
+                  <blockquote style="background-color:#f9f9f9; padding: 15px; font-size: 16px; border-left: 5px solid #2C3E50; border-radius: 6px; color: #2C3E50; white-space: pre-wrap;">
                     ${message}
                   </blockquote>
           
