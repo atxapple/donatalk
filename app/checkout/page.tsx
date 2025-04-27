@@ -1,11 +1,12 @@
 'use client';
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import PageWrapper from '@/components/layout/PageWrapper';
 import CardContainer from '@/components/layout/CardContainer';
 import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
 import { styled } from '@/styles/stitches.config';
+import { auth } from '@/firebase/clientApp';
 
 const SuccessBox = styled('div', {
   backgroundColor: '#e6f9e8',
@@ -18,8 +19,17 @@ const SuccessBox = styled('div', {
   marginTop: '20px',
 });
 
+async function getIdToken() {
+  const currentUser = auth.currentUser;
+  if (currentUser) {
+    return await currentUser.getIdToken();
+  }
+  throw new Error('User not logged in');
+}
+
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const amount = searchParams?.get('amount');
 
   if (!amount || parseFloat(amount) <= 0) {
@@ -37,7 +47,7 @@ export default function CheckoutPage() {
   const createOrder = async () => {
     const res = await fetch("/api/create-order", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ intent: "capture", amount }),
     });
     const data = await res.json();
@@ -45,40 +55,64 @@ export default function CheckoutPage() {
   };
 
   const onApprove = async (data: any) => {
-    const res = await fetch("/api/complete-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ orderID: data.orderID, intent: "capture" }),
-    });
-    const result = await res.json();
-    alert(`✅ Payment completed! Status: ${result.status}`);
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+      alert('❌ No user logged in.');
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/complete-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          'PitcherID': `${currentUser.uid}`, // ✅ Send UID securely
+        },
+        body: JSON.stringify({ orderID: data.orderID, intent: "capture" }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to complete order.');
+      }
+
+      const result = await res.json();
+
+      if (result.status === 'COMPLETED') {
+        // ✅ Redirect to profile page after success
+        router.push('/pitcher/profile');
+      } else {
+        alert(`⚠️ Payment was not completed. Status: ${result.status}`);
+      }
+    } catch (error) {
+      console.error('Payment capture error:', error);
+      alert('❌ Payment completed but an error occurred during fund update.');
+    }
   };
 
   return (
-    <>
-      <PageWrapper>
-        <CardContainer>
-          <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>Fund Your Account</Title>
-          <Subtitle>Adding <span style={{ color: '#E74C3C' }}>${amount}</span> to your credit balance</Subtitle>
+    <PageWrapper>
+      <CardContainer>
+        <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
+        <Title>Fund Your Account</Title>
+        <Subtitle>Adding <span style={{ color: '#E74C3C' }}>${amount}</span> to your credit balance</Subtitle>
 
-          <PayPalScriptProvider
-            options={{
-              clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '',
-              currency: 'USD',
-              'disable-funding': 'paylater',
-            }}
-          >
-            <div style={{ marginTop: '20px', width: '100%', display: 'flex', justifyContent: 'center' }}>
-              <PayPalButtons
-                createOrder={() => createOrder()}
-                onApprove={(data) => onApprove(data)}
-                style={{ layout: 'vertical', shape: 'pill', label: 'pay' }}
-              />
-            </div>
-          </PayPalScriptProvider>
-        </CardContainer>
-      </PageWrapper>
-    </>
+        <PayPalScriptProvider
+          options={{
+            clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '',
+            currency: 'USD',
+            'disable-funding': 'paylater',
+          }}
+        >
+          <div style={{ marginTop: '20px', width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <PayPalButtons
+              createOrder={() => createOrder()}
+              onApprove={onApprove} // ✅ Directly pass the function
+              style={{ layout: 'vertical', shape: 'pill', label: 'pay' }}
+            />
+          </div>
+        </PayPalScriptProvider>
+      </CardContainer>
+    </PageWrapper>
   );
 }
