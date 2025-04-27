@@ -110,7 +110,7 @@ export default function PitcherProfile() {
   };
 
   useEffect(() => {
-    if (searchParams.get('payment') === 'success' && userId) {
+    if (searchParams?.get('payment') === 'success' && userId) {
       fetchPitcherData(userId);
     }
   }, [searchParams, userId]);
