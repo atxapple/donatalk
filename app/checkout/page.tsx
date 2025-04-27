@@ -15,8 +15,8 @@ export default function CheckoutPage() {
   return (
     <PayPalScriptProvider
       options={{
-        'client-id': process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
-        'disable-funding': 'paylater',
+        clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
+        disableFunding: 'paylater',
       }}
     >
       <div className="p-8 max-w-md mx-auto">
