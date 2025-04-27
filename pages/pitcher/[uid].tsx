@@ -74,6 +74,7 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          pitcherName: pitcher.fullName,
           pitcherEmail: pitcher.email,
           listenerName: name,
           listenerEmail: email,
