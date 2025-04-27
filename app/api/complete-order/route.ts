@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     }
 
     const base = process.env.PAYPAL_API_URL;
-    const auth = `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}:${process.env.PAYPAL_APP_SECRET}`;
+    const auth = `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`;
     const tokenResponse = await fetch(`${base}/v1/oauth2/token`, {
       method: 'POST',
       headers: {
