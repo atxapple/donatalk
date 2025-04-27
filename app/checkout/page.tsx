@@ -1,75 +1,63 @@
+// app/checkout/page.tsx
+
+
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { useState } from 'react';
 
 export default function CheckoutPage() {
-  const [amount, setAmount] = useState<string>('10.00');
-  const [paid, setPaid] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const amount = searchParams?.get('amount') || '0';
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(e.target.value);
-  };
+  const [paymentCompleted, setPaymentCompleted] = useState(false);
+
+  if (!amount || parseFloat(amount) <= 0) {
+    return <p>Invalid or missing amount. Please enter a valid amount on the profile page.</p>;
+  }
 
   return (
-    <PayPalScriptProvider
-      options={{
-        clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
-        disableFunding: 'paylater',
-      }}
-    >
-      <div className="p-8 max-w-md mx-auto">
-        <h1 className="text-xl font-bold mb-4">PayPal Secure Checkout</h1>
+    <div style={{ padding: '20px', maxWidth: '500px', margin: '0 auto' }}>
+      <h1>Checkout</h1>
+      <p>Amount to Fund: ${amount}</p>
 
-        <label className="block mb-4 font-medium">
-          Enter Amount (USD):
-          <input
-            type="number"
-            step="0.01"
-            min="1"
-            value={amount}
-            onChange={handleAmountChange}
-            className="mt-1 w-full border rounded p-2"
-          />
-        </label>
-
-        {paid ? (
-          <div className="text-green-600 font-semibold mt-4">✅ Payment Confirmed!</div>
-        ) : (
+      {paymentCompleted ? (
+        <p>✅ Payment Completed Successfully!</p>
+      ) : (
+        <PayPalScriptProvider
+          options={{
+            clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '',
+            currency: 'USD',
+            disableFunding: 'paylater',
+          }}
+        >
           <PayPalButtons
             style={{ layout: 'vertical' }}
-            createOrder={async () => {
-              const res = await fetch('/api/create-order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount }),
+            createOrder={(data, actions) => {
+              return actions.order.create({
+                intent: 'CAPTURE', // ✅ This is REQUIRED
+                purchase_units: [
+                  {
+                    amount: {
+                      currency_code: 'USD',        // ✅ Required
+                      value: String(amount),       // ✅ Ensure string type
+                    },
+                  },
+                ],
               });
-              const data = await res.json();
-              return data.orderID;
             }}
-            onApprove={async (data) => {
-              const res = await fetch('/api/capture-order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ orderID: data.orderID }),
-              });
-              const result = await res.json();
-              if (result.status === 'COMPLETED') {
-                setPaid(true);
-              } else {
-                setError('Payment could not be confirmed.');
+            onApprove={async (data, actions) => {
+              const details = await actions.order?.capture();
+              if (details) {
+                setPaymentCompleted(true);
+                console.log('Payment successful:', details);
+                // Optionally send details to your server to update the fund balance
               }
             }}
-            onError={(err) => {
-              console.error('❌ Payment Error:', err);
-              setError('Payment failed. Please try again.');
-            }}
           />
-        )}
-
-        {error && <div className="text-red-600 mt-4">{error}</div>}
-      </div>
-    </PayPalScriptProvider>
+        </PayPalScriptProvider>
+      )}
+    </div>
   );
 }

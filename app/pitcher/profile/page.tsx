@@ -79,34 +79,42 @@ export default function PitcherProfile() {
     }
   };
 
-  const handleAddFund = async () => {
-    if (!fundAmount || parseFloat(fundAmount) <= 0 || !userId) {
+  // const handleAddFund = async () => {
+  //   if (!fundAmount || parseFloat(fundAmount) <= 0 || !userId) {
+  //     alert('Please enter a valid fund amount.');
+  //     return;
+  //   }
+  //   setLoading(true);
+  //   try {
+  //     const res = await fetch('/api/create-payment-intent', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({
+  //         amount: Math.round(parseFloat(fundAmount) * 100),
+  //         pitcherId: userId,
+  //       }),
+  //     });
+  //     const data = await res.json();
+  //     if (data.url) {
+  //       window.location.href = data.url;
+  //     } else {
+  //       alert('Payment error. Please try again.');
+  //     }
+  //   } catch (err: unknown) {
+  //     const error = err as Error;
+  //     console.error('[Add Fund Error]', error.message);
+  //     alert('Error processing payment.');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleAddFund = () => {
+    if (!fundAmount || parseFloat(fundAmount) <= 0) {
       alert('Please enter a valid fund amount.');
       return;
     }
-    setLoading(true);
-    try {
-      const res = await fetch('/api/create-payment-intent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: Math.round(parseFloat(fundAmount) * 100),
-          pitcherId: userId,
-        }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert('Payment error. Please try again.');
-      }
-    } catch (err: unknown) {
-      const error = err as Error;
-      console.error('[Add Fund Error]', error.message);
-      alert('Error processing payment.');
-    } finally {
-      setLoading(false);
-    }
+    router.push(`/checkout?amount=${fundAmount}`);
   };
 
   useEffect(() => {
