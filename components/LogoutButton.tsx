@@ -1,3 +1,5 @@
+// components/LogoutButton.tsx
+
 import { useRouter } from 'next/router';
 import { signOut, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/clientApp';

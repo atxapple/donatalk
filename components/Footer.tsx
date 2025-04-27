@@ -1,3 +1,7 @@
+// components/Footer.tsx
+
+'use client';  
+
 import { styled } from '../styles/stitches.config';
 
 const FooterContainer = styled('footer', {
