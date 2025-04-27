@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { updateFunds } from '../update-funds/route';
+import { updateFunds } from '@/lib/updateFunds';
 
 export async function POST(req: Request) {
   try {
