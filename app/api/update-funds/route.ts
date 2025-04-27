@@ -25,7 +25,7 @@ export async function updateFunds({
   amount: number;
 }): Promise<{ success: boolean; newBalance?: number; error?: string }> {
   try {
-    console.log('[Update Funds]', pitcherId, refID, amount);
+    // console.log('[Update Funds]', pitcherId, refID, amount);
     if (!pitcherId || !refID || typeof amount !== 'number' || amount <= 0) {
       throw new Error('Invalid pitcherId, refID, or amount');
     }
