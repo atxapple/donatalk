@@ -41,5 +41,19 @@
     transition: visibility 0s ease-in;
   }
   
+  /* Add to your globals.css */
+.form-control {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: 1px solid #ccc;
+}
+
+/* Make sure text areas and inputs are light even in dark mode */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background-color: #fff !important;
+  color: #333 !important;
+}
   /* You can add more shared global styles here as needed */
   
