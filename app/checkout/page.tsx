@@ -1,63 +1,84 @@
-// app/checkout/page.tsx
-
-
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
-import { useState } from 'react';
+import { useSearchParams } from "next/navigation";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import PageWrapper from '@/components/layout/PageWrapper';
+import CardContainer from '@/components/layout/CardContainer';
+import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
+import { styled } from '@/styles/stitches.config';
+
+const SuccessBox = styled('div', {
+  backgroundColor: '#e6f9e8',
+  border: '2px solid #2ecc71',
+  borderRadius: '8px',
+  padding: '12px 20px',
+  color: '#27ae60',
+  textAlign: 'center',
+  fontWeight: 'bold',
+  marginTop: '20px',
+});
 
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
-  const amount = searchParams?.get('amount') || '0';
-
-  const [paymentCompleted, setPaymentCompleted] = useState(false);
+  const amount = searchParams?.get('amount');
 
   if (!amount || parseFloat(amount) <= 0) {
-    return <p>Invalid or missing amount. Please enter a valid amount on the profile page.</p>;
+    return (
+      <PageWrapper>
+        <CardContainer>
+          <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
+          <Title>Payment Error</Title>
+          <ErrorBox>❌ Invalid fund amount. Please go back and enter a valid amount.</ErrorBox>
+        </CardContainer>
+      </PageWrapper>
+    );
   }
 
-  return (
-    <div style={{ padding: '20px', maxWidth: '500px', margin: '0 auto' }}>
-      <h1>Checkout</h1>
-      <p>Amount to Fund: ${amount}</p>
+  const createOrder = async () => {
+    const res = await fetch("/api/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ intent: "capture", amount }),
+    });
+    const data = await res.json();
+    return data.id;
+  };
 
-      {paymentCompleted ? (
-        <p>✅ Payment Completed Successfully!</p>
-      ) : (
-        <PayPalScriptProvider
-          options={{
-            clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '',
-            currency: 'USD',
-            disableFunding: 'paylater',
-          }}
-        >
-          <PayPalButtons
-            style={{ layout: 'vertical' }}
-            createOrder={(data, actions) => {
-              return actions.order.create({
-                intent: 'CAPTURE', // ✅ This is REQUIRED
-                purchase_units: [
-                  {
-                    amount: {
-                      currency_code: 'USD',        // ✅ Required
-                      value: String(amount),       // ✅ Ensure string type
-                    },
-                  },
-                ],
-              });
+  const onApprove = async (data: any) => {
+    const res = await fetch("/api/complete-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderID: data.orderID, intent: "capture" }),
+    });
+    const result = await res.json();
+    alert(`✅ Payment completed! Status: ${result.status}`);
+  };
+
+  return (
+    <>
+      <PageWrapper>
+        <CardContainer>
+          <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
+          <Title>Fund Your Account</Title>
+          <Subtitle>Adding <span style={{ color: '#E74C3C' }}>${amount}</span> to your credit balance</Subtitle>
+
+          <PayPalScriptProvider
+            options={{
+              clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '',
+              currency: 'USD',
+              'disable-funding': 'paylater',
             }}
-            onApprove={async (data, actions) => {
-              const details = await actions.order?.capture();
-              if (details) {
-                setPaymentCompleted(true);
-                console.log('Payment successful:', details);
-                // Optionally send details to your server to update the fund balance
-              }
-            }}
-          />
-        </PayPalScriptProvider>
-      )}
-    </div>
+          >
+            <div style={{ marginTop: '20px', width: '100%', display: 'flex', justifyContent: 'center' }}>
+              <PayPalButtons
+                createOrder={() => createOrder()}
+                onApprove={(data) => onApprove(data)}
+                style={{ layout: 'vertical', shape: 'pill', label: 'pay' }}
+              />
+            </div>
+          </PayPalScriptProvider>
+        </CardContainer>
+      </PageWrapper>
+    </>
   );
 }

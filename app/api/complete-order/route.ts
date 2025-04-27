@@ -1,16 +1,9 @@
-// app/api/create-order/route.ts
+// app/api/complete-order/route.ts
 
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
-  const { intent, amount } = await req.json();
-  const parsedAmount = parseFloat(amount);
-
-  // ✅ Amount Validation (prevent abuse)
-  if (isNaN(parsedAmount) || parsedAmount <= 0) {
-    return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
-  }
-
+  const { orderID, intent } = await req.json();
   const base = process.env.PAYPAL_API_URL;
   const auth = `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}:${process.env.PAYPAL_APP_SECRET}`;
   const accessTokenResponse = await fetch(`${base}/v1/oauth2/token`, {
@@ -23,25 +16,16 @@ export async function POST(req: Request) {
   });
   const { access_token } = await accessTokenResponse.json();
 
-  const orderResponse = await fetch(`${base}/v2/checkout/orders`, {
+  const captureResponse = await fetch(`${base}/v2/checkout/orders/${orderID}/${intent}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${access_token}`,
     },
-    body: JSON.stringify({
-      intent: intent.toUpperCase(),
-      purchase_units: [
-        {
-          amount: {
-            currency_code: 'USD',
-            value: parsedAmount.toFixed(2),
-          },
-        },
-      ],
-    }),
   });
 
-  const order = await orderResponse.json();
-  return NextResponse.json(order);
+  const result = await captureResponse.json();
+  console.log('result:',result);
+  console.log('id:',result.id);
+  return NextResponse.json(result);
 }
