@@ -1,15 +1,16 @@
-/* eslint-disable react/react-in-jsx-scope */
+'use client';
+
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation'; // ✅ App Router uses next/navigation
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { auth, firestore } from '../../firebase/clientApp';
+import { auth, firestore } from '@/firebase/clientApp';
 import Head from 'next/head';
-import PageWrapper from '../../components/layout/PageWrapper';
-import CardContainer from '../../components/layout/CardContainer';
-import { Logo, Title, Subtitle, ErrorBox } from '../../components/ui/shared';
-import { Input, Textarea, Button, Field, Label } from '../../components/ui';
-import { styled } from '../../styles/stitches.config';
+import PageWrapper from '@/components/layout/PageWrapper';
+import CardContainer from '@/components/layout/CardContainer';
+import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
+import { Input, Textarea, Button, Field, Label } from '@/components/ui';
+import { styled } from '@/styles/stitches.config';
 
 type Pitcher = {
   fullName: string;
@@ -43,7 +44,7 @@ export default function PitcherUpdateProfile() {
         setUserId(user.uid);
         await fetchPitcherData(user.uid);
       } else {
-        router.push('/login');
+        router.push('/login'); // ✅ Navigation updated for App Router
       }
     });
     return () => unsubscribe();
@@ -85,7 +86,7 @@ export default function PitcherUpdateProfile() {
           pitch: form.pitch,
           donation: form.donation,
         });
-        router.push('/pitcher/profile');
+        router.push('/pitcher/profile'); // ✅ Updated push for App Router
       }
     } catch (err: unknown) {
       const error = err as Error;

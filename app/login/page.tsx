@@ -1,14 +1,16 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import Head from "next/head";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, firestore } from "../firebase/clientApp";
-import { doc, getDoc } from "firebase/firestore";
-import { Input, Button, Field, Label } from "../components/ui";
-import PageWrapper from "../components/layout/PageWrapper";
-import CardContainer from "../components/layout/CardContainer";
-import { Logo, Title, Subtitle, ErrorBox } from "../components/ui/shared";
-import { styled } from "../styles/stitches.config";
+'use client';
+
+import { useRouter } from 'next/navigation';  // ✅ Correct for App Router
+import { useState } from 'react';
+import Head from 'next/head';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth, firestore } from '@/firebase/clientApp';  // ✅ Adjust your import path
+import { doc, getDoc } from 'firebase/firestore';
+import { Input, Button, Field, Label } from '@/components/ui';
+import PageWrapper from '@/components/layout/PageWrapper';
+import CardContainer from '@/components/layout/CardContainer';
+import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
+import { styled } from '@/styles/stitches.config';
 
 const ForgotPassword = styled('a', {
   marginTop: '0.5rem',
@@ -29,8 +31,8 @@ const ProminentErrorBox = styled(ErrorBox, {
 
 export default function LoginPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,28 +40,28 @@ export default function LoginPage() {
   };
 
   const handleLogin = async () => {
-    setError("");
+    setError('');
     if (!form.email || !form.password) {
-      setError("Please fill in all fields.");
+      setError('Please fill in all fields.');
       return;
     }
     try {
       setLoading(true);
       const { user } = await signInWithEmailAndPassword(auth, form.email, form.password);
-      const pitcherDoc = await getDoc(doc(firestore, "pitchers", user.uid));
-      const listenerDoc = await getDoc(doc(firestore, "listeners", user.uid));
+      const pitcherDoc = await getDoc(doc(firestore, 'pitchers', user.uid));
+      const listenerDoc = await getDoc(doc(firestore, 'listeners', user.uid));
 
       if (pitcherDoc.exists()) {
-        router.push(`/pitcher/profile`);
+        router.push('/pitcher/profile');
       } else if (listenerDoc.exists()) {
-        router.push(`/listener/profile`);
+        router.push('/listener/profile');
       } else {
-        setError("No profile found. Please contact support.");
+        setError('No profile found. Please contact support.');
       }
     } catch (err: unknown) {
       const error = err as Error;
       console.error(error.message);
-      setError("Invalid email or password. Please try again.");
+      setError('Invalid email or password. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -111,7 +113,7 @@ export default function LoginPage() {
           <ForgotPassword href="#">Forgot password?</ForgotPassword>
 
           <Button onClick={handleLogin} disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
+            {loading ? 'Logging in...' : 'Login'}
           </Button>
         </CardContainer>
       </PageWrapper>

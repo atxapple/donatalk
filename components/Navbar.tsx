@@ -1,5 +1,9 @@
+// components/Navbar.tsx
+
+'use client';  
+
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';  // ✅ Correct import here
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../firebase/clientApp';

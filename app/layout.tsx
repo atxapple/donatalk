@@ -1,6 +1,7 @@
 // /app/layout.tsx
-import '@/styles/globals.css'; // if you also have Tailwind or global CSS
-import { globalCss } from '../styles/stitches.config';  // ✅ Import your stitches config
+import '../styles/globals.css';                      // ✅ Global styles
+import Navbar from '../components/Navbar';           // ✅ Navbar component
+import Footer from '../components/Footer';           // ✅ Footer component
 
 export const metadata = {
   title: 'DonaTalk',
@@ -11,7 +12,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        {children}
+        <Navbar />                                   {/* ✅ Added Navbar */}
+        <main style={{ flexGrow: 1 }}>{children}</main>
+        <Footer />                                   {/* ✅ Added Footer */}
       </body>
     </html>
   );
