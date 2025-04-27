@@ -1,4 +1,4 @@
-// app/api/update-funds/route.ts
+// lib/updateFunds.ts
 
 import { getFirestore } from 'firebase-admin/firestore';
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
