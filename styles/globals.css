@@ -32,6 +32,14 @@
     padding: 0.5rem;
     border-radius: 4px;
   }
+
+  html.loading {
+    visibility: hidden;
+  }
+  html.loaded {
+    visibility: visible;
+    transition: visibility 0s ease-in;
+  }
   
   /* You can add more shared global styles here as needed */
   

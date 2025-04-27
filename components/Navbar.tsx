@@ -1,9 +1,9 @@
 // components/Navbar.tsx
 
-'use client';  
+'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';  // ✅ Correct import here
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../firebase/clientApp';
@@ -37,11 +37,12 @@ const Logo = styled('img', {
   height: '50px',
 });
 
-const LoginLink = styled(Link, {
+const NavLink = styled(Link, {
   color: '$dark',
   fontSize: '16px',
   textDecoration: 'none',
   fontWeight: '500',
+  marginLeft: '1rem',
   '&:hover': {
     color: '$heart',
   },
@@ -55,6 +56,7 @@ const LogoutButton = styled('button', {
   background: 'none',
   border: 'none',
   cursor: 'pointer',
+  marginLeft: '1rem',
   '&:hover': {
     color: '$heart',
   },
@@ -87,11 +89,14 @@ export default function Navbar() {
           <Logo src="/logo horizontal with text.png" alt="DonaTalk" />
         </LogoLink>
         {isAuthenticated ? (
-          <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <NavLink href="/pitcher/profile">Profile</NavLink>  {/* ✅ Added Profile link */}
+            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+          </div>
         ) : (
-          <LoginLink href="/login">Login</LoginLink>
+          <NavLink href="/login">Login</NavLink>
         )}
       </NavContent>
     </Nav>
   );
-} 
+}
