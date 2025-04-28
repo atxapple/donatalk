@@ -3,7 +3,7 @@
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
-  console.log('[Create Order] :', req);
+  // console.log('[Create Order] :', req);
   const { intent, amount } = await req.json();
   const parsedAmount = parseFloat(amount);
 
