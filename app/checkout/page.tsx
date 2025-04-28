@@ -30,9 +30,10 @@ async function getIdToken() {
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const amount = searchParams?.get('amount');
+  const encriptedAmount = searchParams?.get('a') || '0'; // Default to '0' if null
+  const amount: number = parseFloat(encriptedAmount) / 7900.0;
 
-  if (!amount || parseFloat(amount) <= 0) {
+  if (!amount || amount <= 0) {
     return (
       <PageWrapper>
         <CardContainer>
@@ -56,10 +57,14 @@ export default function CheckoutPage() {
 
   const onApprove = async (data: any) => {
     const currentUser = auth.currentUser;
+    let userID = currentUser?.uid;
+
+    console.log('[userID] :', userID);
 
     if (!currentUser) {
-      alert('❌ No user logged in.');
-      return;
+      // alert('❌ No user logged in.');
+      // return;
+      userID = '0utmhw44r0WayWHdD4lqAGLExSn2' // temp TODO: fix this
     }
 
     try {
@@ -67,7 +72,7 @@ export default function CheckoutPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'PitcherID': `${currentUser.uid}`, // ✅ Send UID securely
+          'PitcherID': `${userID}`, // ✅ Send UID securely
         },
         body: JSON.stringify({ orderID: data.orderID, intent: "capture" }),
       });

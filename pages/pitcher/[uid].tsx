@@ -79,6 +79,7 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
           listenerName: name,
           listenerEmail: email,
           message: message,
+          donation: pitcher.donation,
         }),
       });
 

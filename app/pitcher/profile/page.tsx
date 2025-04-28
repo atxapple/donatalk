@@ -86,7 +86,8 @@ export default function PitcherProfile() {
       alert('Please enter a valid fund amount.');
       return;
     }
-    router.push(`/checkout?amount=${fundAmount}`);
+    const encriptedAmount = parseFloat(fundAmount) * 7900;
+    router.push(`/checkout?a=${encriptedAmount}`);
   };
 
   useEffect(() => {

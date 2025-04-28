@@ -9,6 +9,7 @@ import CardContainer from '../../components/layout/CardContainer';
 import { Logo, Title, Subtitle, InfoBox } from '../../components/ui/shared';
 import { Input, Button } from '../../components/ui';
 import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type Listener = {
   fullName: string;
@@ -43,9 +44,9 @@ const InputStyled = styled(Input, {
 });
 
 export default function ListenerPage({ listener, uid }: { listener: Listener | null; uid: string }) {
+  const router = useRouter();
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
-
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -75,7 +76,7 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          pitcherName: name, 
+          pitcherName: name,
           pitcherEmail: email,
           listenerName: listener.fullName,
           listenerEmail: listener.email,
@@ -101,46 +102,61 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
     }
   };
 
+  const handleAddFund = () => {
+    if (!requiredBalance) {
+      alert('Please enter a valid fund amount.');
+      return;
+    }
+    const encriptedAmount = requiredBalance * 7900;
+    router.push(`/checkout?a=${encriptedAmount }`);
+  };
+
+  const isFormComplete = name.trim() !== '' && email.trim() !== '' && message.trim() !== '';
+
   return (
     <PageWrapper>
       <CardContainer>
         <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
         <Title>{listener.fullName} on DonaTalk</Title>
-          <>
-            <Subtitle>🙏 Thanks for your interest in pitching to {listener.fullName}.</Subtitle>
-            <Subtitle>The brief intro or LinedIn page of {listener.fullName}: <br></br> {listener.intro}</Subtitle>
-            <Subtitle>
-              You need to escrow  <strong>${requiredBalance} </strong> to arrange a meeting. ${listener.donation.toFixed(2)} will be sent to support a non-profit organization after the meeting.
-            </Subtitle>
-            <Subtitle>🚀 Ready to chat? Fill out the form to notify the listener:</Subtitle>
-            <Form onSubmit={handleSubmit}>
-              <InputStyled
-                type="text"
-                placeholder="Your name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-              <InputStyled
-                type="email"
-                placeholder="Your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <Textarea
-                placeholder="Available times or message (e.g., 'Mon 2-5pm' or Calendly link)"
-                rows={2}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                required
-              />
-              <Button type="submit" disabled={status === 'loading'}>
-                {status === 'loading' ? 'Sending...' : 'Escrow $' + requiredBalance + ' and Notify Listener'} 
-              </Button>
-              {responseMessage && <p>{responseMessage}</p>}
-            </Form>
-          </>
+        <>
+          <Subtitle>🙏 Thanks for your interest in pitching to {listener.fullName}.</Subtitle>
+          <Subtitle>The brief intro or LinedIn page of {listener.fullName}: <br></br> {listener.intro}</Subtitle>
+          <Subtitle>
+            You need to escrow  <strong>${requiredBalance} </strong> to arrange a meeting. ${listener.donation.toFixed(2)} will be sent to support a non-profit organization after the meeting.
+          </Subtitle>
+          <Subtitle>🚀 Ready to chat? Fill out the form to notify the listener:</Subtitle>
+          <Form onSubmit={handleSubmit}>
+            <InputStyled
+              type="text"
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+            <InputStyled
+              type="email"
+              placeholder="Your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <Textarea
+              placeholder="Available times or message (e.g., 'Mon 2-5pm' or Calendly link)"
+              rows={2}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              required
+            />
+            <Button
+              type="submit"
+              disabled={!isFormComplete || status === 'loading'}
+              onClick={handleAddFund}
+            >
+              {status === 'loading' ? 'Sending...' : 'Escrow $' + requiredBalance + ' and Notify Listener'}
+            </Button>
+            {responseMessage && <p>{responseMessage}</p>}
+          </Form>
+        </>
       </CardContainer>
     </PageWrapper>
   );
