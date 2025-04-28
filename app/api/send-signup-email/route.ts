@@ -1,3 +1,5 @@
+//  app/api/send-signup-email/route.ts
+
 import { NextResponse } from 'next/server';
 import sgMail from '@sendgrid/mail';
 
@@ -5,19 +7,19 @@ import sgMail from '@sendgrid/mail';
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
 export async function POST(req: Request) {
-    try {
-        const body = await req.json();
-        const { pitcherName, pitcherEmail, pitcherId } = body;
+  try {
+    const body = await req.json();
+    const { pitcherName, pitcherEmail, pitcherId } = body;
 
-        if (!pitcherName || !pitcherEmail || !pitcherId) {
-            return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
-        }
+    if (!pitcherName || !pitcherEmail || !pitcherId) {
+      return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
+    }
 
-        const msg = {
-            to: [pitcherEmail],
-            from: process.env.SENDGRID_FROM_EMAIL!,
-            subject: `🎉 Welcome to DonaTalk, ${pitcherName}!`,
-            html: `
+    const msg = {
+      to: [pitcherEmail],
+      from: process.env.SENDGRID_FROM_EMAIL!,
+      subject: `🎉 Welcome to DonaTalk, ${pitcherName}!`,
+      html: `
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -38,8 +40,10 @@ export async function POST(req: Request) {
               Your personal pitch page has been created below. Please make sure to add funds to your account at <a href="https://app.donatalk.com/pitcher/profile"> your profile page</a>. Then, the page is ready to share!
             </p>
 
-            <blockquote style="background-color:#F8A5A5; padding: 15px; font-size: 16px; border-left: 5px solid #E74C3C; border-radius: 6px; color: #000000; white-space: pre-wrap;">
-                https://app.donatalk.com/pitcher/${pitcherId}
+            <blockquote style="background-color: #F8A5A5; margin: 5px; padding-top: 30px; padding-bottom: 10px; font-size: 16px; border-left: 5px solid #E74C3C; border-radius: 6px; color: #000000; white-space: pre-wrap; text-align: center; display: flex; align-items: center; justify-content: center; min-height: 50px; width: 100%;">
+              <a href="https://app.donatalk.com/pitcher/${pitcherId}" style="color: #2C3E50; text-decoration: none; font-weight: bold;">
+                https://app.donatalk.com/pitcher/${pitcherId} 
+              </a>
             </blockquote>
 
             <p style="font-size: 16px; color: #333333;">
@@ -60,12 +64,12 @@ export async function POST(req: Request) {
         </body>
         </html>
       `,
-        };
+    };
 
-        await sgMail.send(msg);
-        return NextResponse.json({ success: true, message: 'Signup email sent successfully.' }, { status: 200 });
-    } catch (error: any) {
-        console.error('[Signup Email Error]', error.response?.body || error.message);
-        return NextResponse.json({ error: 'Failed to send signup email.' }, { status: 500 });
-    }
+    await sgMail.send(msg);
+    return NextResponse.json({ success: true, message: 'Signup email sent successfully.' }, { status: 200 });
+  } catch (error: any) {
+    console.error('[Signup Email Error]', error.response?.body || error.message);
+    return NextResponse.json({ error: 'Failed to send signup email.' }, { status: 500 });
+  }
 }

@@ -1,3 +1,5 @@
+// app/pitcher/signup/page.tsx
+
 'use client';
 
 import { useState } from 'react';
@@ -41,12 +43,12 @@ export default function SignupPitcher() {
       setError('Please fill in all fields.');
       return;
     }
-
+  
     try {
       setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
       const uid = userCredential.user.uid;
-
+  
       await setDoc(doc(firestore, 'pitchers', uid), {
         fullName: form.fullName,
         email: form.email,
@@ -55,8 +57,19 @@ export default function SignupPitcher() {
         credit_balance: 0,
         createdAt: Date.now(),
       });
-
-      router.push('/pitcher/profile'); // ✅ Updated push
+  
+      // ✅ Send signup email notification
+      await fetch('/api/send-signup-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pitcherName: form.fullName,
+          pitcherEmail: form.email,
+          pitcherId: uid,
+        }),
+      });
+  
+      router.push('/pitcher/profile'); // ✅ Navigate after sending the email
     } catch (err: unknown) {
       const error = err as Error;
       console.error(error.message);
@@ -65,6 +78,7 @@ export default function SignupPitcher() {
       setLoading(false);
     }
   };
+  
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
