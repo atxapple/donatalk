@@ -3,6 +3,8 @@
 import { getFirestore } from 'firebase-admin/firestore';
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
 if (!getApps().length) {
   initializeApp({
     credential: cert({
@@ -19,15 +21,17 @@ export async function updateFunds({
   refID,
   pitcherId,
   amount,
+  eventType,
 }: {
   refID: string;
   pitcherId: string;
   amount: number;
+  eventType: string
 }): Promise<{ success: boolean; newBalance?: number; error?: string }> {
   try {
     // console.log('[Update Funds]', pitcherId, refID, amount);
-    if (!pitcherId || !refID || typeof amount !== 'number' || amount <= 0) {
-      throw new Error('Invalid pitcherId, refID, or amount');
+    if (!pitcherId || !refID || typeof amount !== 'number' || !eventType) {
+      throw new Error('Invalid pitcherId, refID, amount, or eventType.');
     }
 
     const pitcherRef = db.collection('pitchers').doc(pitcherId);
@@ -48,13 +52,32 @@ export async function updateFunds({
     // ✅ Log fund history
     await db.collection('fund_history').add({
       amount,
-      eventType: 'add_fund',
+      eventType: eventType,
       paymentIntentRefId: refID,
       pitcherId: pitcherId,
       timestamp: new Date(),
     });
 
     console.log(`[Update Funds] Added $${amount} to pitcher ${pitcherId}. New balance: ${newBalance}`);
+
+    console.log('pitcherDoc Data', pitcherDoc.data()?.fullName, pitcherDoc.data()?.email, amount,);
+
+    // ✅ Call the send-payment-confirm-email API
+    const emailResponse = await fetch(`${BASE_URL}/api/send-payment-confirm-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        pitcherName: pitcherDoc.data()?.fullName,
+        pitcherEmail: pitcherDoc.data()?.email,
+        amountPaid: amount,
+      }),
+    });
+
+    if (!emailResponse.ok) {
+      console.error('⚠️ Payment confirmation email failed to send.');
+    } else {
+      console.log('✅ Payment confirmation email sent successfully.');
+    }
 
     return { success: true, newBalance };
   } catch (error: any) {

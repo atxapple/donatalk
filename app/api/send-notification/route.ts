@@ -26,7 +26,7 @@ export async function POST(req: Request) {
                 <title>DonaTalk - New Listener Interest</title>
               </head>
               <body style="margin: 0; padding: 0; background-color: #f5f5f5;">
-                <div style="font-family: Arial, sans-serif; background-color: #ffffff; padding: 30px; border-radius: 8px; max-width: 600px; margin: 40px auto; border: 1px solid #e0e0e0;">
+                <div style="font-family: Arial, sans-serif; background-color: #ffffff; padding: 30px; border-radius: 8px; max-width: 600px; margin: 5px auto; border: 1px solid #e0e0e0;">
                   <div style="text-align: center; margin-bottom: 20px;">
                     <img src="https://app.donatalk.com/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" style="max-width: 88px; height: auto;">
                   </div>

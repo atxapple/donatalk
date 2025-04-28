@@ -1,4 +1,4 @@
-// app/pitcher/signup/page.tsx
+// app/listener/signup/page.tsx
 
 'use client';
 
@@ -20,13 +20,13 @@ const ProminentErrorBox = styled(ErrorBox, {
   backgroundColor: '#ffe5e5',
 });
 
-export default function SignupPitcher() {
+export default function SignupListener() {
   const router = useRouter();
   const [form, setForm] = useState({
     fullName: '',
     email: '',
     password: '',
-    aboutPitch: '',
+    intro: '',
     donation: '',
   });
   const [error, setError] = useState('');
@@ -39,7 +39,7 @@ export default function SignupPitcher() {
 
   const handleSignup = async () => {
     setError('');
-    if (!form.fullName || !form.email || !form.password || !form.aboutPitch || !form.donation) {
+    if (!form.fullName || !form.email || !form.password || !form.intro || !form.donation) {
       setError('Please fill in all fields.');
       return;
     }
@@ -49,10 +49,10 @@ export default function SignupPitcher() {
       const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
       const uid = userCredential.user.uid;
   
-      await setDoc(doc(firestore, 'pitchers', uid), {
+      await setDoc(doc(firestore, 'listeners', uid), {
         fullName: form.fullName,
         email: form.email,
-        pitch: form.aboutPitch,
+        intro: form.intro,
         donation: parseFloat(form.donation),
         credit_balance: 0,
         createdAt: Date.now(),
@@ -66,7 +66,7 @@ export default function SignupPitcher() {
           fullName: form.fullName,
           email: form.email,
           userId: uid,
-          role: 'pitcher',
+          role: 'listener',
         }),
       });
   
@@ -91,14 +91,14 @@ export default function SignupPitcher() {
     <>
       <Head>
         <title>Sign Up as Pitcher | DonaTalk</title>
-        <meta name="description" content="Sign up as a pitcher to share your cause on DonaTalk." />
+        <meta name="description" content="Sign up as a listener and discover pitches that inspire donations." />
       </Head>
 
       <PageWrapper>
         <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>Sign Up as a Pitcher</Title>
-          <Subtitle>Share your cause and connect with supporters</Subtitle>
+          <Title>Sign Up as a Listener</Title>
+          <Subtitle>Discover pitches and support community.</Subtitle>
 
           {error && <ProminentErrorBox>{error}</ProminentErrorBox>}
 
@@ -118,12 +118,12 @@ export default function SignupPitcher() {
           </Field>
 
           <Field>
-            <Label>About Pitch (Brief Description)</Label>
-            <Textarea name="aboutPitch" rows={3} value={form.aboutPitch} onChange={onChange} />
+            <Label>Brief Intro or LinkedIn Page Link</Label>
+            <Textarea name="intro" rows={3} value={form.intro} onChange={onChange} />
           </Field>
 
           <Field>
-            <Label>Donation per Meeting ($)</Label>
+            <Label>Donation Request per Meeting ($)</Label>
             <Input name="donation" type="number" value={form.donation} onChange={onChange} onKeyPress={handleKeyPress} />
           </Field>
 

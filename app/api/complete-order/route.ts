@@ -34,11 +34,11 @@ export async function POST(req: Request) {
 
     const result = await captureResponse.json();
 
-    console.log('Payment Result:', result);
+    // console.log('Payment Result:', result);
 
     if (result.status === 'COMPLETED') {
       const amountCaptured = parseFloat(result.purchase_units[0].payments.captures[0].amount.value);
-      const refID = result.purchase_units[0].reference_id; // Securely passed during create-order
+      const refID = result.id; // Securely passed during create-order
 
       console.log(`[Complete Order] RefID: ${refID}, Amount: ${amountCaptured}, PitcherID: ${pitcherId}`);
 
@@ -47,6 +47,7 @@ export async function POST(req: Request) {
         refID,
         pitcherId,
         amount: amountCaptured,
+        eventType: 'add_fund',
       });
 
       if (fundUpdateResult.success) {
