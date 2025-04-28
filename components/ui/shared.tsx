@@ -16,7 +16,8 @@ export const Title = styled('h1', {
 export const Subtitle = styled('p', {
   textAlign: 'center',
   fontSize: '$base',
-  color: '$mediumgray',
+  // color: '$mediumgray',
+  color: '$darkgray',
   marginBottom: '$sm',
 });
 

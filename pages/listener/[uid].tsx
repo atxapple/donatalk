@@ -1,51 +1,21 @@
+// pages/listener/[uid].tsx
+
 import { GetServerSideProps } from 'next';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../../firebase/clientApp';
 import { styled } from '../../styles/stitches.config';
-import { useState, useEffect } from 'react';
+import PageWrapper from '../../components/layout/PageWrapper';
+import CardContainer from '../../components/layout/CardContainer';
+import { Logo, Title, Subtitle, InfoBox } from '../../components/ui/shared';
+import { Input, Button } from '../../components/ui';
+import { useEffect, useState } from 'react';
 
-const Wrapper = styled('div', {
-  minHeight: '100vh',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: '$light',
-  padding: '$lg',
-});
-
-const Container = styled('div', {
-  maxWidth: '700px',
-  width: '100%',
-  padding: '$lg',
-  fontSize: '$base',
-  color: '$dark',
-  backgroundColor: '$white',
-  borderRadius: '$md',
-  boxShadow: '0 8px 20px rgba(0, 0, 0, 0.05)',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-});
-
-const Logo = styled('img', {
-  width: '60px',
-  height: '60px',
-  marginBottom: '$md',
-});
-
-const Title = styled('h1', {
-  fontSize: '$xl',
-  fontWeight: 'bold',
-  marginBottom: '$sm',
-  textAlign: 'center',
-  color: '$heart',
-});
-
-const Paragraph = styled('p', {
-  marginBottom: '$md',
-  lineHeight: '1.6',
-  textAlign: 'center',
-});
+type Listener = {
+  fullName: string;
+  intro: string;
+  donation: number;
+  email: string;
+};
 
 const Form = styled('form', {
   display: 'flex',
@@ -53,6 +23,7 @@ const Form = styled('form', {
   alignItems: 'center',
   gap: '$sm',
   width: '100%',
+  maxWidth: '550px',
 });
 
 const Textarea = styled('textarea', {
@@ -62,156 +33,116 @@ const Textarea = styled('textarea', {
   borderRadius: '$sm',
   border: '1px solid #ccc',
   width: '100%',
-  maxWidth: '550px',
   resize: 'vertical',
-  '&::placeholder': {
-    fontFamily: 'inherit',
-    fontSize: '$base',
-  },
-  '&:focus': {
-    borderColor: '$heart',
-    outline: 'none',
-  },
+  '&::placeholder': { fontFamily: 'inherit', fontSize: '$base' },
+  '&:focus': { borderColor: '$heart', outline: 'none' },
 });
 
-const Input = styled('input', {
-  padding: '$sm',
-  fontSize: '$base',
-  fontFamily: 'inherit',
-  borderRadius: '$sm',
-  border: '1px solid #ccc',
+const InputStyled = styled(Input, {
   width: '100%',
-  maxWidth: '550px',
-  '&::placeholder': {
-    fontFamily: 'inherit',
-    fontSize: '$base',
-  },
-  '&:focus': {
-    borderColor: '$heart',
-    outline: 'none',
-  },
 });
-
-const Button = styled('button', {
-  backgroundColor: '$heart',
-  color: 'white',
-  padding: '$sm',
-  fontWeight: '600',
-  borderRadius: '$sm',
-  border: 'none',
-  transition: 'background 0.2s',
-  width: '100%',
-  maxWidth: '550px',
-  '&:hover': {
-    backgroundColor: '#c0392b',
-  },
-  '&:disabled': {
-    backgroundColor: '$mediumgray',
-    cursor: 'not-allowed',
-  },
-});
-
-type Listener = {
-  fullName: string;
-  introOrLinkedIn: string;
-  donationPerMeeting: string;
-};
 
 export default function ListenerPage({ listener, uid }: { listener: Listener | null; uid: string }) {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [paymentComplete, setPaymentComplete] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [responseMessage, setResponseMessage] = useState('');
 
-  useEffect(() => {
-    const query = new URLSearchParams(window.location.search);
-    if (query.get("paid") === "1") {
-      setPaymentComplete(true);
-    }
-  }, []);
+  if (!hydrated) return null; // Prevent hydration mismatch
 
-  const handleSubmit = (e: React.FormEvent) => {
+  if (!listener) {
+    return (
+      <PageWrapper>
+        <CardContainer>
+          <InfoBox>Listener not found.</InfoBox>
+        </CardContainer>
+      </PageWrapper>
+    );
+  }
+
+  const requiredBalance = Math.ceil(listener.donation * 1.125 * 100) / 100;
+  // const isActive = pitcher.credit_balance >= requiredBalance;
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Thanks! Your pitch request has been sent.');
-    setName('');
-    setEmail('');
-    setMessage('');
-  };
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/send-notification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pitcherName: name, 
+          pitcherEmail: email,
+          listenerName: listener.fullName,
+          listenerEmail: listener.email,
+          message: message,
+        }),
+      });
 
-  const handleEscrow = async () => {
-    const res = await fetch("/api/create-checkout-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        amount: parseInt(listener?.donationPerMeeting || "0") * 100,
-        meetingId: "meeting_" + Date.now(),
-        listenerId: uid,
-        pitcherId: "pitcher_placeholder", // Replace with logged-in user ID
-      }),
-    });
-
-    const data = await res.json();
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      alert("Unable to start payment.");
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setStatus('success');
+        setResponseMessage('✅ Notification sent successfully!');
+        setName('');
+        setEmail('');
+        setMessage('');
+      } else {
+        setStatus('error');
+        setResponseMessage(`❌ Failed to send: ${data.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('[Send Notification Error]', error);
+      setStatus('error');
+      setResponseMessage('❌ Error sending the email.');
     }
   };
-
-  if (!listener) return <Wrapper><Container>Listener not found.</Container></Wrapper>;
 
   return (
-    <Wrapper>
-      <Container>
+    <PageWrapper>
+      <CardContainer>
         <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
         <Title>{listener.fullName} on DonaTalk</Title>
-        <Paragraph>
-          🙋 Meet {listener.fullName}, a listener ready to support good causes!
-        </Paragraph>
-        <Paragraph>
-          🌐 {listener.introOrLinkedIn || "No intro provided."}
-        </Paragraph>
-        <Paragraph>
-          💸 This listener requests <strong>${listener.donationPerMeeting}</strong> per meeting.
-        </Paragraph>
-
-        {!paymentComplete && (
           <>
-            <Button onClick={handleEscrow}>Escrow</Button>
-            <Paragraph style={{ color: "#a00" }}>
-              ⚠ Please complete escrow payment before sending pitch request.
-            </Paragraph>
+            <Subtitle>🙏 Thanks for your interest in pitching to {listener.fullName}.</Subtitle>
+            <Subtitle>The brief intro or LinedIn page of {listener.fullName}: <br></br> {listener.intro}</Subtitle>
+            <Subtitle>
+              You need to escrow  <strong>${requiredBalance} </strong> to arrange a meeting. ${listener.donation.toFixed(2)} will be sent to support a non-profit organization after the meeting.
+            </Subtitle>
+            <Subtitle>🚀 Ready to chat? Fill out the form to notify the listener:</Subtitle>
+            <Form onSubmit={handleSubmit}>
+              <InputStyled
+                type="text"
+                placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+              <InputStyled
+                type="email"
+                placeholder="Your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <Textarea
+                placeholder="Available times or message (e.g., 'Mon 2-5pm' or Calendly link)"
+                rows={2}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                required
+              />
+              <Button type="submit" disabled={status === 'loading'}>
+                {status === 'loading' ? 'Sending...' : 'Escrow $' + requiredBalance + ' and Notify Listener'} 
+              </Button>
+              {responseMessage && <p>{responseMessage}</p>}
+            </Form>
           </>
-        )}
-
-        <Form onSubmit={handleSubmit}>
-          <Input
-            type="text"
-            placeholder="Your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-          <Input
-            type="email"
-            placeholder="Your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <Textarea
-            placeholder="Available times. Example 1: Mon 2pm - 5pm or Wed morning, Example 2: calendly.com/abc-2"
-            rows={3}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            required
-          />
-          <Button type="submit" disabled={!paymentComplete}>
-            Send pitch request
-          </Button>
-        </Form>
-      </Container>
-    </Wrapper>
+      </CardContainer>
+    </PageWrapper>
   );
 }
 
@@ -227,14 +158,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     return {
-      props: {
-        listener: docSnap.data(),
-        uid: uid as string,
-      },
+      props: { listener: docSnap.data() as Listener, uid: uid as string },
     };
   } catch {
-    return {
-      props: { listener: null, uid: uid as string },
-    };
+    return { props: { listener: null, uid: uid as string } };
   }
 };
