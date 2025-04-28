@@ -1,3 +1,5 @@
+// app/api/send-notification/route.ts
+
 import { NextResponse } from 'next/server';
 import sgMail from '@sendgrid/mail';
 
@@ -5,17 +7,17 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
 export async function POST(req: Request) {
     try {
-        const { pitcherName, pitcherEmail, listenerName, listenerEmail, message } = await req.json();
+        const { pitcherName, pitcherEmail, listenerName, listenerEmail, message, donation } = await req.json();
 
-        if (!pitcherName || !pitcherEmail || !listenerName || !listenerEmail || !message) {
+        if (!pitcherName || !pitcherEmail || !listenerName || !listenerEmail || !message || !donation) {
             return NextResponse.json({ success: false, error: 'Missing required fields.' }, { status: 400 });
         }
 
-        console.log('[Send Notification]', pitcherName, pitcherEmail, listenerName, listenerEmail, message);
+        console.log('[Send Notification]', pitcherName, pitcherEmail, listenerName, listenerEmail, message, donation);
         const msg = {
             to: [pitcherEmail, listenerEmail], // sending to both pitcher and listener
             from: process.env.SENDGRID_FROM_EMAIL!, // ✅ Your verified sender
-            subject: `🎉 [DonaTalk] ${listenerName} wants to hear your pitch! 🚀`,
+            subject: `[DonaTalk] ${listenerName} wants to hear your pitch! 🚀`,
             html: `
               <!DOCTYPE html>
               <html lang="en">
@@ -51,6 +53,8 @@ export async function POST(req: Request) {
                          style="color: #2C3E50; font-weight: bold;">
                          https://us06web.zoom.us/j/88318430995?pwd=TBQhuBCyMvPFbssAmmoyMpgnGbBpCh.1
                       </a>
+                    </li>
+                    <li> After the meeting, <strong> ${donation} USD </strong> will be sent to a non-profit organization.
                     </li>
                   </ul>
           
