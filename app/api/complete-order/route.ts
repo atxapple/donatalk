@@ -4,12 +4,16 @@ import { NextResponse } from 'next/server';
 import { updateFunds } from '@/lib/updateFunds';
 
 export async function POST(req: Request) {
+  
+  console.log('[Complete Order] :', req);
   try {
     const { orderID, intent } = await req.json();
     const pitcherId = req.headers.get('PitcherID'); // ✅ Pitcher UID sent securely from client
     if (!pitcherId) {
       return NextResponse.json({ success: false, message: 'Missing Pitcher ID' }, { status: 400 });
     }
+
+    console.log(`[Complete Order] OrderID: ${orderID}, Intent: ${intent}, PitcherID: ${pitcherId}`);
 
     const base = process.env.PAYPAL_API_URL;
     const auth = `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`;
@@ -34,7 +38,7 @@ export async function POST(req: Request) {
 
     const result = await captureResponse.json();
 
-    // console.log('Payment Result:', result);
+    console.log('Payment Result:', result);
 
     if (result.status === 'COMPLETED') {
       const amountCaptured = parseFloat(result.purchase_units[0].payments.captures[0].amount.value);
