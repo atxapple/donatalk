@@ -80,6 +80,7 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
           listenerEmail: email,
           message: message,
           donation: pitcher.donation,
+          source: 'pitcherPage'
         }),
       });
 
