@@ -68,26 +68,60 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
   const requiredBalance = Math.ceil(listener.donation * 1.125 * 100) / 100;
   // const isActive = pitcher.credit_balance >= requiredBalance;
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setStatus('loading');
+  //   try {
+  //     const res = await fetch('/api/send-notification', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({
+  //         pitcherName: name,
+  //         pitcherEmail: email,
+  //         listenerName: listener.fullName,
+  //         listenerEmail: listener.email,
+  //         message: message,
+  //       }),
+  //     });
+
+  //     const data = await res.json();
+  //     if (res.ok && data.success) {
+  //       setStatus('success');
+  //       setResponseMessage('✅ Notification sent successfully!');
+  //       setName('');
+  //       setEmail('');
+  //       setMessage('');
+  //     } else {
+  //       setStatus('error');
+  //       setResponseMessage(`❌ Failed to send: ${data.error || 'Unknown error'}`);
+  //     }
+  //   } catch (error) {
+  //     console.error('[Send Notification Error]', error);
+  //     setStatus('error');
+  //     setResponseMessage('❌ Error sending the email.');
+  //   }
+  // };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
     try {
-      const res = await fetch('/api/send-notification', {
+      const res = await fetch('/api/create-meeting', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          listenerId: uid,
           pitcherName: name,
           pitcherEmail: email,
-          listenerName: listener.fullName,
-          listenerEmail: listener.email,
           message: message,
         }),
       });
 
+      console.log('[Create Meeting Response]', res);
+  
       const data = await res.json();
       if (res.ok && data.success) {
         setStatus('success');
-        setResponseMessage('✅ Notification sent successfully!');
+        setResponseMessage('✅ Meeting request sent successfully!');
         setName('');
         setEmail('');
         setMessage('');
@@ -96,19 +130,19 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
         setResponseMessage(`❌ Failed to send: ${data.error || 'Unknown error'}`);
       }
     } catch (error) {
-      console.error('[Send Notification Error]', error);
+      console.error('[Create Meeting Error]', error);
       setStatus('error');
-      setResponseMessage('❌ Error sending the email.');
+      setResponseMessage('❌ Error creating the meeting.');
     }
   };
 
   const handleAddFund = () => {
-    if (!requiredBalance) {
-      alert('Please enter a valid fund amount.');
-      return;
-    }
-    const encriptedAmount = requiredBalance * 7900;
-    router.push(`/checkout?a=${encriptedAmount }`);
+    // if (!requiredBalance) {
+    //   alert('Please enter a valid fund amount.');
+    //   return;
+    // }
+    // const encriptedAmount = requiredBalance * 7900;
+    // router.push(`/checkout?a=${encriptedAmount }`);
   };
 
   const isFormComplete = name.trim() !== '' && email.trim() !== '' && message.trim() !== '';
