@@ -5,12 +5,12 @@ import { firestore } from '@/firebase/clientApp';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 
 export async function POST(req: Request) {
-    // console.log('[Create Meeting] :', req);
+    console.log('[Create Meeting] :', req);
     try {
-        const { listenerId, pitcherName, pitcherEmail, message } = await req.json();
-        console.log('[listenerId, pitcherName, pitcherEmail, message] :', { listenerId, pitcherName, pitcherEmail, message });
+        const { listenerId, pitcherName, pitcherEmail, availability } = await req.json();
+        console.log('[listenerId, pitcherName, pitcherEmail, availability] :', { listenerId, pitcherName, pitcherEmail, availability });
 
-        if (!listenerId || !pitcherName || !pitcherEmail || !message) {
+        if (!listenerId || !pitcherName || !pitcherEmail || !availability) {
             return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
         }
 
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
             pitcherId: '',
             pitcherName,
             pitcherEmail,
-            message,
+            availability,
             status: 'pending', // meeting status: pending / confirmed / completed
             createdAt: Timestamp.now(),
         };

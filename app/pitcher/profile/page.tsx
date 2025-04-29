@@ -87,7 +87,7 @@ export default function PitcherProfile() {
       return;
     }
     const encriptedAmount = parseFloat(fundAmount) * 7900;
-    router.push(`/pitcher-add-fund?a=${encriptedAmount}`);
+    router.push(`/pitcher/add-fund?a=${encriptedAmount}`);
   };
 
   useEffect(() => {

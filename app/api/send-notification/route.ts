@@ -7,13 +7,13 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
 export async function POST(req: Request) {
     try {
-        const { pitcherName, pitcherEmail, listenerName, listenerEmail, message, donation } = await req.json();
+        const { pitcherName, pitcherEmail, listenerName, listenerEmail, message, donation, source } = await req.json();
 
-        if (!pitcherName || !pitcherEmail || !listenerName || !listenerEmail || !message || !donation) {
-            return NextResponse.json({ success: false, error: 'Missing required fields.' }, { status: 400 });
+        if (!pitcherName || !pitcherEmail || !listenerName || !listenerEmail || !message || !donation || !source) {
+            return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
         }
 
-        console.log('[Send Notification]', pitcherName, pitcherEmail, listenerName, listenerEmail, message, donation);
+        console.log('[Send Notification]', pitcherName, pitcherEmail, listenerName, listenerEmail, message, donation, source);
         const msg = {
             to: [pitcherEmail, listenerEmail], // sending to both pitcher and listener
             from: process.env.SENDGRID_FROM_EMAIL!, // ✅ Your verified sender
