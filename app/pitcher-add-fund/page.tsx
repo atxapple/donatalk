@@ -1,5 +1,3 @@
-// app/checkout/page.tsx
-
 'use client';
 
 import { useSearchParams, useRouter } from "next/navigation";
@@ -21,15 +19,7 @@ const SuccessBox = styled('div', {
   marginTop: '20px',
 });
 
-async function getIdToken() {
-  const currentUser = auth.currentUser;
-  if (currentUser) {
-    return await currentUser.getIdToken();
-  }
-  throw new Error('User not logged in');
-}
-
-export default function CheckoutPage() {
+export default function PitcherAddFund() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const encriptedAmount = searchParams?.get('a') || '0'; // Default to '0' if null
@@ -64,19 +54,20 @@ export default function CheckoutPage() {
     console.log('[userID] :', userID);
 
     if (!currentUser) {
-      // alert('❌ No user logged in.');
-      // return;
-      userID = '0utmhw44r0WayWHdD4lqAGLExSn2' // temp TODO: fix this
+      alert('❌ No user logged in.');
+      return;
     }
 
     try {
-      const res = await fetch("/api/complete-order", {
+      const res = await fetch("/api/complete-order-and-update-fund", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'PitcherID': `${userID}`, // ✅ Send UID securely
         },
-        body: JSON.stringify({ orderID: data.orderID, intent: "capture" }),
+        body: JSON.stringify({ 
+          orderID: data.orderID, 
+          intent: "capture", 
+          pitcherId: userID }),
       });
 
       if (!res.ok) {

@@ -5,15 +5,13 @@ import { updateFunds } from '@/lib/updateFunds';
 
 export async function POST(req: Request) {
   
-  console.log('[Complete Order] :', req);
+  // console.log('[Complete Order] :', req);
   try {
     const { orderID, intent } = await req.json();
-    const pitcherId = req.headers.get('PitcherID'); // ✅ Pitcher UID sent securely from client
-    if (!pitcherId) {
-      return NextResponse.json({ success: false, message: 'Missing Pitcher ID' }, { status: 400 });
-    }
 
-    console.log(`[Complete Order] OrderID: ${orderID}, Intent: ${intent}, PitcherID: ${pitcherId}`);
+    if (orderID === undefined || intent === undefined) {
+      return NextResponse.json({ success: false, message: 'Missing orderID or intent' }, { status: 400 });
+    }
 
     const base = process.env.PAYPAL_API_URL;
     const auth = `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`;
@@ -37,44 +35,9 @@ export async function POST(req: Request) {
     });
 
     const result = await captureResponse.json();
+    // console.log('Payment Result:', result);
+    return NextResponse.json(result, { status: 200 });
 
-    console.log('Payment Result:', result);
-
-    if (result.status === 'COMPLETED') {
-      const amountCaptured = parseFloat(result.purchase_units[0].payments.captures[0].amount.value);
-      const refID = result.id; // Securely passed during create-order
-
-      console.log(`[Complete Order] RefID: ${refID}, Amount: ${amountCaptured}, PitcherID: ${pitcherId}`);
-
-      // ✅ Wait for fund update before returning success:
-      const fundUpdateResult = await updateFunds({
-        refID,
-        pitcherId,
-        amount: amountCaptured,
-        eventType: 'add_fund',
-      });
-
-      if (fundUpdateResult.success) {
-        return NextResponse.json({
-          success: true,
-          status: result.status,
-          message: 'Payment completed and funds updated successfully.',
-          newBalance: fundUpdateResult.newBalance,
-        });
-      } else {
-        return NextResponse.json({
-          success: false,
-          message: 'Payment captured, but failed to update funds.',
-          error: fundUpdateResult.error,
-        }, { status: 500 });
-      }
-    } else {
-      return NextResponse.json({
-        success: false,
-        message: 'Payment not completed.',
-        status: result.status,
-      });
-    }
   } catch (error: any) {
     console.error('[Complete Order Error]', error.message);
     return NextResponse.json({
