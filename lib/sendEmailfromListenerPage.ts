@@ -59,6 +59,9 @@ export async function sendEmailfromListenerPage({
     console.log('[Listener Info]', { listenerName, listenerEmail });
 
     // Send email notification
+
+    const donation = Number((amountCaptured / 1.125).toFixed(2));
+
     const emailResponse = await fetch(`${BASE_URL}/api/send-notification`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -68,7 +71,7 @@ export async function sendEmailfromListenerPage({
         listenerName,
         listenerEmail,
         message,
-        donation: amountCaptured,
+        donation,
         source: 'listenerPage',
       }),
     });
@@ -77,6 +80,23 @@ export async function sendEmailfromListenerPage({
       console.error('[Send Email] Failed to send notification email.');
     } else {
       console.log('[Send Email] Notification email sent successfully.');
+    }
+
+    // ✅ Call the send-payment-confirm-email API
+    const PyamentEmailResponse = await fetch(`${BASE_URL}/api/send-payment-confirm-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        pitcherName, 
+        pitcherEmail, 
+        amountPaid: amountCaptured,
+      }),
+    });
+
+    if (!PyamentEmailResponse.ok) {
+      console.error('⚠️ Payment confirmation email failed to send.');
+    } else {
+      console.log('✅ Payment confirmation email sent successfully.');
     }
 
     return { success: true };
