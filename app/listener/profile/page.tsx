@@ -101,7 +101,7 @@ export default function ListenerProfile() {
       <PageWrapper>
         <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>My Profile</Title>
+          <Title>My Listener Profile</Title>
           <Subtitle>Welcome, {listener.fullName}</Subtitle>
 
           <ShareSection>
@@ -133,6 +133,11 @@ export default function ListenerProfile() {
 
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '0rem' }}>
             <Button onClick={() => router.push('/listener/update-profile')}>Edit Profile</Button>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+            <Button onClick={() => router.push('/pitcher/profile')}>
+              Go to Pitcher Profile
+            </Button>
           </div>
         </CardContainer>
       </PageWrapper>

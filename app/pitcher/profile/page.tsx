@@ -121,12 +121,12 @@ export default function PitcherProfile() {
   return (
     <>
       <Head>
-        <title>{pitcher.fullName} | My Profile</title>
+        <title>{pitcher.fullName} | My Pitcher Profile</title>
       </Head>
       <PageWrapper>
         <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>My Profile</Title>
+          <Title>My Pitcher Profile</Title>
           <Subtitle>Welcome, {pitcher.fullName}</Subtitle>
           <InfoRow>
             <Label>Current Fund Balance ($):</Label>
@@ -191,6 +191,11 @@ export default function PitcherProfile() {
 
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '0rem' }}>
             <Button onClick={() => router.push('/pitcher/update-profile')}>Edit Profile</Button>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+            <Button onClick={() => router.push('/listener/profile')}>
+              Go to Listener Profile
+            </Button>
           </div>
         </CardContainer>
       </PageWrapper>
