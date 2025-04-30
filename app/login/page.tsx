@@ -1,11 +1,12 @@
+// app/login/page.tsx
+
 'use client';
 
-import { useRouter } from 'next/navigation';  // ✅ Correct for App Router
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Head from 'next/head';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, firestore } from '@/firebase/clientApp';  // ✅ Adjust your import path
-import { doc, getDoc } from 'firebase/firestore';
+import { auth } from '@/firebase/clientApp';
 import { Input, Button, Field, Label } from '@/components/ui';
 import PageWrapper from '@/components/layout/PageWrapper';
 import CardContainer from '@/components/layout/CardContainer';
@@ -36,7 +37,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleLogin = async () => {
@@ -45,22 +47,14 @@ export default function LoginPage() {
       setError('Please fill in all fields.');
       return;
     }
+
     try {
       setLoading(true);
-      const { user } = await signInWithEmailAndPassword(auth, form.email, form.password);
-      const pitcherDoc = await getDoc(doc(firestore, 'pitchers', user.uid));
-      const listenerDoc = await getDoc(doc(firestore, 'listeners', user.uid));
-
-      if (pitcherDoc.exists()) {
-        router.push('/pitcher/profile');
-      } else if (listenerDoc.exists()) {
-        router.push('/listener/profile');
-      } else {
-        setError('No profile found. Please contact support.');
-      }
+      await signInWithEmailAndPassword(auth, form.email, form.password);
+      router.push('/choose-a-profile');
     } catch (err: unknown) {
       const error = err as Error;
-      console.error(error.message);
+      console.error('[Login Error]', error.message);
       setError('Invalid email or password. Please try again.');
     } finally {
       setLoading(false);
@@ -68,9 +62,7 @@ export default function LoginPage() {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleLogin();
-    }
+    if (e.key === 'Enter') handleLogin();
   };
 
   return (
