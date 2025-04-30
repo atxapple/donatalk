@@ -75,7 +75,10 @@ export default function Navbar() {
         await fetchUserData(user.uid);
       } else {
         setIsAuthenticated(false);
-        router.push('/login');
+        const currentPath = window.location.pathname;
+        if (currentPath !== '/pitcher/signup' && currentPath !== '/listener/signup') {
+          router.push('/login');
+        }
       }
     });
     return () => unsubscribe();
