@@ -54,6 +54,14 @@ export default function SignupListener() {
         email: form.email,
         intro: form.intro,
         donation: parseFloat(form.donation),
+        createdAt: Date.now(),
+      });
+
+      await setDoc(doc(firestore, 'pitchers', uid), {
+        fullName: form.fullName,
+        email: form.email,
+        intro: '',
+        donation: 0,
         credit_balance: 0,
         createdAt: Date.now(),
       });

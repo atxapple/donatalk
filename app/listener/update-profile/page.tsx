@@ -111,7 +111,7 @@ export default function ListenerUpdateProfile() {
       <PageWrapper>
         <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>Update Your Profile</Title>
+          <Title>Update Listener Your Profile</Title>
           <Subtitle>Keep your information up to date</Subtitle>
 
           <Form>

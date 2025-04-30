@@ -57,6 +57,14 @@ export default function SignupPitcher() {
         credit_balance: 0,
         createdAt: Date.now(),
       });
+
+      await setDoc(doc(firestore, 'listeners', uid), {
+        fullName: form.fullName,
+        email: form.email,
+        intro: '',
+        donation: 0,
+        createdAt: Date.now(),
+      });
   
       // ✅ Send signup email notification
       await fetch('/api/send-signup-email', {

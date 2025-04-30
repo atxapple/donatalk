@@ -72,7 +72,6 @@ export default function Navbar() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setIsAuthenticated(true);
-        await fetchUserData(user.uid);
       } else {
         setIsAuthenticated(false);
         const currentPath = window.location.pathname;
@@ -83,25 +82,6 @@ export default function Navbar() {
     });
     return () => unsubscribe();
   }, [router]);
-
-  const fetchUserData = async (uid: string) => {
-    try {
-      const docRef = doc(firestore, 'listeners', uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setUserType('listener');
-      } else {
-        const docRef = doc(firestore, 'pitchers', uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserType('pitcher');
-        }
-      }
-    } catch (err: unknown) {
-      const error = err as Error;
-      console.error('[Fetch Data Error]', error.message);
-    }
-  };
 
   console.log('userType:', userType);
 
@@ -122,7 +102,7 @@ export default function Navbar() {
         </LogoLink>
         {isAuthenticated ? (
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <NavLink href={`/${userType}/profile`}>Profile</NavLink>  {/* ✅ Added Profile link */}
+            <NavLink href={`/choose-a-profile`}>Profile</NavLink>  {/* ✅ Added Profile link */}
             <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
           </div>
         ) : (
