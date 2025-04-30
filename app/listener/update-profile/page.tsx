@@ -79,7 +79,7 @@ export default function ListenerUpdateProfile() {
         const docRef = doc(firestore, 'listeners', userId);
         await updateDoc(docRef, {
           fullName: form.fullName,
-          pitch: form.intro,
+          intro: form.intro,
           donation: form.donation,
         });
         router.push('/listener/profile'); // ✅ Updated push for App Router
@@ -126,8 +126,8 @@ export default function ListenerUpdateProfile() {
             </Field>
 
             <Field>
-              <Label>Brief intro or LinedIn page </Label>
-              <Textarea name="pitch" rows={3} value={form.intro} onChange={onChange} />
+              <Label>Brief Intro or LinedIn Page </Label>
+              <Textarea name="intro" rows={3} value={form.intro} onChange={onChange} />
             </Field>
 
             <Field>
