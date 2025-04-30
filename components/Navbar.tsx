@@ -70,12 +70,28 @@ export default function Navbar() {
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);
+  
+        const publicPaths = [
+          '/pitcher/signup',
+          '/listener/signup',
+          /^\/pitcher\/[^\/]+$/,    // e.g. /pitcher/abc123
+          /^\/listener\/[^\/]+$/,   // e.g. /listener/xyz456
+        ];
+  
         const currentPath = window.location.pathname;
-        if (currentPath !== '/pitcher/signup' && currentPath !== '/listener/signup') {
+  
+        const isPublic = publicPaths.some((path) =>
+          typeof path === 'string'
+            ? path === currentPath
+            : path.test(currentPath)
+        );
+  
+        if (!isPublic) {
           router.push('/login');
         }
       }
     });
+  
     return () => unsubscribe();
   }, [router]);
 
