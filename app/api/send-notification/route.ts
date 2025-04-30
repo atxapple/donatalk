@@ -24,20 +24,23 @@ export async function POST(req: Request) {
 
         if (source === 'pitcherPage') {
           subjectText = `${listenerName} wants to hear your pitch! 🚀`;
-          bodyText1 = 'Pitcher';
-          bodyText2 = '${pitcherName}';
-          bodyText3 = '${listenerName}';
-          bodyText4 = '${listenerEmail}';
+          bodyText1 = 'Listener';          
+          bodyText2 = pitcherName;
+          bodyText3 = listenerName;
+          bodyText4 = listenerEmail;
           bodyText5 = 'hearing your pitch.';
         }
+        
         if (source === 'listenerPage') {
           subjectText = `${pitcherName} wants to give you a pitch! 🚀`;
-          bodyText1 = 'Listener';
-          bodyText2 = '${listenerName}';
-          bodyText3 = '${pitcherName}';
-          bodyText4 = '${pitcherEmail}';
+          bodyText1 = 'Pitcher';
+          bodyText2 = listenerName;
+          bodyText3 = pitcherName;
+          bodyText4 = pitcherEmail;
           bodyText5 = 'giving you a pitch.';
         }
+
+        console.log('[Send Notification]', subjectText, bodyText1, bodyText2, bodyText3, bodyText4, bodyText5);
 
         const msg = {
             to: [pitcherEmail, listenerEmail], // sending to both pitcher and listener
@@ -99,6 +102,8 @@ export async function POST(req: Request) {
               </html>
             `,
         };
+
+        console.log('[Send Notification] :', msg);
 
         await sgMail.send(msg);
 
