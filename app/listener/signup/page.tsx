@@ -70,7 +70,7 @@ export default function SignupListener() {
         }),
       });
   
-      router.push('/pitcher/profile'); // ✅ Navigate after sending the email
+      router.push('/listener/profile'); // ✅ Navigate after sending the email
     } catch (err: unknown) {
       const error = err as Error;
       console.error(error.message);
