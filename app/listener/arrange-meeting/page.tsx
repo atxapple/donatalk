@@ -57,12 +57,12 @@ export default function arrangeMeeting() {
   };
 
   const onApprove = async (data: any) => {
-    const currentUser = auth.currentUser;
+    // const currentUser = auth.currentUser;
 
-    if (!currentUser) {
-      alert('❌ No user logged in.');
-      return;
-    }
+    // if (!currentUser) {
+    //   alert('❌ No user logged in.');
+    //   return;
+    // }
 
     try {
       const res = await fetch("/api/escrow-log", {

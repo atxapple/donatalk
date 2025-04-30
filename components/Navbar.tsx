@@ -6,8 +6,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { auth } from '../firebase/clientApp';
+import { auth, firestore } from '../firebase/clientApp';
 import { styled } from '../styles/stitches.config';
+import { doc, getDoc } from 'firebase/firestore';
 
 const Nav = styled('nav', {
   display: 'flex',
@@ -65,13 +66,41 @@ const LogoutButton = styled('button', {
 export default function Navbar() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userType, setUserType] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsAuthenticated(!!user);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setIsAuthenticated(true);
+        await fetchUserData(user.uid);
+      } else {
+        setIsAuthenticated(false);
+        router.push('/login');
+      }
     });
     return () => unsubscribe();
-  }, []);
+  }, [router]);
+
+  const fetchUserData = async (uid: string) => {
+    try {
+      const docRef = doc(firestore, 'listeners', uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setUserType('listener');
+      } else {
+        const docRef = doc(firestore, 'pitchers', uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setUserType('pitcher');
+        }
+      }
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error('[Fetch Data Error]', error.message);
+    }
+  };
+
+  console.log('userType:', userType);
 
   const handleLogout = async () => {
     try {
@@ -90,7 +119,7 @@ export default function Navbar() {
         </LogoLink>
         {isAuthenticated ? (
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <NavLink href="/pitcher/profile">Profile</NavLink>  {/* ✅ Added Profile link */}
+            <NavLink href={`/${userType}/profile`}>Profile</NavLink>  {/* ✅ Added Profile link */}
             <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
           </div>
         ) : (

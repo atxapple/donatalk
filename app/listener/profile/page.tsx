@@ -1,4 +1,4 @@
-// app/pitcher/profile/page.tsx
+// app/listener/profile/page.tsx
 
 'use client';
 
@@ -25,16 +25,15 @@ const CopyButton = styled('button', { background: 'none', border: 'none', cursor
 const AddFundSection = styled('div', { marginTop: '0.5rem', textAlign: 'center' });
 const AddFundButton = styled(Button, { marginTop: '0.25rem' });
 
-export default function PitcherProfile() {
+export default function ListenerProfile() {
+  
   const router = useRouter();
-  const searchParams = useSearchParams();                     // ✅ Updated
+  const searchParams = useSearchParams();
   const [userId, setUserId] = useState<string | null>(null);
-  const [listener, setPitcher] = useState<Listener | null>(null);
+  const [listener, setListener] = useState<Listener | null>(null);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
-  const [fundAmount, setFundAmount] = useState<string>('');
   const [loading, setLoading] = useState(false);
-  const [showFundInput, setShowFundInput] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -53,7 +52,7 @@ export default function PitcherProfile() {
       const docRef = doc(firestore, 'listeners', uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        setPitcher(docSnap.data() as Listener);
+        setListener(docSnap.data() as Listener);
       } else {
         setError('Your profile was not found. Please contact support.');
       }
@@ -108,7 +107,7 @@ export default function PitcherProfile() {
           <ShareSection>
             <p>Please share the following link with a potential pitcher:</p>
             <SharableLink>
-              {`${window.location.origin}/pitcher/${userId}`}
+              {`${window.location.origin}/listener/${userId}`}
               <CopyButton onClick={handleCopy} aria-label="Copy link to clipboard">
                 <ClipboardCopy size={18} />
               </CopyButton>
