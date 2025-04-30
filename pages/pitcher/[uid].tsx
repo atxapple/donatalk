@@ -1,3 +1,5 @@
+// pages/pitcher/[uid].tsx
+
 import { GetServerSideProps } from 'next';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../../firebase/clientApp';
@@ -7,14 +9,7 @@ import CardContainer from '../../components/layout/CardContainer';
 import { Logo, Title, Subtitle, InfoBox } from '../../components/ui/shared';
 import { Input, Button } from '../../components/ui';
 import { useEffect, useState } from 'react';
-
-type Pitcher = {
-  fullName: string;
-  pitch: string;
-  donation: number;
-  credit_balance: number;
-  email: string;
-};
+import { Pitcher } from '@/types/pitcher';
 
 const Form = styled('form', {
   display: 'flex',
@@ -137,7 +132,7 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
                 onChange={(e) => setMessage(e.target.value)}
                 required
               />
-              <Button type="submit" disabled={status === 'loading'}>
+              <Button type="submit" disabled={status === 'loading' || !name.trim() || !email.trim() || !message.trim()}>
                 {status === 'loading' ? 'Sending...' : 'Notify Acceptance and Availability'}
               </Button>
               {responseMessage && <p>{responseMessage}</p>}
