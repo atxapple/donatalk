@@ -142,8 +142,8 @@ export default function PitcherProfile() {
             <span style={{ color: '#e74c3c', marginRight: '0.3rem' }}>🚩</span>
             Fund balance must be at least
             <strong> ${requiredBalance.toFixed(2)} </strong>
-            (Donation amount + 12.5% process fee including tax),
-            or your shareable link will be inactive.
+            (Donation amount + 12.5% process fee including tax).
+            Otherwise, your shareable link and Zoom meeting link will be inactive.
           </p>
 
           <AddFundSection>
