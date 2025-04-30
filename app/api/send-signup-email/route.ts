@@ -80,6 +80,8 @@ export async function POST(req: Request) {
       `,
     };
 
+    console.log('[Signup Email]', msg);
+    
     await sgMail.send(msg);
     return NextResponse.json({ success: true, message: 'Signup email sent successfully.' }, { status: 200 });
   } catch (error: any) {
