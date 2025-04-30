@@ -1,14 +1,11 @@
-// components/Navbar.tsx
-
 'use client';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { auth, firestore } from '../firebase/clientApp';
+import { auth } from '../firebase/clientApp';
 import { styled } from '../styles/stitches.config';
-import { doc, getDoc } from 'firebase/firestore';
 
 const Nav = styled('nav', {
   display: 'flex',
@@ -66,10 +63,9 @@ const LogoutButton = styled('button', {
 export default function Navbar() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userType, setUserType] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsAuthenticated(true);
       } else {
@@ -82,8 +78,6 @@ export default function Navbar() {
     });
     return () => unsubscribe();
   }, [router]);
-
-  console.log('userType:', userType);
 
   const handleLogout = async () => {
     try {
@@ -102,7 +96,7 @@ export default function Navbar() {
         </LogoLink>
         {isAuthenticated ? (
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <NavLink href={`/choose-a-profile`}>Profile</NavLink>  {/* ✅ Added Profile link */}
+            <NavLink href="/choose-a-profile">Profile</NavLink>
             <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
           </div>
         ) : (
