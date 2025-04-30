@@ -79,6 +79,8 @@ export async function POST(req: Request) {
       `,
     };
 
+    console.log('[Payment Confirmation Email]', msg);
+
     await sgMail.send(msg);
     return NextResponse.json({ success: true, message: 'Payment confirmation email sent successfully.' }, { status: 200 });
   } catch (error: any) {
