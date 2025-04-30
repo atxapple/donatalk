@@ -28,7 +28,7 @@ export async function POST(req: Request) {
           bodyText2 = pitcherName;
           bodyText3 = listenerName;
           bodyText4 = listenerEmail;
-          bodyText5 = 'hearing your pitch.';
+          bodyText5 = 'hearing your pitch';
         }
         
         if (source === 'listenerPage') {
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
           bodyText2 = listenerName;
           bodyText3 = pitcherName;
           bodyText4 = pitcherEmail;
-          bodyText5 = 'giving you a pitch.';
+          bodyText5 = 'giving you a pitch';
         }
 
         console.log('[Send Notification]', subjectText, bodyText1, bodyText2, bodyText3, bodyText4, bodyText5);
