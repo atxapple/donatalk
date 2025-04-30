@@ -7,11 +7,13 @@ import { collection, addDoc, Timestamp } from 'firebase/firestore';
 export async function POST(req: Request) {
     console.log('[Create Meeting] :', req);
     try {
-        const { listenerId, pitcherName, pitcherEmail, availability } = await req.json();
-        console.log('[listenerId, pitcherName, pitcherEmail, availability] :', { listenerId, pitcherName, pitcherEmail, availability });
+        const {meetingsource, listenerId, listenerName, listenerEmail,pitcherId, pitcherName, pitcherEmail, availability} = await req.json();
 
-        if (!listenerId || !pitcherName || !pitcherEmail || !availability) {
-            return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
+        console.log('[Create Meeting] :', {meetingsource, listenerId, listenerName, listenerEmail,pitcherId, pitcherName, pitcherEmail, availability});
+
+        if (!listenerId || !listenerName || !listenerEmail || !pitcherId || !pitcherName || !pitcherEmail || !availability) {
+            console.error('[Validation Error] Missing listenerId, listenerName, listenerEmail, pitcherId, pitcherName, pitcherEmail, or availability');
+            return NextResponse.json({ success: false, message: 'Missing listenerId, listenerName, listenerEmail, pitcherId, pitcherName, pitcherEmail, or availability' }, { status: 400 });
         }
 
         const newMeeting = {

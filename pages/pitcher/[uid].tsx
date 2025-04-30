@@ -95,6 +95,22 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
       setStatus('error');
       setResponseMessage('❌ Error sending the email.');
     }
+    const res = await fetch('/api/create-meeting', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        meetingsource: 'pitcherPage',
+        listenerId: '',
+        listenerName: name,
+        listenerEmail: email,
+        pitcherId: uid,
+        pitcherName: pitcher.fullName,
+        pitcherEmail: pitcher.email,
+        availability: message,
+      }),
+    });
+
+
   };
 
   return (

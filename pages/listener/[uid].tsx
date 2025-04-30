@@ -108,7 +108,11 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          meetingsource: 'listenerPage',
           listenerId: uid,
+          listenerName: '',
+          listenerEmail: '',
+          pitcherId: '',
           pitcherName: name,
           pitcherEmail: email,
           availability: message,
@@ -116,8 +120,8 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
       });
 
       console.log('[Create Meeting Response]', res);
-  
-      const data =  await res.json();
+
+      const data = await res.json();
       if (res.ok && data.success) {
         setStatus('success');
         setResponseMessage('✅ Meeting request sent successfully!');
