@@ -1,4 +1,4 @@
-//  app/api/send-payment-confirm-email/route.ts
+// app/api/send-payment-confirm-email/route.ts
 
 import { NextResponse } from 'next/server';
 import sgMail from '@sendgrid/mail';
@@ -18,6 +18,13 @@ export async function POST(req: Request) {
     if (!pitcherName || !pitcherEmail || !amountPaid) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     }
+
+    // Get current date in readable format (e.g., April 28, 2025)
+    const paymentDate = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
 
     const msg = {
       to: [pitcherEmail],
@@ -40,7 +47,7 @@ export async function POST(req: Request) {
               Hi <strong>${pitcherName}</strong>,
             </p>
             <p style="font-size: 16px; color: #333333;">
-              We have successfully received your payment of <strong>$${amountPaid}</strong>.
+               We have successfully received your payment of <strong>$${amountPaid}</strong> on <strong>${paymentDate}</strong>.
             </p>
 
             <p style="font-size: 16px; color: #333333;">
