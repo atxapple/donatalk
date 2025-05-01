@@ -102,7 +102,7 @@ export default function CheckoutPage() {
       <CardContainer>
         <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
         <Title>Fund Your Account</Title>
-        <Subtitle>Adding <span style={{ color: '#E74C3C' }}>${amount}</span> to your credit balance</Subtitle>
+        <Subtitle>Do not close the window. Adding <span style={{ color: '#E74C3C' }}>${amount}</span> to your credit balance</Subtitle>
 
         <PayPalScriptProvider
           options={{
