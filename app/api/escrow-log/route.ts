@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   console.log('[Escrow Log] :', req);
 
   try {
-    const { orderID, intent, pitcherEmail, pitcherName,listenerId, message } = await req.json();
+    const { orderID, intent, pitcherEmail, pitcherName, listenerId, message } = await req.json();
 
     if (!orderID || !intent || !pitcherEmail || !pitcherName || !listenerId || !message) {
       console.error('[Validation Error] Missing orderID, intent, pitcherEmail, pitcherName, listenerId, or message');
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     }
 
     console.log('[orderID, intent, pitcherEmail, pitcherName, listenerId, message]', orderID, intent, pitcherEmail, pitcherName, listenerId, message);
-          
+
     const captureRes = await fetch(`${BASE_URL}/api/complete-order`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -47,35 +47,19 @@ export async function POST(req: Request) {
 
     console.log(`[Fund Update] RefID: ${refID}, Amount: ${amountCaptured}, pitcherEmail: ${pitcherEmail}, listenerId: ${listenerId}`);
 
-    const sendEmailfromListenerPageResult = sendEmailfromListenerPage({
-      pitcherName,
-      pitcherEmail,
-      amountCaptured,
-      listenerId,
-      message,
-    });
-    console.log(
-      '[sendEmailfromListenerPageResult]',
-      sendEmailfromListenerPageResult
-    )
-    // const fundUpdateResult = await updateFunds({
-    //   refID,
-    //   pitcherId,
-    //   amount: amountCaptured,
-    //   eventType: 'add_fund',
-    // });
-
-    // if (!fundUpdateResult.success) {
-    //   console.error('[Fund Update Failed]', fundUpdateResult.error);
-    //   return NextResponse.json(
-    //     {
-    //       success: false,
-    //       message: 'Payment captured, but failed to update funds.',
-    //       error: fundUpdateResult.error,
-    //     },
-    //     { status: 500 }
-    //   );
-    // }
+    let sendEmailfromListenerPageResult;
+    try {
+      sendEmailfromListenerPageResult = await sendEmailfromListenerPage({
+        pitcherName,
+        pitcherEmail,
+        amountCaptured,
+        listenerId,
+        message,
+      });
+      console.log('[sendEmailfromListenerPageResult]', sendEmailfromListenerPageResult);
+    } catch (emailErr) {
+      console.error('[Email Send Failed]', emailErr);
+    }
 
     return NextResponse.json({
       success: true,
