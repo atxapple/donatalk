@@ -110,9 +110,9 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
         body: JSON.stringify({
           meetingsource: 'listenerPage',
           listenerId: uid,
-          listenerName: '',
-          listenerEmail: '',
-          pitcherId: '',
+          listenerName: 'TBD',
+          listenerEmail: 'TBD',
+          pitcherId: 'TBD',
           pitcherName: name,
           pitcherEmail: email,
           availability: message,
