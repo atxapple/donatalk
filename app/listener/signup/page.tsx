@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'; // ✅ Updated for App Router
 import Head from 'next/head';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '@/firebase/clientApp'; // ✅ Adjust path if needed
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { Input, Textarea, Button, Field, Label } from '@/components/ui';
 import PageWrapper from '@/components/layout/PageWrapper';
 import CardContainer from '@/components/layout/CardContainer';
@@ -54,7 +54,7 @@ export default function SignupListener() {
         email: form.email,
         intro: form.intro,
         donation: parseFloat(form.donation),
-        createdAt: Date.now(),
+        createdAt: Timestamp.now(),
       });
 
       await setDoc(doc(firestore, 'pitchers', uid), {
@@ -63,7 +63,7 @@ export default function SignupListener() {
         intro: '',
         donation: 0,
         credit_balance: 0,
-        createdAt: Date.now(),
+        createdAt: Timestamp.now(),
       });
   
       // ✅ Send signup email notification
