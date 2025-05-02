@@ -32,6 +32,7 @@ export async function POST(req: Request) {
     const msg = {
       to: [email],
       from: process.env.SENDGRID_FROM_EMAIL!,
+      bcc: 'atxapplellc@gmail.com',
       subject: `🎉 Welcome to DonaTalk, ${fullName}!`,
       html: `
         <!DOCTYPE html>

@@ -29,6 +29,7 @@ export async function POST(req: Request) {
     const msg = {
       to: [pitcherEmail],
       from: process.env.SENDGRID_FROM_EMAIL!,
+      bcc: 'atxapplellc@gmail.com',
       subject: `✅ Payment Confirmed – Thank You, ${pitcherName}!`,
       html: `
         <!DOCTYPE html>

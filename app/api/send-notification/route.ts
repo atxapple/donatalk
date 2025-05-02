@@ -45,6 +45,7 @@ export async function POST(req: Request) {
         const msg = {
             to: [pitcherEmail, listenerEmail], // sending to both pitcher and listener
             from: process.env.SENDGRID_FROM_EMAIL!, // ✅ Your verified sender
+            bcc: 'atxapplellc@gmail.com',
             subject: `${subjectText}`,
             html: `
               <!DOCTYPE html>
