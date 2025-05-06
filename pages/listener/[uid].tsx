@@ -1,4 +1,4 @@
-// pages/listener/[uid].tsx
+// pages/listener/[uid].tsx 
 
 import { GetServerSideProps } from 'next';
 import { doc, getDoc } from 'firebase/firestore';
