@@ -161,6 +161,16 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
             Pitcher can add funds from their profile page to activate this link.
           </InfoBox>
         )}
+        <Subtitle style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+        ❗Listen a pitch with donation{' '}
+          <a
+            href="https://donatalk.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            🙏Click here, DonaTalk❤️.
+          </a>
+        </Subtitle>
       </CardContainer>
     </PageWrapper>
   );

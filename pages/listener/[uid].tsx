@@ -188,6 +188,16 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
             {responseMessage && <p>{responseMessage}</p>}
           </Form>
         </>
+        <Subtitle style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+        ❗Want to make an effective pitch?{' '}
+          <a
+            href="https://donatalk.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            🙏Click here, DonaTalk❤️.
+          </a>
+        </Subtitle>
       </CardContainer>
     </PageWrapper>
   );
