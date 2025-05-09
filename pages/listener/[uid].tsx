@@ -10,13 +10,7 @@ import { Logo, Title, Subtitle, InfoBox } from '../../components/ui/shared';
 import { Input, Button } from '../../components/ui';
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-
-type Listener = {
-  fullName: string;
-  intro: string;
-  donation: number;
-  email: string;
-};
+import { Listener } from '@/types/listener';
 
 const Form = styled('form', {
   display: 'flex',
