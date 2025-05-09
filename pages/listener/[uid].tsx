@@ -65,35 +65,6 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
-    // try {
-    //   const res = await fetch('/api/send-notification', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({
-    //       pitcherName: name,
-    //       pitcherEmail: email,
-    //       listenerName: listener.fullName,
-    //       listenerEmail: listener.email,
-    //       message: message,
-    //     }),
-    //   });
-
-    //   const data = await res.json();
-    //   if (res.ok && data.success) {
-    //     setStatus('success');
-    //     setResponseMessage('✅ Notification sent successfully!');
-    //     setName('');
-    //     setEmail('');
-    //     setMessage('');
-    //   } else {
-    //     setStatus('error');
-    //     setResponseMessage(`❌ Failed to send: ${data.error || 'Unknown error'}`);
-    //   }
-    // } catch (error) {
-    //   console.error('[Send Notification Error]', error);
-    //   setStatus('error');
-    //   setResponseMessage('❌ Error sending the email.');
-    // }
   };
 
   const handleAddFund = async () => {
