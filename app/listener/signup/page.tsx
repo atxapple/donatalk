@@ -117,7 +117,7 @@ export default function SignupListener() {
 
   return (
     <>
-      {/* Google Tag Manager */}
+      {/* G Tag Manager */}
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=AW-17050482317"
         strategy="afterInteractive"
