@@ -8,12 +8,13 @@ import { useRouter } from 'next/navigation'; // ✅ Updated for App Router
 import Head from 'next/head';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '@/firebase/clientApp'; // ✅ Adjust path if needed
-import { doc, setDoc,  Timestamp, collection, getDocs, query, where } from 'firebase/firestore';
+import { doc, setDoc, Timestamp, collection, getDocs, query, where } from 'firebase/firestore';
 import { Input, Textarea, Button, Field, Label } from '@/components/ui';
 import PageWrapper from '@/components/layout/PageWrapper';
 import CardContainer from '@/components/layout/CardContainer';
 import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
 import { styled } from '@/styles/stitches.config';
+import Script from 'next/script';
 
 async function generateUniqueSlug(baseName: string): Promise<string> {
   const baseSlug = slugify(baseName, { lower: true, remove: /[^a-zA-Z0-9]/g });
@@ -59,13 +60,13 @@ export default function SignupListener() {
       setError('Please fill in all fields.');
       return;
     }
-  
+
     try {
       setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
       const uid = userCredential.user.uid;
       const slug = await generateUniqueSlug(form.fullName);
-  
+
       await setDoc(doc(firestore, 'listeners', uid), {
         fullName: form.fullName,
         email: form.email,
@@ -84,7 +85,7 @@ export default function SignupListener() {
         slug,
         createdAt: Timestamp.now(),
       });
-  
+
       // ✅ Send signup email notification
       await fetch('/api/send-signup-email', {
         method: 'POST',
@@ -96,7 +97,7 @@ export default function SignupListener() {
           role: 'listener',
         }),
       });
-  
+
       router.push('/listener/profile'); // ✅ Navigate after sending the email
     } catch (err: unknown) {
       const error = err as Error;
@@ -106,7 +107,7 @@ export default function SignupListener() {
       setLoading(false);
     }
   };
-  
+
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -116,6 +117,20 @@ export default function SignupListener() {
 
   return (
     <>
+      {/* Google Tag Manager */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=AW-17050482317"
+        strategy="afterInteractive"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-17050482317');
+      `}
+      </Script>
+
       <Head>
         <title>Sign Up as Pitcher | DonaTalk</title>
         <meta name="description" content="Sign up as a listener and discover pitches that inspire donations." />
