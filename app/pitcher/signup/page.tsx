@@ -2,17 +2,33 @@
 
 'use client';
 
+import slugify from 'slugify';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'; // ✅ Updated for App Router
 import Head from 'next/head';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '@/firebase/clientApp'; // ✅ Adjust path if needed
-import { doc, setDoc,  Timestamp } from 'firebase/firestore';
+import { doc, setDoc,  Timestamp, collection, getDocs, query, where } from 'firebase/firestore';
 import { Input, Textarea, Button, Field, Label } from '@/components/ui';
 import PageWrapper from '@/components/layout/PageWrapper';
 import CardContainer from '@/components/layout/CardContainer';
 import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
 import { styled } from '@/styles/stitches.config';
+
+async function generateUniqueSlug(baseName: string): Promise<string> {
+  const baseSlug = slugify(baseName, { lower: true, remove: /[^a-zA-Z0-9]/g });
+  let slug = baseSlug;
+  let counter = 1;
+
+  while (true) {
+    const q = query(collection(firestore, 'pitchers'), where('slug', '==', slug));
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) break;
+    slug = `${baseSlug}${++counter}`;
+  }
+
+  return slug;
+}
 
 const ProminentErrorBox = styled(ErrorBox, {
   border: '2px solid #e74c3c',
@@ -47,14 +63,16 @@ export default function SignupPitcher() {
     try {
       setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
-      const uid = userCredential.user.uid;
-  
+      const uid = userCredential.user.uid;  
+      const slug = await generateUniqueSlug(form.fullName);
+
       await setDoc(doc(firestore, 'pitchers', uid), {
         fullName: form.fullName,
         email: form.email,
         pitch: form.aboutPitch,
         donation: parseFloat(form.donation),
         credit_balance: 0,
+        slug, // 👈 save the unique slug here
         createdAt: Timestamp.now(),
       });
 
@@ -63,6 +81,7 @@ export default function SignupPitcher() {
         email: form.email,
         intro: '',
         donation: 0,
+        slug, // 👈 save the unique slug here
         createdAt: Timestamp.now(),
       });
   
