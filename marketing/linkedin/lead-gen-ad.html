@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200">
+  <link rel="stylesheet" href="../brand.css">
+  <title>DonaTalk — LinkedIn Lead Gen Ad</title>
+  <style>
+    .ad {
+      width: 1200px;
+      height: 628px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+    }
+
+    /* ── Left panel (navy, 60%) ── */
+    .ad__left {
+      width: 60%;
+      background-color: #2C3E50;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 52px 56px 44px 56px;
+      position: relative;
+    }
+
+    /* Subtle top accent bar */
+    .ad__left::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #C26148 0%, #E74C3C 100%);
+    }
+
+    .ad__left-body {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .ad__eyebrow {
+      font-family: var(--font-family);
+      font-weight: var(--font-medium);
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #F8A5A5;
+    }
+
+    .ad__headline {
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 36px;
+      line-height: 1.22;
+      color: #FFFFFF;
+      max-width: 520px;
+    }
+
+    .ad__headline em {
+      font-style: normal;
+      color: #F1C40F;
+    }
+
+    .ad__subtext {
+      font-family: var(--font-family);
+      font-weight: var(--font-regular);
+      font-size: 20px;
+      line-height: 1.5;
+      color: #ECF0F1;
+      max-width: 460px;
+      opacity: 0.88;
+    }
+
+    .ad__cta-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: 8px;
+    }
+
+    .ad__cta-btn {
+      display: inline-block;
+      padding: 15px 36px;
+      background-color: #C26148;
+      color: #FFFFFF;
+      font-family: var(--font-family);
+      font-weight: var(--font-semibold);
+      font-size: 18px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color 0.2s;
+    }
+
+    .ad__cta-note {
+      font-family: var(--font-family);
+      font-weight: var(--font-light);
+      font-size: 13px;
+      color: rgba(236, 240, 241, 0.55);
+      white-space: nowrap;
+    }
+
+    /* Logo at bottom-left */
+    .ad__logo {
+      display: flex;
+      align-items: baseline;
+      gap: 0;
+    }
+
+    .ad__logo-dona {
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 22px;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: -0.3px;
+    }
+
+    .ad__logo-talk {
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 22px;
+      color: #F8A5A5;
+      letter-spacing: -0.3px;
+    }
+
+    /* ── Right panel (beige, 40%) ── */
+    .ad__right {
+      width: 40%;
+      background-color: #EBE8E6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 44px;
+      gap: 36px;
+    }
+
+    .ad__icon-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ad__icon-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.72;
+    }
+
+    .ad__icon-divider {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #C26148, transparent);
+      border-radius: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="ad">
+
+    <!-- ── Left: Navy panel ── -->
+    <div class="ad__left">
+      <div class="ad__left-body">
+        <span class="ad__eyebrow">For Sales Professionals</span>
+
+        <h1 class="ad__headline">
+          Get Warm Sales Meetings<br>
+          by <em>Giving Back</em>
+        </h1>
+
+        <p class="ad__subtext">
+          Donate to your prospect's cause.<br>They take your call.
+        </p>
+
+        <div class="ad__cta-row">
+          <a class="ad__cta-btn" href="https://app.donatalk.com/pitcher/signup">Sign Up Free</a>
+          <span class="ad__cta-note">No credit card required</span>
+        </div>
+      </div>
+
+      <!-- Logo lockup at bottom -->
+      <div class="ad__logo">
+        <span class="ad__logo-dona">Dona</span><span class="ad__logo-talk">Talk</span>
+      </div>
+    </div>
+
+    <!-- ── Right: Beige panel ── -->
+    <div class="ad__right">
+
+      <!-- Heart-in-speech-bubble icon (~150px) -->
+      <div class="ad__icon-primary">
+        <svg width="150" height="150" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Heart in speech bubble">
+          <!-- Rounded rectangle speech bubble body -->
+          <rect x="10" y="10" width="120" height="96" rx="18" ry="18" fill="#F8A5A5"/>
+          <!-- Speech bubble tail pointing down-left -->
+          <path d="M28 106 L18 132 L52 112 Z" fill="#F8A5A5"/>
+          <!-- Heart inside bubble -->
+          <path d="M75 82 C75 82 44 63 44 46 C44 36.6 51.6 30 60 30 C66 30 71 33.4 75 37.8 C79 33.4 84 30 90 30 C98.4 30 106 36.6 106 46 C106 63 75 82 75 82Z" fill="#E74C3C"/>
+        </svg>
+      </div>
+
+      <div class="ad__icon-divider"></div>
+
+      <!-- Handshake icon (~64px) navy stroke -->
+      <div class="ad__icon-secondary">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Handshake">
+          <!-- Left forearm coming in from lower-left -->
+          <path d="M4 44 L20 32" stroke="#2C3E50" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- Right forearm coming in from lower-right -->
+          <path d="M60 44 L44 32" stroke="#2C3E50" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- Left hand shape -->
+          <path d="M20 32 C20 32 23 28 27 28 L32 28" stroke="#2C3E50" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Right hand shape -->
+          <path d="M44 32 C44 32 41 28 37 28 L32 28" stroke="#2C3E50" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Clasped grip -->
+          <path d="M20 32 L25 38 C25 38 28 42 32 42 C36 42 39 38 39 38 L44 32" stroke="#2C3E50" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <!-- Knuckle detail left -->
+          <path d="M23 35 L27 31" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <!-- Knuckle detail right -->
+          <path d="M41 35 L37 31" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+      </div>
+
+    </div>
+
+  </div>
+</body>
+</html>
