@@ -53,7 +53,25 @@ async function getCollectionData(collectionName: string) {
 
 async function getFundHistory() {
   const snap = await adminDb.collection('fund_history').orderBy('timestamp', 'desc').get();
-  return snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  const records = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Record<string, unknown>));
+
+  // Resolve pitcherId → pitcherEmail
+  const uniqueIds = [...new Set(records.map((r) => r.pitcherId).filter(Boolean))] as string[];
+  const emailMap: Record<string, string> = {};
+  // Firestore getAll supports up to 100 refs per call
+  for (let i = 0; i < uniqueIds.length; i += 100) {
+    const batch = uniqueIds.slice(i, i + 100);
+    const refs = batch.map((id) => adminDb.collection('pitchers').doc(id));
+    const docs = await adminDb.getAll(...refs);
+    docs.forEach((d) => {
+      if (d.exists) emailMap[d.id] = d.data()?.email || d.id;
+    });
+  }
+
+  return records.map((r) => ({
+    ...r,
+    pitcherEmail: emailMap[r.pitcherId as string] || r.pitcherId || '—',
+  }));
 }
 
 export async function GET(req: Request) {

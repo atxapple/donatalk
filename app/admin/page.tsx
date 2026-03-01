@@ -550,7 +550,7 @@ export default function AdminPage() {
   ];
 
   const fundHistoryColumns = [
-    { key: 'pitcherId', label: 'Pitcher ID' },
+    { key: 'pitcherEmail', label: 'Pitcher' },
     { key: 'amount', label: 'Amount' },
     { key: 'eventType', label: 'Event Type' },
     { key: 'paymentIntentRefId', label: 'PayPal Order ID' },
