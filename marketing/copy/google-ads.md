@@ -148,7 +148,7 @@
 
 #### Display Ad Specs
 - **Image Assets:** DonaTalk logo, sample pitcher profile, hands-shake imagery
-- **Landing Page:** `https://app.donatalk.com/listener/signup` (retargeted visitors likely prospect-buyers)
+- **Landing Page:** `https://donatalk.com` (retargeted visitors likely prospect-buyers)
 - **Frequency Cap:** 3 impressions per day per user
 - **Duration:** 30-day remarketing window
 

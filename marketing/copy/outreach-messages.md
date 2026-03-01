@@ -74,7 +74,7 @@ Thanks for connecting, [Name]! Quick question — have you ever wished prospects
 
 That's exactly what DonaTalk does. Sales pros commit to donate to a cause their prospect cares about, and in return, they get a warm introduction.
 
-Here's how it works: app.donatalk.com
+Here's how it works: donatalk.com
 
 Would love to hear your thoughts!
 ```
@@ -201,7 +201,7 @@ Track these metrics to optimize the campaign over time.
 - [ ] First batch of 50 targets identified and researched
 - [ ] Personalization notes prepared for high-priority targets
 - [ ] Follow-up task reminders set (3-day and 10-day intervals)
-- [ ] Analytics tracking set up (e.g., UTM parameters on app.donatalk.com links)
+- [ ] Analytics tracking set up (e.g., UTM parameters on donatalk.com links)
 - [ ] Weekly cadence scheduled (e.g., send 50 connection requests every Monday-Friday)
 
 ---
@@ -260,7 +260,7 @@ Hi Jennifer, [Tom Watson] mentioned you might be interested in new sales tools. 
 ## Resources
 
 - **LinkedIn Sales Navigator Help:** https://business.linkedin.com/sales/sales-navigator
-- **DonaTalk App:** app.donatalk.com
+- **DonaTalk App:** donatalk.com
 - **Support Email:** support@donatalk.com
 
 ---
