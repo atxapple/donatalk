@@ -1,6 +1,6 @@
 # DonaTalk - Developer Reference
 
-> Last updated: 2026-03-01 | Version: 0.6.0
+> Last updated: 2026-03-01 | Version: 0.6.1
 
 ## Project Overview
 
@@ -44,6 +44,7 @@ donatalk/
 │   │   ├── escrow-log/
 │   │   ├── send-notification/
 │   │   ├── send-payment-confirm-email/
+│   │   ├── send-reset-email/
 │   │   └── send-signup-email/
 │   ├── listener/                 # Listener pages (signup, profile, update, arrange-meeting)
 │   ├── pitcher/                  # Pitcher pages (signup, profile, update, add-fund)
@@ -134,6 +135,7 @@ All routes located in `app/api/`.
 | `/api/escrow-log` | POST | Handle listener-to-pitcher escrow payment | PayPal, Firebase Admin, Nodemailer |
 | `/api/send-notification` | POST | Send meeting interest email to both parties | Nodemailer |
 | `/api/send-payment-confirm-email` | POST | Send payment confirmation to pitcher | Nodemailer |
+| `/api/send-reset-email` | POST | Send branded password reset email | Firebase Admin, Nodemailer |
 | `/api/send-signup-email` | POST | Send welcome email on registration | Nodemailer |
 | `/api/create-profiles` | POST | Create dual pitcher/listener profiles (supports `pitcher`, `listener`, `both-stubs` roles) | Firebase Admin |
 
@@ -220,6 +222,7 @@ export type Listener = {
 4. **Session:** `onAuthStateChanged()` listener in `Navbar.tsx` tracks auth state client-side
 5. **Route protection:** Client-side only (no middleware). Public routes: signup pages and `/pitcher/[uid]`, `/listener/[uid]`. All other routes redirect to `/login` if unauthenticated. Public SSR pages hide profiles where `isSetUp === false`.
 6. **Logout:** `signOut(auth)` -> redirect to `/login`
+7. **Password reset:** Login page "Forgot password?" calls `POST /api/send-reset-email` which uses `adminAuth.generatePasswordResetLink()` to generate a reset link, then sends a branded HTML email via Nodemailer. Returns success even for non-existent emails (anti-enumeration).
 7. **Profile setup:** Stub profiles (`isSetUp: false`) are marked as set up (`isSetUp: true`) when the user saves via the update-profile page. The `/choose-a-profile` page shows "Set Up" vs "Go to" buttons based on `isSetUp` status.
 
 **Important:** Every user gets BOTH a pitcher and listener profile on signup, regardless of which role they sign up as. The non-primary profile is a stub (`isSetUp: false`) until the user completes it via the update-profile page. Google sign-in users get both profiles as stubs and choose which to set up first.
@@ -230,7 +233,7 @@ export type Listener = {
 - **Protection:** Email whitelist in `lib/adminConfig.ts` — checked both client-side (redirect) and server-side (API returns 403)
 - **API:** `GET /api/admin?tab=<tab>` with `Authorization: Bearer <Firebase ID token>` header
 - **Admin emails:** `yunyoungmokk@gmail.com`, `atxapplellc@gmail.com`
-- **Tabs:** Dashboard (summary stats), Pitchers, Listeners, Meetings, Fund History (sortable tables)
+- **Tabs:** Dashboard (summary stats), Pitchers, Listeners, Meetings, Fund History (sortable tables). Fund History resolves `pitcherId` to pitcher email server-side (falls back to UID if pitcher doc no longer exists).
 - **Navbar:** "Admin" link shown only for admin users
 
 ## Soft Delete
@@ -282,6 +285,7 @@ Profiles can be soft-deleted by admins via the admin dashboard. Soft delete sets
 |---------|-----------|------------|
 | User signup | `/api/send-signup-email` | New user |
 | Payment received | `/api/send-payment-confirm-email` | Pitcher |
+| Password reset | `/api/send-reset-email` | Requesting user |
 | Meeting interest (from pitcher page) | `/api/send-notification` | Both pitcher + listener |
 | Meeting interest (from listener page) | `/api/send-notification` | Both pitcher + listener |
 
