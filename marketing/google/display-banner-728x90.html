@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../brand.css">
+  <title>DonaTalk — Leaderboard Banner 728x90</title>
+  <style>
+    body {
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .banner {
+      width: 728px;
+      height: 90px;
+      background: #2C3E50;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 0;
+      border: 1px solid #3498DB;
+      box-sizing: border-box;
+    }
+
+    .banner__logo {
+      display: flex;
+      align-items: baseline;
+      flex-shrink: 0;
+    }
+
+    .banner__logo-dona {
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 16px;
+      color: #FFFFFF;
+      letter-spacing: -0.2px;
+    }
+
+    .banner__logo-talk {
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 16px;
+      color: #F8A5A5;
+      letter-spacing: -0.2px;
+    }
+
+    .banner__divider {
+      width: 1px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.18);
+      margin: 0 20px;
+      flex-shrink: 0;
+    }
+
+    .banner__tagline {
+      font-family: var(--font-family);
+      font-weight: var(--font-regular);
+      font-size: 16px;
+      color: #FFFFFF;
+      flex-grow: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .banner__cta {
+      display: inline-block;
+      padding: 8px 18px;
+      background: #C26148;
+      color: #FFFFFF;
+      font-family: var(--font-family);
+      font-weight: var(--font-semibold);
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <div class="banner__logo">
+      <span class="banner__logo-dona">Dona</span><span class="banner__logo-talk">Talk</span>
+    </div>
+
+    <div class="banner__divider"></div>
+
+    <span class="banner__tagline">Turn cold outreach into warm introductions</span>
+
+    <a class="banner__cta" href="https://app.donatalk.com/pitcher/signup">Sign Up</a>
+  </div>
+</body>
+</html>
