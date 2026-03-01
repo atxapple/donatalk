@@ -5,4 +5,6 @@ export type Listener = {
   intro: string;
   donation: number;
   email: string;
+  isSetUp?: boolean;
+  deletedAt?: unknown;
 };

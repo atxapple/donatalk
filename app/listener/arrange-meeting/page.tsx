@@ -106,6 +106,7 @@ export default function arrangeMeeting() {
             clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '',
             currency: 'USD',
             'disable-funding': 'paylater',
+            ...(process.env.NEXT_PUBLIC_PAYPAL_ENV === 'sandbox' && { environment: 'sandbox' as const }),
           }}
         >
           <div style={{ marginTop: '20px', width: '100%', display: 'flex', justifyContent: 'center' }}>

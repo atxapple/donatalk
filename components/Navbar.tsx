@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../firebase/clientApp';
+import { isAdminEmail } from '../lib/adminConfig';
 import { styled } from '../styles/stitches.config';
 
 const Nav = styled('nav', {
@@ -63,13 +64,16 @@ const LogoutButton = styled('button', {
 export default function Navbar() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsAuthenticated(true);
+        setUserEmail(user.email);
       } else {
         setIsAuthenticated(false);
+        setUserEmail(null);
   
         const publicPaths = [
           '/pitcher/signup',
@@ -112,6 +116,7 @@ export default function Navbar() {
         </LogoLink>
         {isAuthenticated ? (
           <div style={{ display: 'flex', alignItems: 'center' }}>
+            {isAdminEmail(userEmail) && <NavLink href="/admin">Admin</NavLink>}
             <NavLink href="/choose-a-profile">Profile</NavLink>
             <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
           </div>

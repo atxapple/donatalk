@@ -69,8 +69,8 @@ export default function ListenerUpdateProfile() {
   };
 
   const handleUpdate = async () => {
-    if (!form.fullName || !form.donation) {
-      setError('Full Name and Donation fields are required.');
+    if (!form.fullName || !form.intro || !form.donation) {
+      setError('Full Name, Intro, and Donation fields are required.');
       return;
     }
     setLoading(true);
@@ -81,6 +81,7 @@ export default function ListenerUpdateProfile() {
           fullName: form.fullName,
           intro: form.intro,
           donation: form.donation,
+          isSetUp: true,
         });
         router.push('/listener/profile'); // ✅ Updated push for App Router
       }

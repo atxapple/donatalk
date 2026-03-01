@@ -6,4 +6,6 @@ export type Pitcher = {
   donation: number;
   credit_balance: number;
   email: string;
+  isSetUp?: boolean;
+  deletedAt?: unknown;
 };

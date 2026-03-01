@@ -1,6 +1,6 @@
 # DonaTalk - Developer Reference
 
-> Last updated: 2026-03-01 | Version: 0.3.0
+> Last updated: 2026-03-01 | Version: 0.6.0
 
 ## Project Overview
 
@@ -19,7 +19,7 @@ DonaTalk is a two-sided marketplace that connects **Pitchers** (fundraisers who 
 | Language | TypeScript 5.8 (strict mode) |
 | Styling | Stitches (CSS-in-JS) + Tailwind CSS 4.1 |
 | Icons | Lucide React |
-| Auth | Firebase Auth (email/password) |
+| Auth | Firebase Auth (email/password + Google Sign-In) |
 | Database | Cloud Firestore |
 | Payments | PayPal (REST API + React SDK) |
 | Email | Nodemailer (SMTP) |
@@ -34,7 +34,9 @@ DonaTalk is a two-sided marketplace that connects **Pitchers** (fundraisers who 
 ```
 donatalk/
 ├── app/                          # Next.js App Router (primary)
-│   ├── api/                      # API routes (all POST)
+│   ├── admin/                    # Admin dashboard page
+│   ├── api/                      # API routes
+│   │   ├── admin/                # GET: admin dashboard data (token-authenticated)
 │   │   ├── complete-order/
 │   │   ├── complete-order-and-update-fund/
 │   │   ├── create-meeting/
@@ -58,13 +60,16 @@ donatalk/
 │   ├── _app.tsx
 │   └── _document.tsx
 ├── components/
-│   ├── layout/                   # CardContainer, PageWrapper
+│   ├── layout/                   # AdminContainer, CardContainer, PageWrapper
 │   ├── ui/                       # Button, Input, Label, Textarea, Field, shared
 │   ├── Footer.tsx
 │   ├── LoadingScreen.tsx
 │   ├── LogoutButton.tsx
 │   └── Navbar.tsx                # Auth state + route protection
 ├── lib/
+│   ├── adminAuth.ts              # Shared verifyAdmin() for admin API routes
+│   ├── adminConfig.ts            # Admin email whitelist + isAdminEmail()
+│   ├── firebaseAdmin.ts          # Shared Firebase Admin SDK init (adminDb, adminAuth)
 │   ├── mailer.ts                 # Nodemailer SMTP transporter + email constants
 │   ├── sendEmailfromListenerPage.ts
 │   └── updateFunds.ts
@@ -92,7 +97,8 @@ donatalk/
 | Route | File | Purpose |
 |-------|------|---------|
 | `/` | `app/page.tsx` | Redirects to `/login` |
-| `/login` | `app/login/page.tsx` | Email/password login |
+| `/admin` | `app/admin/page.tsx` | Admin dashboard (email whitelist protected) |
+| `/login` | `app/login/page.tsx` | Email/password + Google login |
 | `/choose-a-profile` | `app/choose-a-profile/page.tsx` | Switch between Pitcher/Listener roles |
 | `/pitcher/signup` | `app/pitcher/signup/page.tsx` | Pitcher registration |
 | `/pitcher/profile` | `app/pitcher/profile/page.tsx` | Pitcher dashboard (balance, shareable link) |
@@ -114,18 +120,22 @@ donatalk/
 
 ## API Routes
 
-All routes are `POST` only, located in `app/api/`.
+All routes located in `app/api/`.
 
-| Endpoint | Purpose | External Services |
-|----------|---------|-------------------|
-| `/api/create-order` | Create PayPal order | PayPal |
-| `/api/complete-order` | Capture PayPal payment | PayPal |
-| `/api/complete-order-and-update-fund` | Capture payment + update pitcher balance | PayPal, Firebase Admin |
-| `/api/create-meeting` | Create meeting record in Firestore | Firebase Admin |
-| `/api/escrow-log` | Handle listener-to-pitcher escrow payment | PayPal, Firebase Admin, Nodemailer |
-| `/api/send-notification` | Send meeting interest email to both parties | Nodemailer |
-| `/api/send-payment-confirm-email` | Send payment confirmation to pitcher | Nodemailer |
-| `/api/send-signup-email` | Send welcome email on registration | Nodemailer |
+| Endpoint | Method | Purpose | External Services |
+|----------|--------|---------|-------------------|
+| `/api/admin` | GET | Admin dashboard data (token + email whitelist) | Firebase Admin |
+| `/api/admin/[collection]/[id]` | PATCH | Edit pitcher/listener profile fields (admin only) | Firebase Admin |
+| `/api/admin/[collection]/[id]` | DELETE | Soft-delete pitcher/listener profile (admin only) | Firebase Admin |
+| `/api/create-order` | POST | Create PayPal order | PayPal |
+| `/api/complete-order` | POST | Capture PayPal payment | PayPal |
+| `/api/complete-order-and-update-fund` | POST | Capture payment + update pitcher balance | PayPal, Firebase Admin |
+| `/api/create-meeting` | POST | Create meeting record in Firestore | Firebase Admin |
+| `/api/escrow-log` | POST | Handle listener-to-pitcher escrow payment | PayPal, Firebase Admin, Nodemailer |
+| `/api/send-notification` | POST | Send meeting interest email to both parties | Nodemailer |
+| `/api/send-payment-confirm-email` | POST | Send payment confirmation to pitcher | Nodemailer |
+| `/api/send-signup-email` | POST | Send welcome email on registration | Nodemailer |
+| `/api/create-profiles` | POST | Create dual pitcher/listener profiles (supports `pitcher`, `listener`, `both-stubs` roles) | Firebase Admin |
 
 ## Database Schema (Firestore)
 
@@ -138,6 +148,8 @@ All routes are `POST` only, located in `app/api/`.
 | `donation` | number | Donation amount per meeting (USD) |
 | `credit_balance` | number | Current fund balance (USD, stored as raw number) |
 | `slug` | string | URL-safe unique slug (via slugify) |
+| `isSetUp` | boolean (optional) | Whether the profile has been fully set up. Missing = `true` for backward compat |
+| `deletedAt` | Timestamp (optional) | Soft-delete timestamp. If present, profile is hidden from public pages |
 | `createdAt` | Timestamp | Server timestamp |
 
 ### `listeners/{uid}`
@@ -148,6 +160,8 @@ All routes are `POST` only, located in `app/api/`.
 | `intro` | string | Brief intro or LinkedIn page link |
 | `donation` | number | Requested donation per meeting (USD) |
 | `slug` | string | URL-safe unique slug (via slugify) |
+| `isSetUp` | boolean (optional) | Whether the profile has been fully set up. Missing = `true` for backward compat |
+| `deletedAt` | Timestamp (optional) | Soft-delete timestamp. If present, profile is hidden from public pages |
 | `createdAt` | Timestamp | Server timestamp |
 
 ### `meetings/{auto-id}`
@@ -183,6 +197,8 @@ export type Pitcher = {
   donation: number;
   credit_balance: number;
   email: string;
+  isSetUp?: boolean;
+  deletedAt?: unknown; // Firestore Timestamp (soft delete)
 };
 
 // types/listener.ts
@@ -191,18 +207,41 @@ export type Listener = {
   intro: string;
   donation: number;
   email: string;
+  isSetUp?: boolean;
+  deletedAt?: unknown; // Firestore Timestamp (soft delete)
 };
 ```
 
 ## Authentication Flow
 
-1. **Login:** `signInWithEmailAndPassword()` via Firebase Auth -> redirect to `/choose-a-profile`
-2. **Signup:** `createUserWithEmailAndPassword()` -> creates both `pitchers/{uid}` and `listeners/{uid}` documents (dual-profile system) -> sends welcome email -> redirect to profile
-3. **Session:** `onAuthStateChanged()` listener in `Navbar.tsx` tracks auth state client-side
-4. **Route protection:** Client-side only (no middleware). Public routes: signup pages and `/pitcher/[uid]`, `/listener/[uid]`. All other routes redirect to `/login` if unauthenticated
-5. **Logout:** `signOut(auth)` -> redirect to `/login`
+1. **Login (email):** `signInWithEmailAndPassword()` via Firebase Auth -> redirect to `/choose-a-profile`
+2. **Login (Google):** `signInWithPopup()` via Firebase Auth with `GoogleAuthProvider` -> checks if Firestore profiles exist -> if new user, creates both profiles as stubs (`isSetUp: false`) via `POST /api/create-profiles` with `role: "both-stubs"` and sends welcome email -> redirect to `/choose-a-profile`
+3. **Signup:** `createUserWithEmailAndPassword()` -> creates both `pitchers/{uid}` and `listeners/{uid}` documents (dual-profile system) -> primary role gets `isSetUp: true`, stub role gets `isSetUp: false` -> sends welcome email -> redirect to profile
+4. **Session:** `onAuthStateChanged()` listener in `Navbar.tsx` tracks auth state client-side
+5. **Route protection:** Client-side only (no middleware). Public routes: signup pages and `/pitcher/[uid]`, `/listener/[uid]`. All other routes redirect to `/login` if unauthenticated. Public SSR pages hide profiles where `isSetUp === false`.
+6. **Logout:** `signOut(auth)` -> redirect to `/login`
+7. **Profile setup:** Stub profiles (`isSetUp: false`) are marked as set up (`isSetUp: true`) when the user saves via the update-profile page. The `/choose-a-profile` page shows "Set Up" vs "Go to" buttons based on `isSetUp` status.
 
-**Important:** Every user gets BOTH a pitcher and listener profile on signup, regardless of which role they sign up as.
+**Important:** Every user gets BOTH a pitcher and listener profile on signup, regardless of which role they sign up as. The non-primary profile is a stub (`isSetUp: false`) until the user completes it via the update-profile page. Google sign-in users get both profiles as stubs and choose which to set up first.
+
+## Admin Access
+
+- **Route:** `/admin` (client-side page with server-validated API)
+- **Protection:** Email whitelist in `lib/adminConfig.ts` — checked both client-side (redirect) and server-side (API returns 403)
+- **API:** `GET /api/admin?tab=<tab>` with `Authorization: Bearer <Firebase ID token>` header
+- **Admin emails:** `yunyoungmokk@gmail.com`, `atxapplellc@gmail.com`
+- **Tabs:** Dashboard (summary stats), Pitchers, Listeners, Meetings, Fund History (sortable tables)
+- **Navbar:** "Admin" link shown only for admin users
+
+## Soft Delete
+
+Profiles can be soft-deleted by admins via the admin dashboard. Soft delete sets `deletedAt` (server timestamp) and `isSetUp: false` on the document — it does NOT remove the Firestore document.
+
+- **Affected pages:** Public profiles (`pages/pitcher/[uid].tsx`, `pages/listener/[uid].tsx`) check both `isSetUp !== false` and `!deletedAt`. The `choose-a-profile` page hides soft-deleted profiles entirely.
+- **Restore:** Admins can restore a soft-deleted profile from the admin dashboard, which sets `isSetUp: true` and removes the `deletedAt` field.
+- **Independence:** Deleting a pitcher profile does NOT affect the user's listener profile (and vice versa).
+- **Referential integrity:** Meetings and fund_history records still reference valid docs (just marked deleted).
+- **Admin API:** `PATCH /api/admin/[collection]/[id]` edits fields; `DELETE /api/admin/[collection]/[id]` soft-deletes.
 
 ## Payment Flow
 
