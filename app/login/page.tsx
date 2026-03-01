@@ -5,7 +5,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Head from 'next/head';
-import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/firebase/clientApp';
 import { signInWithGoogle, checkProfilesExist } from '@/lib/googleAuth';
 import { GoogleSignInButton } from '@/components/ui/GoogleSignInButton';
@@ -134,12 +134,19 @@ export default function LoginPage() {
       return;
     }
     try {
-      await sendPasswordResetEmail(auth, form.email);
+      const res = await fetch('/api/send-reset-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email }),
+      });
+      if (!res.ok) {
+        throw new Error('Failed to send');
+      }
       setSuccess('Password reset email sent. Check your inbox.');
     } catch (err: unknown) {
       const error = err as Error;
       console.error('[Forgot Password Error]', error.message);
-      setError('Failed to send reset email. Please check your email address.');
+      setError('Failed to send reset email. Please try again.');
     }
   };
 
