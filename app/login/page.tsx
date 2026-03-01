@@ -5,7 +5,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Head from 'next/head';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '@/firebase/clientApp';
 import { signInWithGoogle, checkProfilesExist } from '@/lib/googleAuth';
 import { GoogleSignInButton } from '@/components/ui/GoogleSignInButton';
@@ -53,6 +53,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,6 +63,7 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     setError('');
+    setSuccess('');
     if (!form.email || !form.password) {
       setError('Please fill in all fields.');
       return;
@@ -124,6 +126,23 @@ export default function LoginPage() {
     }
   };
 
+  const handleForgotPassword = async () => {
+    setError('');
+    setSuccess('');
+    if (!form.email) {
+      setError('Please enter your email address first.');
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, form.email);
+      setSuccess('Password reset email sent. Check your inbox.');
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error('[Forgot Password Error]', error.message);
+      setError('Failed to send reset email. Please check your email address.');
+    }
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleLogin();
   };
@@ -142,6 +161,7 @@ export default function LoginPage() {
           <Subtitle>Access your profile to connect and support</Subtitle>
 
           {error && <ProminentErrorBox>{error}</ProminentErrorBox>}
+          {success && <Subtitle style={{ color: 'green' }}>{success}</Subtitle>}
 
           <GoogleSignInButton onClick={handleGoogleLogin} disabled={loading} />
 
@@ -169,7 +189,7 @@ export default function LoginPage() {
             />
           </Field>
 
-          <ForgotPassword href="#">Forgot password?</ForgotPassword>
+          <ForgotPassword href="#" onClick={(e) => { e.preventDefault(); handleForgotPassword(); }}>Forgot password?</ForgotPassword>
 
           <Button onClick={handleLogin} disabled={loading}>
             {loading ? 'Logging in...' : 'Login'}
