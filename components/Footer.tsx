@@ -35,7 +35,7 @@ const FooterLink = styled('a', {
 export default function Footer() {
   return (
     <FooterContainer>
-      <div>© 2025 DonaTalk. All rights reserved.</div>
+      <div>© {new Date().getFullYear()} DonaTalk. All rights reserved.</div>
       <FooterLinks>
         <FooterLink href="https://donatalk.com/terms-of-service/">Terms of Service</FooterLink>
         <FooterLink href="https://donatalk.com/privacy-policy/">Privacy Policy</FooterLink>

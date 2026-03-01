@@ -66,7 +66,7 @@ export async function POST(req: Request) {
 
             <hr style="margin-top: 30px; border: none; border-top: 1px solid #e0e0e0;">
             <p style="text-align: center; font-size: 12px; color: #aaaaaa;">
-              © 2025 DonaTalk. All rights reserved.
+              © ${new Date().getFullYear()} DonaTalk. All rights reserved.
             </p>
           </div>
         </body>

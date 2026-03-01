@@ -353,9 +353,8 @@ npm run test     # Run Vitest unit tests
 6. **Hardcoded domain in emails:** `https://app.donatalk.com` hardcoded in email templates instead of using `NEXT_PUBLIC_BASE_URL`.
 7. **Commented-out isActive check:** In `pages/listener/[uid].tsx`, the `isActive` check is commented out (`// const isActive = pitcher.credit_balance >= requiredBalance;`).
 8. **Dual routing system:** Hybrid App Router + Pages Router - public profiles use Pages Router for SSR, everything else uses App Router.
-9. **Footer copyright year:** Hardcoded as 2025.
-10. **No rate limiting** on API routes.
-11. **`create-meeting` called after notification error:** In `pages/pitcher/[uid].tsx`, the `create-meeting` API call runs outside the try/catch and after status is already set, regardless of notification success/failure.
+9. **No rate limiting** on API routes.
+10. **`create-meeting` called after notification error:** In `pages/pitcher/[uid].tsx`, the `create-meeting` API call runs outside the try/catch and after status is already set, regardless of notification success/failure.
 
 ## Conventions
 

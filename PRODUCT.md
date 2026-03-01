@@ -176,7 +176,7 @@ A person who wants to hear pitches and direct donations to non-profits. They:
 - **Legal pages:** Terms of Service, Privacy Policy (linked from app footer)
 - **Known issues:**
   - No cookie consent management (Cookiebot or equivalent) is implemented
-  - Footer copyright in app says 2025
+  - Footer copyright in app now uses dynamic year via `new Date().getFullYear()`
 
 ## Backlog / TODO
 
