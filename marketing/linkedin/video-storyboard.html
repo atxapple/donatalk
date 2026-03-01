@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../brand.css">
+  <title>DonaTalk — Video Storyboard</title>
+  <style>
+    body {
+      background: #EBE8E6;
+      padding: 40px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 28px;
+      color: var(--navy);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-family: var(--font-family);
+      font-weight: var(--font-regular);
+      font-size: 14px;
+      color: var(--medium-gray);
+      text-align: center;
+      margin-bottom: 40px;
+      letter-spacing: 0.03em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 400px);
+      grid-template-rows: repeat(3, auto);
+      gap: 32px;
+      justify-content: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Panel card */
+    .panel {
+      width: 400px;
+      background: #FFFFFF;
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(44, 62, 80, 0.12);
+      overflow: hidden;
+    }
+
+    /* Visual area */
+    .panel-visual {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      background: #F0F2F4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Timestamp badge */
+    .timestamp {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--navy);
+      color: #FFFFFF;
+      font-family: var(--font-family);
+      font-weight: var(--font-semibold);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.04em;
+      z-index: 1;
+    }
+
+    /* Script area */
+    .panel-script {
+      padding: 20px 24px;
+      border-top: 1px solid #E8EAEC;
+    }
+
+    .panel-label {
+      font-family: var(--font-family);
+      font-weight: var(--font-semibold);
+      font-size: 11px;
+      color: var(--medium-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .panel-text {
+      font-family: var(--font-family);
+      font-weight: var(--font-medium);
+      font-size: 17px;
+      color: var(--text-dark);
+      line-height: 1.45;
+    }
+
+    /* Panel number label in corner of script area */
+    .panel-number {
+      float: right;
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 36px;
+      color: #E8EAEC;
+      line-height: 1;
+      margin-left: 8px;
+    }
+
+    /* ---- SVG icon styles ---- */
+    .icon-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-shape {
+      fill: none;
+      stroke: var(--navy);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .icon-accent {
+      fill: var(--heart-red);
+      stroke: none;
+    }
+
+    .icon-gold {
+      fill: var(--accent-yellow);
+      stroke: none;
+    }
+
+    .icon-x {
+      stroke: var(--cta-pitcher);
+      stroke-width: 3;
+      stroke-linecap: round;
+    }
+
+    .icon-check {
+      stroke: #27AE60;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    /* DonaTalk logo in panel 2 */
+    .logo-display {
+      text-align: center;
+    }
+
+    .logo-display .logo-text {
+      font-size: 42px;
+      letter-spacing: -1px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .logo-display .tagline {
+      font-family: var(--font-family);
+      font-weight: var(--font-light);
+      font-size: 13px;
+      color: var(--medium-gray);
+      letter-spacing: 0.06em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>DonaTalk — 30-Second Explainer Video Storyboard</h1>
+  <p class="subtitle">Production reference document &nbsp;|&nbsp; 6 scenes &nbsp;|&nbsp; 30 seconds total</p>
+
+  <div class="grid">
+
+    <!-- Panel 1: 0-5s — Sales rep frustrated -->
+    <div class="panel">
+      <div class="panel-visual">
+        <span class="timestamp">0 – 5s</span>
+        <svg width="180" height="120" viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+          <!-- Desk surface -->
+          <rect x="20" y="75" width="140" height="8" rx="3" class="icon-shape" stroke="#95A5A6" fill="#E8EAEC"/>
+          <!-- Desk legs -->
+          <line x1="30" y1="83" x2="30" y2="105" class="icon-shape" stroke="#95A5A6"/>
+          <line x1="150" y1="83" x2="150" y2="105" class="icon-shape" stroke="#95A5A6"/>
+          <!-- Laptop / screen -->
+          <rect x="55" y="50" width="70" height="26" rx="3" class="icon-shape" stroke="var(--navy)" fill="white"/>
+          <line x1="45" y1="76" x2="135" y2="76" class="icon-shape" stroke="var(--navy)"/>
+          <!-- Person body -->
+          <rect x="78" y="25" width="24" height="18" rx="3" class="icon-shape" stroke="var(--navy)" fill="#D6E4F0"/>
+          <!-- Person head -->
+          <circle cx="90" cy="16" r="9" class="icon-shape" stroke="var(--navy)" fill="#F5CBA7"/>
+          <!-- X mark (frustration) -->
+          <line x1="105" y1="30" x2="120" y2="15" class="icon-x"/>
+          <line x1="120" y1="30" x2="105" y2="15" class="icon-x"/>
+          <!-- Email envelopes bouncing away -->
+          <rect x="28" y="40" width="22" height="16" rx="2" class="icon-shape" stroke="#95A5A6" fill="white"/>
+          <polyline points="28,40 39,50 50,40" class="icon-shape" stroke="#95A5A6" fill="none" stroke-width="1.5"/>
+          <!-- Arrow away from envelope -->
+          <line x1="52" y1="48" x2="62" y2="44" stroke="#C26148" stroke-width="1.8" stroke-linecap="round"/>
+          <polyline points="58,40 62,44 58,48" stroke="#C26148" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="panel-script">
+        <span class="panel-number">1</span>
+        <div class="panel-label">Voiceover / Script</div>
+        <p class="panel-text">"Tired of cold emails getting ignored?"</p>
+      </div>
+    </div>
+
+    <!-- Panel 2: 5-10s — DonaTalk logo reveal -->
+    <div class="panel">
+      <div class="panel-visual">
+        <span class="timestamp">5 – 10s</span>
+        <div class="logo-display">
+          <img src="../png/logo-horizontal-with-text-2.webp" height="50" alt="DonaTalk">
+          <span class="tagline">Share your cause. Connect with supporters.</span>
+        </div>
+      </div>
+      <div class="panel-script">
+        <span class="panel-number">2</span>
+        <div class="panel-label">Voiceover / Script</div>
+        <p class="panel-text">"Meet DonaTalk."</p>
+      </div>
+    </div>
+
+    <!-- Panel 3: 10-15s — Sign up + link -->
+    <div class="panel">
+      <div class="panel-visual">
+        <span class="timestamp">10 – 15s</span>
+        <svg width="180" height="120" viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+          <!-- Person -->
+          <circle cx="55" cy="38" r="14" class="icon-shape" stroke="var(--navy)" fill="#D6E4F0"/>
+          <path d="M30 80 Q30 58 55 58 Q80 58 80 80" class="icon-shape" stroke="var(--navy)" fill="#ECF0F1"/>
+          <!-- Arrow pointing right -->
+          <line x1="88" y1="55" x2="110" y2="55" stroke="var(--navy)" stroke-width="2.5" stroke-linecap="round"/>
+          <polyline points="104,48 110,55 104,62" stroke="var(--navy)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <!-- Link chain icon -->
+          <rect x="115" y="38" width="24" height="14" rx="7" class="icon-shape" stroke="var(--cta-listener)" fill="none" stroke-width="3"/>
+          <rect x="131" y="38" width="24" height="14" rx="7" class="icon-shape" stroke="var(--cta-listener)" fill="none" stroke-width="3"/>
+          <line x1="130" y1="45" x2="140" y2="45" stroke="#EBE8E6" stroke-width="4"/>
+          <!-- URL bar beneath -->
+          <rect x="104" y="62" width="62" height="18" rx="4" fill="white" stroke="#BDC3C7" stroke-width="1.5"/>
+          <circle cx="117" cy="71" r="3" fill="var(--cta-listener)" opacity="0.7"/>
+          <line x1="124" y1="71" x2="157" y2="71" stroke="#BDC3C7" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="panel-script">
+        <span class="panel-number">3</span>
+        <div class="panel-label">Voiceover / Script</div>
+        <p class="panel-text">"Sign up and get your unique pitch link."</p>
+      </div>
+    </div>
+
+    <!-- Panel 4: 15-20s — Link shared, donation committed -->
+    <div class="panel">
+      <div class="panel-visual">
+        <span class="timestamp">15 – 20s</span>
+        <svg width="180" height="120" viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+          <!-- Arrow (share/send) -->
+          <line x1="20" y1="60" x2="65" y2="60" stroke="var(--navy)" stroke-width="2.5" stroke-linecap="round"/>
+          <polyline points="57,51 65,60 57,69" stroke="var(--navy)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <!-- Heart -->
+          <path d="M90 72 C90 72 68 58 68 44 C68 36 74 30 82 30 C86 30 89 32 90 34 C91 32 94 30 98 30 C106 30 112 36 112 44 C112 58 90 72 90 72Z" fill="var(--heart-red)" opacity="0.9"/>
+          <!-- Dollar sign circle -->
+          <circle cx="148" cy="52" r="22" fill="var(--accent-yellow)" opacity="0.9"/>
+          <text x="148" y="59" text-anchor="middle" font-family="'Readex Pro', sans-serif" font-weight="700" font-size="22" fill="var(--navy)">$</text>
+          <!-- Connector line heart to dollar -->
+          <line x1="113" y1="52" x2="126" y2="52" stroke="#BDC3C7" stroke-width="1.5" stroke-dasharray="4 3"/>
+        </svg>
+      </div>
+      <div class="panel-script">
+        <span class="panel-number">4</span>
+        <div class="panel-label">Voiceover / Script</div>
+        <p class="panel-text">"Commit to donate to your prospect's cause."</p>
+      </div>
+    </div>
+
+    <!-- Panel 5: 20-25s — Prospect accepts meeting -->
+    <div class="panel">
+      <div class="panel-visual">
+        <span class="timestamp">20 – 25s</span>
+        <svg width="180" height="120" viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+          <!-- Person left -->
+          <circle cx="55" cy="36" r="14" class="icon-shape" stroke="var(--navy)" fill="#D6E4F0"/>
+          <path d="M30 82 Q30 58 55 58 Q80 58 80 82" class="icon-shape" stroke="var(--navy)" fill="#ECF0F1"/>
+          <!-- Person right -->
+          <circle cx="125" cy="36" r="14" class="icon-shape" stroke="var(--navy)" fill="#FADBD8"/>
+          <path d="M100 82 Q100 58 125 58 Q150 58 150 82" class="icon-shape" stroke="var(--navy)" fill="#FADBD8"/>
+          <!-- Checkmark circle between them -->
+          <circle cx="90" cy="36" r="16" fill="#27AE60" opacity="0.15"/>
+          <circle cx="90" cy="36" r="16" fill="none" stroke="#27AE60" stroke-width="2"/>
+          <polyline points="82,36 87,42 99,28" class="icon-check" stroke="#27AE60"/>
+          <!-- Calendar beneath -->
+          <rect x="64" y="90" width="52" height="20" rx="3" fill="white" stroke="#BDC3C7" stroke-width="1.5"/>
+          <line x1="64" y1="97" x2="116" y2="97" stroke="#BDC3C7" stroke-width="1"/>
+          <line x1="77" y1="90" x2="77" y2="87" stroke="var(--navy)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="103" y1="90" x2="103" y2="87" stroke="var(--navy)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="panel-script">
+        <span class="panel-number">5</span>
+        <div class="panel-label">Voiceover / Script</div>
+        <p class="panel-text">"They'll gladly take your call."</p>
+      </div>
+    </div>
+
+    <!-- Panel 6: 25-30s — Both happy, cause supported -->
+    <div class="panel">
+      <div class="panel-visual">
+        <span class="timestamp">25 – 30s</span>
+        <svg width="180" height="120" viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
+          <!-- Handshake -->
+          <!-- Left hand -->
+          <path d="M20 65 L55 48 L70 55 L60 70 L25 80 Z" fill="#F5CBA7" stroke="var(--navy)" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Right hand -->
+          <path d="M160 65 L125 48 L110 55 L120 70 L155 80 Z" fill="#F5CBA7" stroke="var(--navy)" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Clasped center -->
+          <ellipse cx="90" cy="62" rx="22" ry="14" fill="#F5CBA7" stroke="var(--navy)" stroke-width="2"/>
+          <!-- Finger lines -->
+          <line x1="74" y1="56" x2="70" y2="66" stroke="var(--navy)" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="82" y1="52" x2="78" y2="66" stroke="var(--navy)" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="98" y1="52" x2="102" y2="66" stroke="var(--navy)" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="106" y1="56" x2="110" y2="66" stroke="var(--navy)" stroke-width="1.2" stroke-linecap="round"/>
+          <!-- Heart above -->
+          <path d="M90 38 C90 38 76 29 76 21 C76 16 80 12 85 12 C87.5 12 89 13.5 90 15 C91 13.5 92.5 12 95 12 C100 12 104 16 104 21 C104 29 90 38 90 38Z" fill="var(--heart-red)"/>
+          <!-- Sparkles -->
+          <circle cx="62" cy="20" r="3" fill="var(--accent-yellow)"/>
+          <circle cx="118" cy="20" r="3" fill="var(--accent-yellow)"/>
+          <circle cx="45" cy="35" r="2" fill="var(--accent-yellow)" opacity="0.7"/>
+          <circle cx="135" cy="35" r="2" fill="var(--accent-yellow)" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="panel-script">
+        <span class="panel-number">6</span>
+        <div class="panel-label">Voiceover / Script</div>
+        <p class="panel-text">"Warm meetings. Real donations. donatalk.com"</p>
+      </div>
+    </div>
+
+  </div><!-- /.grid -->
+
+</body>
+</html>

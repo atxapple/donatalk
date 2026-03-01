@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080">
+  <link rel="stylesheet" href="../brand.css">
+  <title>How It Works — DonaTalk</title>
+  <style>
+    .card {
+      width: 1080px;
+      height: 1080px;
+      overflow: hidden;
+      position: relative;
+      background-color: #FDFAF7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 60px;
+    }
+
+    .title {
+      font-size: 44px;
+      font-weight: 700;
+      color: #1D1F25;
+      margin-bottom: 80px;
+      letter-spacing: -0.5px;
+      text-align: center;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      width: 100%;
+      margin-bottom: 80px;
+    }
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 250px;
+      text-align: center;
+    }
+
+    .icon-wrap {
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .panel-label {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1D1F25;
+      line-height: 1.4;
+    }
+
+    .arrow {
+      font-size: 56px;
+      font-weight: 700;
+      color: #F8A5A5;
+      margin: 0 20px;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-bottom: 40px;
+    }
+
+    .logo-bottom {
+      margin-top: auto;
+      text-align: center;
+    }
+
+    .logo-text {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text .dona {
+      color: #2C3E50;
+    }
+
+    .logo-text .talk {
+      color: #E74C3C;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1 class="title">How DonaTalk Works</h1>
+
+    <div class="flow">
+
+      <!-- Panel 1: Pitcher -->
+      <div class="panel">
+        <div class="icon-wrap">
+          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Head -->
+            <circle cx="45" cy="26" r="16" fill="#2C3E50"/>
+            <!-- Body -->
+            <path d="M15 80 C15 58 75 58 75 80" stroke="#2C3E50" stroke-width="8" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <p class="panel-label">Pitcher signs up<br>&amp; adds funds</p>
+      </div>
+
+      <div class="arrow">&#x2192;</div>
+
+      <!-- Panel 2: Platform -->
+      <div class="panel">
+        <div class="icon-wrap">
+          <img src="../png/DonaTalk_icon_88x77.png" width="80" alt="DonaTalk icon">
+        </div>
+        <p class="panel-label">DonaTalk<br>connects</p>
+      </div>
+
+      <div class="arrow">&#x2192;</div>
+
+      <!-- Panel 3: Listener -->
+      <div class="panel">
+        <div class="icon-wrap">
+          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Head -->
+            <circle cx="45" cy="26" r="16" fill="#C26148"/>
+            <!-- Body -->
+            <path d="M15 80 C15 58 75 58 75 80" stroke="#C26148" stroke-width="8" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <p class="panel-label">Listener gets donation<br>to their cause</p>
+      </div>
+
+    </div>
+
+    <div class="logo-bottom">
+      <img src="../png/logo-horizontal-with-text-2.webp" height="36" alt="DonaTalk">
+    </div>
+  </div>
+</body>
+</html>
