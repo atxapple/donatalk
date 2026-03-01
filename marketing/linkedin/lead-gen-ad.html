@@ -6,6 +6,11 @@
   <link rel="stylesheet" href="../brand.css">
   <title>DonaTalk — LinkedIn Lead Gen Ad</title>
   <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
     .ad {
       width: 1200px;
       height: 628px;
@@ -14,18 +19,17 @@
       display: flex;
     }
 
-    /* ── Left panel (navy, 60%) ── */
+    /* ── Left panel (navy, 58%) ── */
     .ad__left {
-      width: 60%;
+      width: 58%;
       background-color: #2C3E50;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      padding: 52px 56px 44px 56px;
+      justify-content: center;
+      padding: 60px 56px;
       position: relative;
     }
 
-    /* Subtle top accent bar */
     .ad__left::before {
       content: '';
       position: absolute;
@@ -33,33 +37,26 @@
       left: 0;
       right: 0;
       height: 5px;
-      background: linear-gradient(90deg, #C26148 0%, #E74C3C 100%);
-    }
-
-    .ad__left-body {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      flex: 1;
-      justify-content: center;
+      background: linear-gradient(90deg, #F1C40F, #C26148, #E74C3C);
     }
 
     .ad__eyebrow {
       font-family: var(--font-family);
       font-weight: var(--font-medium);
-      font-size: 13px;
+      font-size: 14px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: #F8A5A5;
+      margin-bottom: 20px;
     }
 
     .ad__headline {
       font-family: var(--font-family);
       font-weight: var(--font-bold);
-      font-size: 36px;
-      line-height: 1.22;
+      font-size: 40px;
+      line-height: 1.2;
       color: #FFFFFF;
-      max-width: 520px;
+      margin: 0 0 20px 0;
     }
 
     .ad__headline em {
@@ -73,20 +70,19 @@
       font-size: 20px;
       line-height: 1.5;
       color: #ECF0F1;
-      max-width: 460px;
-      opacity: 0.88;
+      opacity: 0.85;
+      margin-bottom: 32px;
     }
 
     .ad__cta-row {
       display: flex;
       align-items: center;
       gap: 20px;
-      margin-top: 8px;
     }
 
     .ad__cta-btn {
       display: inline-block;
-      padding: 15px 36px;
+      padding: 16px 40px;
       background-color: #C26148;
       color: #FFFFFF;
       font-family: var(--font-family);
@@ -95,73 +91,69 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      letter-spacing: 0.01em;
       text-decoration: none;
-      white-space: nowrap;
-      transition: background-color 0.2s;
     }
 
     .ad__cta-note {
       font-family: var(--font-family);
       font-weight: var(--font-light);
       font-size: 13px;
-      color: rgba(236, 240, 241, 0.55);
-      white-space: nowrap;
+      color: rgba(236, 240, 241, 0.5);
     }
 
-    /* Logo at bottom-left */
     .ad__logo {
+      position: absolute;
+      bottom: 36px;
+      left: 56px;
       display: flex;
-      align-items: baseline;
-      gap: 0;
+      align-items: center;
+      gap: 10px;
     }
 
-    .ad__logo-dona {
-      font-family: var(--font-family);
-      font-weight: var(--font-bold);
-      font-size: 22px;
-      color: rgba(255, 255, 255, 0.75);
-      letter-spacing: -0.3px;
+    .ad__logo img {
+      height: 36px;
+      display: block;
     }
 
-    .ad__logo-talk {
+    .ad__logo-text {
       font-family: var(--font-family);
       font-weight: var(--font-bold);
-      font-size: 22px;
+      font-size: 24px;
+      letter-spacing: -0.5px;
+    }
+
+    .ad__logo-text .dona {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .ad__logo-text .talk {
       color: #F8A5A5;
-      letter-spacing: -0.3px;
     }
 
-    /* ── Right panel (beige, 40%) ── */
+    /* ── Right panel (beige, 42%) ── */
     .ad__right {
-      width: 40%;
+      width: 42%;
       background-color: #EBE8E6;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 48px 44px;
-      gap: 36px;
+      position: relative;
     }
 
-    .ad__icon-primary {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .ad__right::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #C26148, #E74C3C, #F1C40F);
     }
 
-    .ad__icon-secondary {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0.72;
-    }
-
-    .ad__icon-divider {
-      width: 48px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #C26148, transparent);
-      border-radius: 1px;
+    .ad__hero {
+      width: 340px;
+      height: auto;
+      display: block;
     }
   </style>
 </head>
@@ -170,45 +162,32 @@
 
     <!-- ── Left: Navy panel ── -->
     <div class="ad__left">
-      <div class="ad__left-body">
-        <span class="ad__eyebrow">For Sales Professionals</span>
+      <div class="ad__eyebrow">For Sales Professionals</div>
 
-        <h1 class="ad__headline">
-          Get Warm Sales Meetings<br>
-          by <em>Giving Back</em>
-        </h1>
+      <h1 class="ad__headline">
+        Get Warm Sales Meetings<br>
+        by <em>Giving Back</em>
+      </h1>
 
-        <p class="ad__subtext">
-          Donate to your prospect's cause.<br>They take your call.
-        </p>
+      <p class="ad__subtext">
+        Donate to your prospect's cause.<br>
+        They take your call.
+      </p>
 
-        <div class="ad__cta-row">
-          <a class="ad__cta-btn" href="https://app.donatalk.com/pitcher/signup">Sign Up Free</a>
-          <span class="ad__cta-note">No credit card required</span>
-        </div>
+      <div class="ad__cta-row">
+        <a class="ad__cta-btn" href="https://app.donatalk.com/pitcher/signup">Sign Up Free</a>
+        <span class="ad__cta-note">No credit card required</span>
       </div>
 
-      <!-- Logo lockup at bottom -->
       <div class="ad__logo">
-        <img src="../png/logo-horizontal-with-text-2.webp" height="30" alt="DonaTalk">
+        <img src="../png/DonaTalk_icon_88x77.png" alt="DonaTalk">
+        <span class="ad__logo-text"><span class="dona">Dona</span><span class="talk">Talk</span></span>
       </div>
     </div>
 
-    <!-- ── Right: Beige panel ── -->
+    <!-- ── Right: Hero illustration ── -->
     <div class="ad__right">
-
-      <!-- Heart-in-speech-bubble icon (~150px) -->
-      <div class="ad__icon-primary">
-        <img src="../png/DonaTalk_icon_88x77.png" width="150" alt="DonaTalk icon">
-      </div>
-
-      <div class="ad__icon-divider"></div>
-
-      <!-- Hero illustration -->
-      <div class="ad__icon-secondary">
-        <img src="../png/DonaTalk_Hero_300x222.webp" width="200" alt="DonaTalk hero illustration">
-      </div>
-
+      <img class="ad__hero" src="../png/DonaTalk_Hero_300x222.webp" alt="DonaTalk — connect through charitable giving">
     </div>
 
   </div>
