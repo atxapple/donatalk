@@ -1,10 +1,7 @@
 //  app/api/send-signup-email/route.ts
 
 import { NextResponse } from 'next/server';
-import sgMail from '@sendgrid/mail';
-
-// Set your SendGrid API Key
-sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+import { transporter, FROM_EMAIL, BCC_EMAIL } from '@/lib/mailer';
 
 export async function POST(req: Request) {
   try {
@@ -14,11 +11,11 @@ export async function POST(req: Request) {
     if (!fullName || !email || !userId || !role) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     }
-    
+
     let customMsg1 = '';
     let customMsg2 = '';
     let customMsg3 = '';
-    if (role === 'pitcher') {   
+    if (role === 'pitcher') {
       customMsg1 = 'We are excited to support you in sharing your story.'
       customMsg2 = 'Please make sure to add funds to your account at '
       customMsg3 = 'Then, the page is ready to share!';
@@ -29,10 +26,10 @@ export async function POST(req: Request) {
       customMsg3 = '';
     }
 
-    const msg = {
+    const mailOptions = {
       to: [email],
-      from: process.env.SENDGRID_FROM_EMAIL!,
-      bcc: 'atxapplellc@gmail.com',
+      from: FROM_EMAIL,
+      bcc: BCC_EMAIL,
       subject: `🎉 Welcome to DonaTalk, ${fullName}!`,
       html: `
         <!DOCTYPE html>
@@ -57,16 +54,16 @@ export async function POST(req: Request) {
 
             <blockquote style="background-color: #F8A5A5; margin: 5px; padding-top: 30px; padding-bottom: 10px; font-size: 16px; border-left: 5px solid #E74C3C; border-radius: 6px; color: #000000; white-space: pre-wrap; text-align: center; display: flex; align-items: center; justify-content: center; min-height: 50px; width: 100%;">
               <a href="https://app.donatalk.com/pitcher/${userId}" style="color: #2C3E50; text-decoration: none; font-weight: bold;">
-                https://app.donatalk.com/${role}/${userId} 
+                https://app.donatalk.com/${role}/${userId}
               </a>
             </blockquote>
 
             <p style="font-size: 16px; color: #333333;">
-              If you have any questions or need assistance, feel free to reach out to us at 
+              If you have any questions or need assistance, feel free to reach out to us at
               <a href="mailto:support@donatalk.com" style="color: #2C3E50;">support@donatalk.com</a>.
             </p>
 
-            <p style="font-size: 16px; color: #333333;">We’re thrilled to have you onboard. Let’s make a difference together!</p>
+            <p style="font-size: 16px; color: #333333;">We're thrilled to have you onboard. Let's make a difference together!</p>
 
             <p style="font-size: 16px; color: #333333;">Warmly,</p>
             <p style="color: #888888; font-size: 14px;">– The DonaTalk Team</p>
@@ -81,12 +78,12 @@ export async function POST(req: Request) {
       `,
     };
 
-    console.log('[Signup Email]', msg);
-    
-    await sgMail.send(msg);
+    console.log('[Signup Email]', mailOptions);
+
+    await transporter.sendMail(mailOptions);
     return NextResponse.json({ success: true, message: 'Signup email sent successfully.' }, { status: 200 });
   } catch (error: any) {
-    console.error('[Signup Email Error]', error.response?.body || error.message);
+    console.error('[Signup Email Error]', error.message);
     return NextResponse.json({ error: 'Failed to send signup email.' }, { status: 500 });
   }
 }
