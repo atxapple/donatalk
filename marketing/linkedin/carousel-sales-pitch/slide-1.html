@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080">
+  <link rel="stylesheet" href="../../brand.css">
+  <title>Slide 1 – Hook</title>
+  <style>
+    .slide {
+      width: 1080px;
+      height: 1080px;
+      overflow: hidden;
+      position: relative;
+      background-color: #2C3E50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px;
+    }
+
+    /* Faint heart watermark */
+    .watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.05;
+      pointer-events: none;
+    }
+
+    .watermark svg {
+      width: 600px;
+      height: 600px;
+      fill: #F8A5A5;
+    }
+
+    /* Decorative top accent line */
+    .accent-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #F1C40F 0%, #E74C3C 100%);
+    }
+
+    /* Main headline */
+    .headline {
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 54px;
+      color: #FFFFFF;
+      text-align: center;
+      line-height: 1.25;
+      max-width: 860px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .headline .highlight {
+      position: relative;
+      display: inline;
+      white-space: nowrap;
+    }
+
+    .headline .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background-color: #F1C40F;
+      border-radius: 2px;
+    }
+
+    /* Slide counter */
+    .slide-counter {
+      position: absolute;
+      bottom: 48px;
+      left: 48px;
+      font-family: var(--font-family);
+      font-weight: var(--font-light);
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 0.05em;
+    }
+
+    /* Logo bottom-right */
+    .logo-wrap {
+      position: absolute;
+      bottom: 44px;
+      right: 52px;
+    }
+
+    .logo-wrap .logo-text {
+      font-size: 28px;
+      letter-spacing: -0.5px;
+    }
+
+    /* On dark background, override logo colors to lighter tones */
+    .logo-wrap .logo-text .dona {
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .logo-wrap .logo-text .talk {
+      color: #F8A5A5;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide">
+
+    <!-- Accent line at top -->
+    <div class="accent-line"></div>
+
+    <!-- Faint heart watermark -->
+    <div class="watermark">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 88 C50 88 10 60 10 35 C10 20 20 10 35 10 C42 10 48 14 50 18 C52 14 58 10 65 10 C80 10 90 20 90 35 C90 60 50 88 50 88Z"/>
+      </svg>
+    </div>
+
+    <!-- Main content -->
+    <p class="headline">
+      What if every sales call you made<br>
+      <span class="highlight">also helped a non-profit?</span>
+    </p>
+
+    <!-- Slide counter -->
+    <span class="slide-counter">1 / 5</span>
+
+    <!-- DonaTalk logo -->
+    <div class="logo-wrap">
+      <span class="logo-text">
+        <span class="dona">Dona</span><span class="talk">Talk</span>
+      </span>
+    </div>
+
+  </div>
+</body>
+</html>
