@@ -1,6 +1,6 @@
 # DonaTalk - Developer Reference
 
-> Last updated: 2026-03-01 | Version: 0.2.0
+> Last updated: 2026-03-01 | Version: 0.3.0
 
 ## Project Overview
 
@@ -26,6 +26,7 @@ DonaTalk is a two-sided marketplace that connects **Pitchers** (fundraisers who 
 | Theme | next-themes (light/dark, default: light) |
 | Slugs | slugify |
 | Analytics | Google Tag Manager (AW-17050482317) |
+| Testing | Vitest |
 | Dev server | Turbopack (`next dev --turbopack`) |
 
 ## Project Structure
@@ -72,9 +73,12 @@ donatalk/
 ├── types/
 │   ├── listener.ts
 │   └── pitcher.ts
+├── test/
+│   └── helpers.ts                # Shared test utilities (createJsonRequest)
 ├── styles/
 │   ├── globals.css
 │   └── stitches.config.ts        # Theme tokens (colors, fonts, spacing, radii)
+├── vitest.config.ts              # Vitest config with path aliases
 └── public/
     ├── DonaTalk_icon_88x77.png
     ├── logo horizontal with text.png
@@ -275,6 +279,7 @@ npm run dev      # Start dev server with Turbopack
 npm run build    # Production build
 npm run start    # Start production server
 npm run lint     # Run ESLint
+npm run test     # Run Vitest unit tests
 ```
 
 - **Hosting:** Vercel (auto-deploy from GitHub `main` branch)
@@ -321,3 +326,4 @@ npm run lint     # Run ESLint
 - **State management:** No global state library. Auth state via `onAuthStateChanged` in Navbar. Page-level state via `useState`.
 - **Loading:** `LoadingScreen` component wraps all pages in layout.
 - **Theme:** Light mode default, dark mode support via `next-themes`.
+- **Testing:** Vitest with co-located test files (`*.test.ts` next to source). Mocks for Firebase, PayPal, and Nodemailer via `vi.mock()` / `vi.hoisted()`. Shared helpers in `test/helpers.ts`.
