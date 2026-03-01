@@ -1,6 +1,6 @@
 # DonaTalk - Developer Reference
 
-> Last updated: 2026-03-01 | Version: 0.1.0
+> Last updated: 2026-03-01 | Version: 0.2.0
 
 ## Project Overview
 
@@ -22,7 +22,7 @@ DonaTalk is a two-sided marketplace that connects **Pitchers** (fundraisers who 
 | Auth | Firebase Auth (email/password) |
 | Database | Cloud Firestore |
 | Payments | PayPal (REST API + React SDK) |
-| Email | SendGrid (@sendgrid/mail) |
+| Email | Nodemailer (SMTP) |
 | Theme | next-themes (light/dark, default: light) |
 | Slugs | slugify |
 | Analytics | Google Tag Manager (AW-17050482317) |
@@ -64,6 +64,7 @@ donatalk/
 │   ├── LogoutButton.tsx
 │   └── Navbar.tsx                # Auth state + route protection
 ├── lib/
+│   ├── mailer.ts                 # Nodemailer SMTP transporter + email constants
 │   ├── sendEmailfromListenerPage.ts
 │   └── updateFunds.ts
 ├── firebase/
@@ -117,10 +118,10 @@ All routes are `POST` only, located in `app/api/`.
 | `/api/complete-order` | Capture PayPal payment | PayPal |
 | `/api/complete-order-and-update-fund` | Capture payment + update pitcher balance | PayPal, Firebase Admin |
 | `/api/create-meeting` | Create meeting record in Firestore | Firebase Admin |
-| `/api/escrow-log` | Handle listener-to-pitcher escrow payment | PayPal, Firebase Admin, SendGrid |
-| `/api/send-notification` | Send meeting interest email to both parties | SendGrid |
-| `/api/send-payment-confirm-email` | Send payment confirmation to pitcher | SendGrid |
-| `/api/send-signup-email` | Send welcome email on registration | SendGrid |
+| `/api/escrow-log` | Handle listener-to-pitcher escrow payment | PayPal, Firebase Admin, Nodemailer |
+| `/api/send-notification` | Send meeting interest email to both parties | Nodemailer |
+| `/api/send-payment-confirm-email` | Send payment confirmation to pitcher | Nodemailer |
+| `/api/send-signup-email` | Send welcome email on registration | Nodemailer |
 
 ## Database Schema (Firestore)
 
@@ -227,10 +228,10 @@ export type Listener = {
 - Pitcher's shareable link is **active** only if `credit_balance >= donation * 1.125`
 - If insufficient funds, the public page shows an "inactive" message
 
-## Email Integration (SendGrid)
+## Email Integration (Nodemailer SMTP)
 
 - **BCC on ALL emails:** `atxapplellc@gmail.com`
-- **From address:** configured via `SENDGRID_FROM_EMAIL` env var
+- **From address:** hardcoded as `support@donatalk.com` in `lib/mailer.ts`
 - **Support email:** `support@donatalk.com`
 
 ### Email Types
@@ -261,9 +262,8 @@ All emails use inline HTML templates with DonaTalk branding (logo, colors).
 - `PAYPAL_CLIENT_SECRET`
 - `PAYPAL_API_URL` (production: `https://api-m.paypal.com`)
 
-### SendGrid
-- `SENDGRID_API_KEY`
-- `SENDGRID_FROM_EMAIL`
+### Email (SMTP)
+- `EMAIL_PASSWORD`
 
 ### App
 - `NEXT_PUBLIC_BASE_URL` (defaults to `http://localhost:3000`)
@@ -291,7 +291,7 @@ npm run lint     # Run ESLint
 | Database | Firebase / Cloud Firestore |
 | Authentication | Firebase Auth |
 | Payments | PayPal |
-| Email | SendGrid |
+| Email | Nodemailer (SMTP via mail.donatalk.com) |
 | Analytics | Google Ads (AW-17050482317) |
 | Source control | GitHub |
 
@@ -301,7 +301,7 @@ npm run lint     # Run ESLint
 2. **Hardcoded Zoom link:** A single Zoom meeting URL is hardcoded in `send-notification/route.ts` and sent in all meeting emails.
 3. **Typos in code:** `encriptedAmount` (should be `encryptedAmount`), `ilstenerId` (should be `listenerId`) in listener/[uid].tsx query params, `PyamentEmailResponse` (should be `PaymentEmailResponse`) in `sendEmailfromListenerPage.ts`.
 4. **No server-side auth middleware:** Route protection is client-side only via `Navbar.tsx`. API routes have no authentication checks.
-5. **Hardcoded BCC email:** `atxapplellc@gmail.com` is hardcoded in all SendGrid API routes.
+5. **Hardcoded BCC email:** `atxapplellc@gmail.com` is hardcoded in `lib/mailer.ts`.
 6. **Hardcoded domain in emails:** `https://app.donatalk.com` hardcoded in email templates instead of using `NEXT_PUBLIC_BASE_URL`.
 7. **Commented-out isActive check:** In `pages/listener/[uid].tsx`, the `isActive` check is commented out (`// const isActive = pitcher.credit_balance >= requiredBalance;`).
 8. **Dual routing system:** Hybrid App Router + Pages Router - public profiles use Pages Router for SSR, everything else uses App Router.
