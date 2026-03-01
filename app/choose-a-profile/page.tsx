@@ -25,6 +25,8 @@ export default function ChooseProfile() {
   const [userId, setUserId] = useState<string | null>(null);
   const [isPitcher, setIsPitcher] = useState(false);
   const [isListener, setIsListener] = useState(false);
+  const [pitcherSetUp, setPitcherSetUp] = useState(true);
+  const [listenerSetUp, setListenerSetUp] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -39,8 +41,18 @@ export default function ChooseProfile() {
         const pitcherDoc = await getDoc(doc(firestore, 'pitchers', user.uid));
         const listenerDoc = await getDoc(doc(firestore, 'listeners', user.uid));
 
-        setIsPitcher(pitcherDoc.exists());
-        setIsListener(listenerDoc.exists());
+        const pitcherData = pitcherDoc.exists() ? pitcherDoc.data() : null;
+        const listenerData = listenerDoc.exists() ? listenerDoc.data() : null;
+
+        setIsPitcher(pitcherDoc.exists() && !pitcherData?.deletedAt);
+        setIsListener(listenerDoc.exists() && !listenerData?.deletedAt);
+
+        if (pitcherData && !pitcherData.deletedAt) {
+          setPitcherSetUp(pitcherData.isSetUp !== false);
+        }
+        if (listenerData && !listenerData.deletedAt) {
+          setListenerSetUp(listenerData.isSetUp !== false);
+        }
 
         if (!pitcherDoc.exists() && !listenerDoc.exists()) {
           setError('No profile found. Please sign up as Pitcher or Listener first.');
@@ -70,13 +82,13 @@ export default function ChooseProfile() {
 
           <ButtonGroup>
             {isPitcher && (
-              <Button onClick={() => router.push('/pitcher/profile')}>
-                🎤 Go to Pitcher Profile
+              <Button onClick={() => router.push(pitcherSetUp ? '/pitcher/profile' : '/pitcher/update-profile')}>
+                {pitcherSetUp ? '🎤 Go to Pitcher Profile' : '🎤 Set Up Pitcher Profile'}
               </Button>
             )}
             {isListener && (
-              <Button onClick={() => router.push('/listener/profile')}>
-                👂 Go to Listener Profile
+              <Button onClick={() => router.push(listenerSetUp ? '/listener/profile' : '/listener/update-profile')}>
+                {listenerSetUp ? '👂 Go to Listener Profile' : '👂 Set Up Listener Profile'}
               </Button>
             )}
           </ButtonGroup>

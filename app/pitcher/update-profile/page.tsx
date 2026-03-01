@@ -75,8 +75,8 @@ export default function PitcherUpdateProfile() {
   };
 
   const handleUpdate = async () => {
-    if (!form.fullName || !form.donation) {
-      setError('Full Name and Donation fields are required.');
+    if (!form.fullName || !form.pitch || !form.donation) {
+      setError('Full Name, About Pitch, and Donation fields are required.');
       return;
     }
     setLoading(true);
@@ -87,6 +87,7 @@ export default function PitcherUpdateProfile() {
           fullName: form.fullName,
           pitch: form.pitch,
           donation: form.donation,
+          isSetUp: true,
         });
         router.push('/pitcher/profile'); // ✅ Updated push for App Router
       }

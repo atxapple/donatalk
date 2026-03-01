@@ -42,12 +42,22 @@ export default function PitcherProfile() {
   const [fundAmount, setFundAmount] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [showFundInput, setShowFundInput] = useState(false);
+  const [listenerSetUp, setListenerSetUp] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUserId(user.uid);
         await fetchPitcherData(user.uid);
+        // Fetch listener isSetUp status for cross-role button
+        try {
+          const listenerDoc = await getDoc(doc(firestore, 'listeners', user.uid));
+          if (listenerDoc.exists()) {
+            setListenerSetUp(listenerDoc.data().isSetUp !== false);
+          }
+        } catch (err) {
+          console.error('[Fetch Listener Status Error]', err);
+        }
       } else {
         router.push('/login');
       }
@@ -193,8 +203,8 @@ export default function PitcherProfile() {
             <Button onClick={() => router.push('/pitcher/update-profile')}>Edit Profile</Button>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-            <Button onClick={() => router.push('/listener/profile')}>
-              Go to Listener Profile
+            <Button onClick={() => router.push(listenerSetUp ? '/listener/profile' : '/listener/update-profile')}>
+              {listenerSetUp ? 'Go to Listener Profile' : 'Set Up Listener Profile'}
             </Button>
           </div>
         </CardContainer>

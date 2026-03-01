@@ -9,12 +9,31 @@ import Head from 'next/head';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '@/firebase/clientApp'; // ✅ Adjust path if needed
 import { doc, setDoc, Timestamp, collection, getDocs, query, where } from 'firebase/firestore';
+import { signInWithGoogle, checkProfilesExist } from '@/lib/googleAuth';
+import { GoogleSignInButton } from '@/components/ui/GoogleSignInButton';
 import { Input, Textarea, Button, Field, Label } from '@/components/ui';
 import PageWrapper from '@/components/layout/PageWrapper';
 import CardContainer from '@/components/layout/CardContainer';
 import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
 import { styled } from '@/styles/stitches.config';
 import Script from 'next/script';
+
+const Divider = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  width: '100%',
+  margin: '16px 0',
+  color: '#999',
+  fontSize: '14px',
+  '&::before, &::after': {
+    content: '""',
+    flex: 1,
+    height: '1px',
+    backgroundColor: '#ddd',
+  },
+  '&::before': { marginRight: '12px' },
+  '&::after': { marginLeft: '12px' },
+});
 
 async function generateUniqueSlug(baseName: string): Promise<string> {
   const baseSlug = slugify(baseName, { lower: true, remove: /[^a-zA-Z0-9]/g });
@@ -73,6 +92,7 @@ export default function SignupListener() {
         intro: form.intro,
         donation: parseFloat(form.donation),
         slug,
+        isSetUp: true,
         createdAt: Timestamp.now(),
       });
 
@@ -83,6 +103,7 @@ export default function SignupListener() {
         donation: 0,
         credit_balance: 0,
         slug,
+        isSetUp: false,
         createdAt: Timestamp.now(),
       });
 
@@ -108,6 +129,48 @@ export default function SignupListener() {
     }
   };
 
+
+  const handleGoogleSignup = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      const result = await signInWithGoogle();
+      if (result.cancelled) return;
+      if (result.error) { setError(result.error); return; }
+      if (!result.userCredential) return;
+
+      const { uid, displayName, email } = result.userCredential.user;
+      const { hasPitcher, hasListener } = await checkProfilesExist(uid);
+
+      if (!hasPitcher && !hasListener) {
+        await fetch('/api/create-profiles', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            uid,
+            fullName: displayName || '',
+            email: email || '',
+            role: 'both-stubs',
+          }),
+        });
+        await fetch('/api/send-signup-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: email || '',
+            fullName: displayName || '',
+          }),
+        });
+      }
+
+      router.push('/choose-a-profile');
+    } catch (err) {
+      console.error('[Google Signup Error]', err);
+      setError('An error occurred during Google sign-in. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -143,6 +206,10 @@ export default function SignupListener() {
           <Subtitle>Discover pitches and support community.</Subtitle>
 
           {error && <ProminentErrorBox>{error}</ProminentErrorBox>}
+
+          <GoogleSignInButton onClick={handleGoogleSignup} disabled={loading} label="Sign up with Google" />
+
+          <Divider>or</Divider>
 
           <Field>
             <Label>Full Name</Label>

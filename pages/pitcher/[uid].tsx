@@ -58,6 +58,19 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
     );
   }
 
+  const isProfileSetUp = pitcher.isSetUp !== false && !pitcher.deletedAt;
+
+  if (!isProfileSetUp) {
+    return (
+      <PageWrapper>
+        <CardContainer>
+          <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
+          <InfoBox>This profile is not yet available.</InfoBox>
+        </CardContainer>
+      </PageWrapper>
+    );
+  }
+
   const requiredBalance = Math.ceil(pitcher.donation * 1.125 * 100) / 100;
   const isActive = pitcher.credit_balance >= requiredBalance;
 
@@ -187,8 +200,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       return { props: { pitcher: null, uid: uid as string } };
     }
 
+    const data = docSnap.data();
     return {
-      props: { pitcher: docSnap.data() as Pitcher, uid: uid as string },
+      props: { pitcher: JSON.parse(JSON.stringify(data)) as Pitcher, uid: uid as string },
     };
   } catch {
     return { props: { pitcher: null, uid: uid as string } };
