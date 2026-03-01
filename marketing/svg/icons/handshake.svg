@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="#2C3E50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Left arm/wrist coming from the left -->
+  <path d="M4 28 L14 20" />
+  <!-- Left hand fingers (top) -->
+  <path d="M14 20 L18 16 L22 18" />
+  <!-- Left hand grip body -->
+  <path d="M22 18 L26 22" />
+  <!-- Interlocked fingers in the middle -->
+  <path d="M18 16 L20 13 L24 15" />
+  <path d="M20 13 L22 10 L26 12 L25 15" />
+  <!-- Right arm/wrist coming from the right -->
+  <path d="M44 28 L34 20" />
+  <!-- Right hand fingers (top) -->
+  <path d="M34 20 L30 16 L26 18" />
+  <!-- Right hand grip body -->
+  <path d="M26 18 L22 22" />
+  <!-- Interlocked fingers from right side -->
+  <path d="M30 16 L28 13 L24 15" />
+  <!-- Clasped hands body -->
+  <path d="M22 18 L24 24 L26 18" />
+  <!-- Lower palm area left -->
+  <path d="M14 20 L12 30 L20 34 L24 32" />
+  <!-- Lower palm area right -->
+  <path d="M34 20 L36 30 L28 34 L24 32" />
+  <!-- Wrist cuffs -->
+  <path d="M4 28 L8 36 L12 34" />
+  <path d="M44 28 L40 36 L36 34" />
+</svg>
