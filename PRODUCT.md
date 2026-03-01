@@ -1,6 +1,6 @@
 # DonaTalk - Product Reference
 
-> Last updated: 2026-03-01 | Version: 0.1.0
+> Last updated: 2026-03-01 | Version: 0.2.0
 
 ## Product Vision
 
@@ -164,7 +164,7 @@ A person who wants to hear pitches and direct donations to non-profits. They:
 | Database | Firebase / Cloud Firestore | 4 collections: pitchers, listeners, meetings, fund_history |
 | Authentication | Firebase Auth | Email/password only |
 | Payments | PayPal | Live (production API URL) |
-| Transactional email | SendGrid | From: support@donatalk.com |
+| Transactional email | Nodemailer (SMTP) | From: support@donatalk.com via mail.donatalk.com |
 | Source control | GitHub | Private repository |
 | Analytics | Google Ads | Conversion tracking: AW-17050482317 |
 | Monitoring BCC | atxapplellc@gmail.com | Receives BCC of all transactional emails |
