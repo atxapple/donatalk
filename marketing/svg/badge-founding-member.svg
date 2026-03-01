@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240">
+  <!-- Shield body: navy #2C3E50 with gold border -->
+  <path
+    d="M100 10
+       L185 45
+       L185 130
+       Q185 195 100 230
+       Q15 195 15 130
+       L15 45
+       Z"
+    fill="#2C3E50"
+    stroke="#F1C40F"
+    stroke-width="4"
+    stroke-linejoin="round"
+  />
+
+  <!-- Ribbon tail left -->
+  <path
+    d="M15 190 L5 215 L30 205 L15 190 Z"
+    fill="#1A252F"
+    stroke="#F1C40F"
+    stroke-width="2"
+    stroke-linejoin="round"
+  />
+
+  <!-- Ribbon tail right -->
+  <path
+    d="M185 190 L195 215 L170 205 L185 190 Z"
+    fill="#1A252F"
+    stroke="#F1C40F"
+    stroke-width="2"
+    stroke-linejoin="round"
+  />
+
+  <!-- Star at top center -->
+  <!-- 5-pointed star centered at (100, 72), outer radius 34, inner radius 14 -->
+  <polygon
+    points="
+      100,38
+      109.9,65.4
+      138.9,65.4
+      116.5,82.2
+      125.4,109.6
+      100,92.8
+      74.6,109.6
+      83.5,82.2
+      61.1,65.4
+      90.1,65.4
+    "
+    fill="#F1C40F"
+    stroke="#D4AC0D"
+    stroke-width="1.5"
+    stroke-linejoin="round"
+  />
+
+  <!-- Text: FOUNDING -->
+  <text
+    x="100"
+    y="148"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="22"
+    font-weight="bold"
+    fill="#FFFFFF"
+    text-anchor="middle"
+    letter-spacing="3"
+  >FOUNDING</text>
+
+  <!-- Decorative divider line -->
+  <line
+    x1="55" y1="158"
+    x2="145" y2="158"
+    stroke="#F1C40F"
+    stroke-width="1.5"
+    stroke-linecap="round"
+  />
+
+  <!-- Text: MEMBER -->
+  <text
+    x="100"
+    y="178"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="22"
+    font-weight="bold"
+    fill="#FFFFFF"
+    text-anchor="middle"
+    letter-spacing="3"
+  >MEMBER</text>
+</svg>

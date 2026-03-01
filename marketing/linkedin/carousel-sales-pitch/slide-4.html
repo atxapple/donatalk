@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080">
+  <link rel="stylesheet" href="../../brand.css">
+  <title>Slide 4 – How It Works</title>
+  <style>
+    .slide {
+      width: 1080px;
+      height: 1080px;
+      overflow: hidden;
+      position: relative;
+      background-color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 72px 80px 64px;
+    }
+
+    /* Accent line at top */
+    .accent-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #F1C40F 0%, #E74C3C 100%);
+    }
+
+    /* Slide title */
+    .slide-title {
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 48px;
+      color: #1D1F25;
+      text-align: center;
+      margin-bottom: 64px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .slide-title::after {
+      content: '';
+      display: block;
+      width: 64px;
+      height: 5px;
+      background-color: #E74C3C;
+      border-radius: 2px;
+      margin: 16px auto 0;
+    }
+
+    /* Steps container */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      width: 640px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    /* Individual step row */
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      position: relative;
+    }
+
+    /* Left column: circle + connector */
+    .step-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* Numbered circle */
+    .step-circle {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background-color: #E74C3C;
+      color: #FFFFFF;
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Connector line between circles */
+    .step-connector {
+      width: 2px;
+      height: 72px;
+      background: repeating-linear-gradient(
+        to bottom,
+        #D0D0D0 0px,
+        #D0D0D0 6px,
+        transparent 6px,
+        transparent 12px
+      );
+      flex-shrink: 0;
+    }
+
+    /* Step text */
+    .step-text {
+      font-family: var(--font-family);
+      font-weight: var(--font-semibold);
+      font-size: 28px;
+      color: #1D1F25;
+      line-height: 1.3;
+    }
+
+    /* Slide counter */
+    .slide-counter {
+      position: absolute;
+      bottom: 48px;
+      left: 52px;
+      font-family: var(--font-family);
+      font-weight: var(--font-light);
+      font-size: 18px;
+      color: rgba(29, 31, 37, 0.35);
+      letter-spacing: 0.05em;
+    }
+
+    /* Logo bottom-right */
+    .logo-wrap {
+      position: absolute;
+      bottom: 44px;
+      right: 52px;
+    }
+
+    .logo-wrap .logo-text {
+      font-size: 28px;
+      letter-spacing: -0.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide">
+
+    <!-- Accent line at top -->
+    <div class="accent-line"></div>
+
+    <!-- Title -->
+    <h1 class="slide-title">How It Works</h1>
+
+    <!-- 4-step flow -->
+    <div class="steps">
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-left">
+          <div class="step-circle">1</div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-text">Sign up as a Pitcher</div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-left">
+          <div class="step-circle">2</div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-text">Add funds for donation</div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-left">
+          <div class="step-circle">3</div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-text">Share your unique link</div>
+      </div>
+
+      <!-- Step 4 (no connector below last step) -->
+      <div class="step">
+        <div class="step-left">
+          <div class="step-circle">4</div>
+        </div>
+        <div class="step-text">Get warm meetings</div>
+      </div>
+
+    </div>
+
+    <!-- Slide counter -->
+    <span class="slide-counter">4 / 5</span>
+
+    <!-- DonaTalk logo -->
+    <div class="logo-wrap">
+      <img src="../../png/logo-horizontal-with-text-2.webp" height="32" alt="DonaTalk">
+    </div>
+
+  </div>
+</body>
+</html>

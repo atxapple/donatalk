@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080">
+  <link rel="stylesheet" href="../../brand.css">
+  <title>Slide 3 – Solution</title>
+  <style>
+    .slide {
+      width: 1080px;
+      height: 1080px;
+      overflow: hidden;
+      position: relative;
+      background-color: #FFFFFF;
+      display: flex;
+      flex-direction: row;
+    }
+
+    /* Coral vertical accent bar on the left */
+    .accent-bar {
+      width: 8px;
+      height: 100%;
+      flex-shrink: 0;
+      background-color: #F8A5A5;
+    }
+
+    /* Main content area */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 100px 100px 100px 88px;
+    }
+
+    /* Heart icon */
+    .heart-icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 48px;
+    }
+
+    /* Headline */
+    .headline {
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 52px;
+      color: #1D1F25;
+      line-height: 1.2;
+      margin-bottom: 28px;
+      max-width: 760px;
+    }
+
+    /* Subhead */
+    .subhead {
+      font-family: var(--font-family);
+      font-weight: var(--font-regular);
+      font-size: 30px;
+      color: #95A5A6;
+      line-height: 1.4;
+      max-width: 620px;
+    }
+
+    .subhead strong {
+      color: #1D1F25;
+      font-weight: var(--font-semibold);
+    }
+
+    /* Horizontal rule below subhead */
+    .rule {
+      width: 64px;
+      height: 4px;
+      background-color: #F8A5A5;
+      border-radius: 2px;
+      margin-top: 52px;
+    }
+
+    /* Bottom branding row */
+    .bottom-row {
+      position: absolute;
+      bottom: 44px;
+      left: 8px;   /* account for accent bar */
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 52px 0 88px;
+    }
+
+    .slide-counter {
+      font-family: var(--font-family);
+      font-weight: var(--font-light);
+      font-size: 18px;
+      color: #95A5A6;
+      letter-spacing: 0.05em;
+    }
+
+    .logo-text {
+      font-size: 28px;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text .dona {
+      color: #2C3E50;
+    }
+
+    .logo-text .talk {
+      color: #E74C3C;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide">
+
+    <!-- Left coral accent bar -->
+    <div class="accent-bar"></div>
+
+    <!-- Main content -->
+    <div class="content">
+
+      <!-- Heart icon -->
+      <img src="../../png/DonaTalk_icon_88x77.png" width="80" alt="DonaTalk icon" class="heart-icon">
+
+      <!-- Headline -->
+      <h1 class="headline">Commit to donate to<br>your prospect's cause.</h1>
+
+      <!-- Subhead -->
+      <p class="subhead">They'll <strong>gladly</strong> take your meeting.</p>
+
+      <!-- Decorative rule -->
+      <div class="rule"></div>
+
+    </div>
+
+    <!-- Bottom branding row -->
+    <div class="bottom-row">
+      <span class="slide-counter">3 / 5</span>
+      <img src="../../png/logo-horizontal-with-text-2.webp" height="32" alt="DonaTalk">
+    </div>
+
+  </div>
+</body>
+</html>

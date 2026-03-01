@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080">
+  <link rel="stylesheet" href="../../brand.css">
+  <title>Slide 2 – Problem</title>
+  <style>
+    .slide {
+      width: 1080px;
+      height: 1080px;
+      overflow: hidden;
+      position: relative;
+      background-color: #EBE8E6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 80px 80px;
+    }
+
+    /* Top accent bar */
+    .accent-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background-color: #E74C3C;
+    }
+
+    /* Big stat number */
+    .stat-number {
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 210px;
+      color: #E74C3C;
+      line-height: 1;
+      letter-spacing: -8px;
+      margin-bottom: 8px;
+    }
+
+    /* Stat label */
+    .stat-label {
+      font-family: var(--font-family);
+      font-weight: var(--font-regular);
+      font-size: 26px;
+      color: #95A5A6;
+      text-align: center;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 64px;
+    }
+
+    /* Divider */
+    .divider {
+      width: 60px;
+      height: 3px;
+      background-color: #E74C3C;
+      border-radius: 2px;
+      margin-bottom: 52px;
+    }
+
+    /* Pain points list */
+    .pain-list {
+      list-style: none;
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .pain-list li {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-family: var(--font-family);
+      font-weight: var(--font-medium);
+      font-size: 30px;
+      color: #1D1F25;
+    }
+
+    .pain-list li .bullet {
+      flex-shrink: 0;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #E74C3C;
+    }
+
+    /* Bottom branding row */
+    .bottom-row {
+      position: absolute;
+      bottom: 44px;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 52px;
+    }
+
+    .slide-counter {
+      font-family: var(--font-family);
+      font-weight: var(--font-light);
+      font-size: 18px;
+      color: #95A5A6;
+      letter-spacing: 0.05em;
+    }
+
+    .logo-text {
+      font-size: 28px;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text .dona {
+      color: #2C3E50;
+    }
+
+    .logo-text .talk {
+      color: #E74C3C;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide">
+
+    <div class="accent-bar"></div>
+
+    <!-- Stat -->
+    <div class="stat-number">1%</div>
+    <p class="stat-label">average cold email response rate</p>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Pain points -->
+    <ul class="pain-list">
+      <li>
+        <span class="bullet"></span>
+        Gatekeepers block you.
+      </li>
+      <li>
+        <span class="bullet"></span>
+        Prospects don't trust you.
+      </li>
+      <li>
+        <span class="bullet"></span>
+        No reason to say yes.
+      </li>
+    </ul>
+
+    <!-- Bottom row -->
+    <div class="bottom-row">
+      <span class="slide-counter">2 / 5</span>
+      <img src="../../png/logo-horizontal-with-text-2.webp" height="32" alt="DonaTalk">
+    </div>
+
+  </div>
+</body>
+</html>

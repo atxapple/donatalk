@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../brand.css">
+  <title>DonaTalk — Wide Skyscraper 160x600</title>
+  <style>
+    body {
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .banner {
+      width: 160px;
+      height: 600px;
+      background: #2C3E50;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 14px 24px;
+      box-sizing: border-box;
+      border: 1px solid #3498DB;
+    }
+
+    .banner__logo {
+      display: flex;
+      align-items: baseline;
+      margin-bottom: 24px;
+    }
+
+    .banner__logo-dona {
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 16px;
+      color: #FFFFFF;
+      letter-spacing: -0.2px;
+    }
+
+    .banner__logo-talk {
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 16px;
+      color: #F8A5A5;
+      letter-spacing: -0.2px;
+    }
+
+    .banner__divider {
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #C26148, transparent);
+      border-radius: 1px;
+      margin-bottom: 24px;
+    }
+
+    .banner__headline {
+      font-family: var(--font-family);
+      font-weight: var(--font-bold);
+      font-size: 18px;
+      line-height: 1.28;
+      color: #FFFFFF;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .banner__bullets {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: auto;
+    }
+
+    .banner__bullet {
+      font-family: var(--font-family);
+      font-weight: var(--font-regular);
+      font-size: 13px;
+      color: #ECF0F1;
+      text-align: left;
+      line-height: 1.3;
+    }
+
+    .banner__bullet .check {
+      color: #C26148;
+      font-weight: var(--font-bold);
+      margin-right: 4px;
+    }
+
+    .banner__cta {
+      display: block;
+      width: 100%;
+      padding: 11px 0;
+      background: #C26148;
+      color: #FFFFFF;
+      font-family: var(--font-family);
+      font-weight: var(--font-semibold);
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 28px;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <div class="banner__logo">
+      <img src="../png/DonaTalk_icon_88x77.png" height="22" alt="DonaTalk" style="margin-right:4px;">
+      <span class="banner__logo-dona">Dona</span><span class="banner__logo-talk">Talk</span>
+    </div>
+
+    <div class="banner__divider"></div>
+
+    <h2 class="banner__headline">Warm Meetings<br>Through Giving</h2>
+
+    <div class="banner__bullets">
+      <span class="banner__bullet"><span class="check">✓</span> Sign up free</span>
+      <span class="banner__bullet"><span class="check">✓</span> Offer donation</span>
+      <span class="banner__bullet"><span class="check">✓</span> Get meetings</span>
+    </div>
+
+    <a class="banner__cta" href="https://donatalk.com">Join Free</a>
+  </div>
+</body>
+</html>

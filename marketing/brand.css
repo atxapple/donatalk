@@ -1,0 +1,71 @@
+/* marketing/brand.css — DonaTalk Marketing Brand Tokens */
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Colors — from donatalk.com */
+  --bg-warm: #EBE8E6;
+  --text-dark: #1D1F25;
+  --cta-pitcher: #C26148;
+  --cta-listener: #3498DB;
+
+  /* Colors — from app theme */
+  --heart-red: #E74C3C;
+  --coral: #F8A5A5;
+  --navy: #2C3E50;
+  --light: #ECF0F1;
+  --accent-yellow: #F1C40F;
+  --medium-gray: #95A5A6;
+  --white: #FFFFFF;
+
+  /* Typography */
+  --font-family: 'Readex Pro', sans-serif;
+  --font-light: 300;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 14px 32px;
+  background: var(--cta-pitcher);
+  color: var(--white);
+  font-family: var(--font-family);
+  font-weight: var(--font-semibold);
+  font-size: 18px;
+  text-decoration: none;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.cta-button--listener {
+  background: var(--cta-listener);
+}
+
+.logo-text {
+  font-family: var(--font-family);
+  font-weight: var(--font-bold);
+}
+
+.logo-text .dona {
+  color: var(--navy);
+}
+
+.logo-text .talk {
+  color: var(--heart-red);
+}
