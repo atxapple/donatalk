@@ -1,18 +1,12 @@
 // app/api/send-payment-confirm-email/route.ts
 
 import { NextResponse } from 'next/server';
-import sgMail from '@sendgrid/mail';
-
-// ✅ Set your SendGrid API Key
-sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+import { transporter, FROM_EMAIL, BCC_EMAIL } from '@/lib/mailer';
 
 export async function POST(req: Request) {
 
-  // console.log('[Send Payment Confirm Email] :', req);
-
   try {
     const body = await req.json();
-    // console.log('[body] :', body);
     const { pitcherName, pitcherEmail, amountPaid } = body;
 
     if (!pitcherName || !pitcherEmail || !amountPaid) {
@@ -26,10 +20,10 @@ export async function POST(req: Request) {
       day: 'numeric',
     });
 
-    const msg = {
+    const mailOptions = {
       to: [pitcherEmail],
-      from: process.env.SENDGRID_FROM_EMAIL!,
-      bcc: 'atxapplellc@gmail.com',
+      from: FROM_EMAIL,
+      bcc: BCC_EMAIL,
       subject: `✅ Payment Confirmed – Thank You, ${pitcherName}!`,
       html: `
         <!DOCTYPE html>
@@ -56,14 +50,14 @@ export async function POST(req: Request) {
             </p>
 
             <div style="text-align: center; margin: 30px 0;">
-              <a href="https://app.donatalk.com/pitcher/profile" 
+              <a href="https://app.donatalk.com/pitcher/profile"
                  style="background-color: #2C3E50; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">
                 View Your Profile
               </a>
             </div>
 
             <p style="font-size: 16px; color: #333333;">
-              If you have any questions, feel free to contact us at 
+              If you have any questions, feel free to contact us at
               <a href="mailto:support@donatalk.com" style="color: #2C3E50;">support@donatalk.com</a>.
             </p>
 
@@ -80,12 +74,12 @@ export async function POST(req: Request) {
       `,
     };
 
-    console.log('[Payment Confirmation Email]', msg);
+    console.log('[Payment Confirmation Email]', mailOptions);
 
-    await sgMail.send(msg);
+    await transporter.sendMail(mailOptions);
     return NextResponse.json({ success: true, message: 'Payment confirmation email sent successfully.' }, { status: 200 });
   } catch (error: any) {
-    console.error('[Payment Confirmation Email Error]', error.response?.body || error.message);
+    console.error('[Payment Confirmation Email Error]', error.message);
     return NextResponse.json({ error: 'Failed to send payment confirmation email.' }, { status: 500 });
   }
 }
