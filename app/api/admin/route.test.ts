@@ -1,20 +1,24 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const { mockVerifyIdToken, mockGet, mockOrderBy, mockCollection } = vi.hoisted(() => {
+const { mockVerifyIdToken, mockGet, mockOrderBy, mockDoc, mockGetAll, mockCollection } = vi.hoisted(() => {
   const mockGet = vi.fn();
   const mockOrderBy = vi.fn().mockReturnValue({ get: mockGet });
-  const mockCollection = vi.fn().mockReturnValue({ get: mockGet, orderBy: mockOrderBy });
+  const mockDoc = vi.fn().mockReturnValue({ id: 'mock-ref' });
+  const mockGetAll = vi.fn().mockResolvedValue([]);
+  const mockCollection = vi.fn().mockReturnValue({ get: mockGet, orderBy: mockOrderBy, doc: mockDoc });
   return {
     mockVerifyIdToken: vi.fn(),
     mockGet,
     mockOrderBy,
+    mockDoc,
+    mockGetAll,
     mockCollection,
   };
 });
 
 vi.mock('@/lib/firebaseAdmin', () => ({
   adminAuth: { verifyIdToken: mockVerifyIdToken },
-  adminDb: { collection: mockCollection },
+  adminDb: { collection: mockCollection, getAll: mockGetAll },
 }));
 
 vi.mock('@/lib/adminConfig', () => ({
@@ -37,8 +41,10 @@ const emptySnap = { docs: [] };
 beforeEach(() => {
   vi.clearAllMocks();
   mockGet.mockResolvedValue(emptySnap);
+  mockGetAll.mockResolvedValue([]);
   mockOrderBy.mockReturnValue({ get: mockGet });
-  mockCollection.mockReturnValue({ get: mockGet, orderBy: mockOrderBy });
+  mockDoc.mockReturnValue({ id: 'mock-ref' });
+  mockCollection.mockReturnValue({ get: mockGet, orderBy: mockOrderBy, doc: mockDoc });
 });
 
 describe('GET /api/admin', () => {
@@ -110,5 +116,61 @@ describe('GET /api/admin', () => {
     expect(res.status).toBe(400);
     const data = await res.json();
     expect(data.error).toContain('Invalid tab');
+  });
+
+  describe('fund_history tab', () => {
+    it('resolves pitcherId to pitcherEmail', async () => {
+      mockVerifyIdToken.mockResolvedValue({ email: 'yunyoungmokk@gmail.com' });
+      mockGet.mockResolvedValue({
+        docs: [
+          { id: 'fh1', data: () => ({ pitcherId: 'p1', amount: 10, eventType: 'add_fund' }) },
+          { id: 'fh2', data: () => ({ pitcherId: 'p2', amount: 20, eventType: 'add_fund' }) },
+        ],
+      });
+      mockDoc.mockImplementation((id: string) => ({ id }));
+      mockGetAll.mockResolvedValue([
+        { id: 'p1', exists: true, data: () => ({ email: 'alice@test.com' }) },
+        { id: 'p2', exists: true, data: () => ({ email: 'bob@test.com' }) },
+      ]);
+
+      const req = createAdminRequest('fund_history', 'valid-token');
+      const res = await GET(req as any);
+      expect(res.status).toBe(200);
+      const json = await res.json();
+      expect(json.data[0].pitcherEmail).toBe('alice@test.com');
+      expect(json.data[1].pitcherEmail).toBe('bob@test.com');
+    });
+
+    it('falls back to pitcherId when pitcher doc does not exist', async () => {
+      mockVerifyIdToken.mockResolvedValue({ email: 'yunyoungmokk@gmail.com' });
+      mockGet.mockResolvedValue({
+        docs: [
+          { id: 'fh1', data: () => ({ pitcherId: 'deleted-uid', amount: 5 }) },
+        ],
+      });
+      mockDoc.mockImplementation((id: string) => ({ id }));
+      mockGetAll.mockResolvedValue([
+        { id: 'deleted-uid', exists: false, data: () => undefined },
+      ]);
+
+      const req = createAdminRequest('fund_history', 'valid-token');
+      const res = await GET(req as any);
+      const json = await res.json();
+      expect(json.data[0].pitcherEmail).toBe('deleted-uid');
+    });
+
+    it('returns dash when pitcherId is missing', async () => {
+      mockVerifyIdToken.mockResolvedValue({ email: 'yunyoungmokk@gmail.com' });
+      mockGet.mockResolvedValue({
+        docs: [
+          { id: 'fh1', data: () => ({ amount: 5 }) },
+        ],
+      });
+
+      const req = createAdminRequest('fund_history', 'valid-token');
+      const res = await GET(req as any);
+      const json = await res.json();
+      expect(json.data[0].pitcherEmail).toBe('—');
+    });
   });
 });
