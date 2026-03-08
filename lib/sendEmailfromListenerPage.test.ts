@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { PLATFORM_FEE_PERCENTAGE, calculateTotalWithFee } from "@/lib/constants";
 
 const mockGet = vi.fn();
 
@@ -50,12 +51,15 @@ afterEach(() => {
 });
 
 describe("sendEmailfromListenerPage", () => {
+  const testDonation = 100;
+  const testAmountCaptured = calculateTotalWithFee(testDonation);
+
   describe("input validation", () => {
     it("returns error when pitcherEmail is empty", async () => {
       const result = await sendEmailfromListenerPage({
         pitcherName: "Alice",
         pitcherEmail: "",
-        amountCaptured: 112.5,
+        amountCaptured: testAmountCaptured,
         listenerId: "lid-1",
         message: "Hello",
       });
@@ -79,7 +83,7 @@ describe("sendEmailfromListenerPage", () => {
       const result = await sendEmailfromListenerPage({
         pitcherName: "Alice",
         pitcherEmail: "alice@test.com",
-        amountCaptured: 112.5,
+        amountCaptured: testAmountCaptured,
         listenerId: "",
         message: "Hello",
       });
@@ -94,7 +98,7 @@ describe("sendEmailfromListenerPage", () => {
       const result = await sendEmailfromListenerPage({
         pitcherName: "Alice",
         pitcherEmail: "alice@test.com",
-        amountCaptured: 112.5,
+        amountCaptured: testAmountCaptured,
         listenerId: "lid-missing",
         message: "Hello",
       });
@@ -110,7 +114,7 @@ describe("sendEmailfromListenerPage", () => {
       const result = await sendEmailfromListenerPage({
         pitcherName: "Alice",
         pitcherEmail: "alice@test.com",
-        amountCaptured: 112.5,
+        amountCaptured: testAmountCaptured,
         listenerId: "lid-1",
         message: "Hello",
       });
@@ -126,7 +130,7 @@ describe("sendEmailfromListenerPage", () => {
       const result = await sendEmailfromListenerPage({
         pitcherName: "Alice",
         pitcherEmail: "alice@test.com",
-        amountCaptured: 112.5,
+        amountCaptured: testAmountCaptured,
         listenerId: "lid-1",
         message: "Hello",
       });
@@ -136,11 +140,11 @@ describe("sendEmailfromListenerPage", () => {
   });
 
   describe("donation calculation", () => {
-    it("correctly reverses the 12.5% fee (112.50 → 100.00)", async () => {
+    it(`correctly reverses the ${PLATFORM_FEE_PERCENTAGE}% fee`, async () => {
       await sendEmailfromListenerPage({
         pitcherName: "Alice",
         pitcherEmail: "alice@test.com",
-        amountCaptured: 112.5,
+        amountCaptured: testAmountCaptured,
         listenerId: "lid-1",
         message: "Hello",
       });
@@ -149,14 +153,16 @@ describe("sendEmailfromListenerPage", () => {
         (c[0] as string).includes("/api/send-notification")
       );
       const body = JSON.parse(notificationCall![1]!.body as string);
-      expect(body.donation).toBe(100);
+      expect(body.donation).toBe(testDonation);
     });
 
-    it("rounds to 2 decimal places (56.25 → 50.00)", async () => {
+    it("rounds to 2 decimal places", async () => {
+      const donation50 = 50;
+      const captured50 = calculateTotalWithFee(donation50);
       await sendEmailfromListenerPage({
         pitcherName: "Alice",
         pitcherEmail: "alice@test.com",
-        amountCaptured: 56.25,
+        amountCaptured: captured50,
         listenerId: "lid-1",
         message: "Hello",
       });
@@ -165,7 +171,7 @@ describe("sendEmailfromListenerPage", () => {
         (c[0] as string).includes("/api/send-notification")
       );
       const body = JSON.parse(notificationCall![1]!.body as string);
-      expect(body.donation).toBe(50);
+      expect(body.donation).toBe(donation50);
     });
   });
 
@@ -174,7 +180,7 @@ describe("sendEmailfromListenerPage", () => {
       await sendEmailfromListenerPage({
         pitcherName: "Alice",
         pitcherEmail: "alice@test.com",
-        amountCaptured: 112.5,
+        amountCaptured: testAmountCaptured,
         listenerId: "lid-1",
         message: "I'm interested",
       });
@@ -196,7 +202,7 @@ describe("sendEmailfromListenerPage", () => {
       await sendEmailfromListenerPage({
         pitcherName: "Alice",
         pitcherEmail: "alice@test.com",
-        amountCaptured: 112.5,
+        amountCaptured: testAmountCaptured,
         listenerId: "lid-1",
         message: "Hello",
       });
@@ -205,7 +211,7 @@ describe("sendEmailfromListenerPage", () => {
         (c[0] as string).includes("/api/send-payment-confirm-email")
       );
       const body = JSON.parse(paymentCall![1]!.body as string);
-      expect(body.amountPaid).toBe(112.5);
+      expect(body.amountPaid).toBe(testAmountCaptured);
     });
   });
 
@@ -214,7 +220,7 @@ describe("sendEmailfromListenerPage", () => {
       const result = await sendEmailfromListenerPage({
         pitcherName: "Alice",
         pitcherEmail: "alice@test.com",
-        amountCaptured: 112.5,
+        amountCaptured: testAmountCaptured,
         listenerId: "lid-1",
         message: "Hello",
       });
@@ -230,7 +236,7 @@ describe("sendEmailfromListenerPage", () => {
       const result = await mod.sendEmailfromListenerPage({
         pitcherName: "Alice",
         pitcherEmail: "alice@test.com",
-        amountCaptured: 112.5,
+        amountCaptured: testAmountCaptured,
         listenerId: "lid-1",
         message: "Hello",
       });
@@ -244,7 +250,7 @@ describe("sendEmailfromListenerPage", () => {
       const result = await sendEmailfromListenerPage({
         pitcherName: "Alice",
         pitcherEmail: "alice@test.com",
-        amountCaptured: 112.5,
+        amountCaptured: testAmountCaptured,
         listenerId: "lid-1",
         message: "Hello",
       });

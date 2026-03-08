@@ -11,6 +11,7 @@ import { Input, Button } from '../../components/ui';
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Listener } from '@/types/listener';
+import { calculateTotalWithFee } from '@/lib/constants';
 
 const Form = styled('form', {
   display: 'flex',
@@ -72,7 +73,7 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
     );
   }
 
-  const requiredBalance = Math.ceil(listener.donation * 1.125 * 100) / 100;
+  const requiredBalance = calculateTotalWithFee(listener.donation);
   // const isActive = pitcher.credit_balance >= requiredBalance;
 
   const handleSubmit = async (e: React.FormEvent) => {

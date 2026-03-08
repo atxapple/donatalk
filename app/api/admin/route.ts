@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebaseAdmin';
 import { verifyAdmin } from '@/lib/adminAuth';
+import { calculateTotalWithFee } from '@/lib/constants';
 
 const VALID_TABS = ['dashboard', 'pitchers', 'listeners', 'meetings', 'fund_history'] as const;
 type Tab = (typeof VALID_TABS)[number];
@@ -21,7 +22,7 @@ async function getDashboardData() {
   const pitchersSetUp = pitchers.filter((p) => p.isSetUp !== false).length;
   const listenersSetUp = listeners.filter((l) => l.isSetUp !== false).length;
   const activePitchers = pitchers.filter((p) => {
-    const required = Math.ceil((p.donation || 0) * 1.125 * 100) / 100;
+    const required = calculateTotalWithFee(p.donation || 0);
     return (p.credit_balance || 0) >= required;
   }).length;
 

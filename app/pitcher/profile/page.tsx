@@ -14,6 +14,7 @@ import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
 import { Input, Button } from '@/components/ui';
 import { styled } from '@/styles/stitches.config';
 import { ClipboardCopy } from 'lucide-react';
+import { PLATFORM_FEE_PERCENTAGE, PLATFORM_FEE_MULTIPLIER, calculateTotalWithFee } from '@/lib/constants';
 
 type Pitcher = {
   fullName: string;
@@ -126,7 +127,7 @@ export default function PitcherProfile() {
     );
   }
 
-  const requiredBalance = Math.ceil(pitcher.donation * 1.125 * 100) / 100;
+  const requiredBalance = calculateTotalWithFee(pitcher.donation);
 
   return (
     <>
@@ -152,7 +153,7 @@ export default function PitcherProfile() {
             <span style={{ color: '#e74c3c', marginRight: '0.3rem' }}>🚩</span>
             Fund balance must be at least
             <strong> ${requiredBalance.toFixed(2)} </strong>
-            (Donation amount + 12.5% process fee including tax).
+            (Donation amount + {PLATFORM_FEE_PERCENTAGE}% process fee including tax).
             Otherwise, your shareable link and Zoom meeting link will be inactive.
           </p>
 

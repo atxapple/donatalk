@@ -25,7 +25,7 @@ To access certain features, you must create an account. You agree to provide acc
 ## 5. Donations and Fees
 
 - **Funding:** Pitchers add funds to their account balance via PayPal. A sufficient balance is required before their profile link becomes active.
-- **Platform Fee:** DonaTalk charges a 12.5% service fee on top of the donation amount. For example, a $100 donation requires $112.50 in account balance.
+- **Platform Fee:** DonaTalk charges a service fee on top of the donation amount to cover processing and platform costs. The current fee percentage is displayed during the account funding process.
 - **Processing:** When a meeting is arranged, the donation amount is processed and directed to the Listener's selected non-profit organization.
 - **Refunds:** Refund requests are handled on a case-by-case basis. Please contact support@donatalk.com for assistance.
 

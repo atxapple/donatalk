@@ -1,0 +1,32 @@
+[   38524ms] [WARNING] Error: The domain DONATALK.COM is not authorized to show the cookie banner for domain group ID 37c0885c-ce0c-49fe-ba2d-e87e81cd8be0. Please add it to the domain group in the Cookiebot Manager to authorize the domain. @ https://consent.cookiebot.com/37c0885c-ce0c-49fe-ba2d-e87e81cd8be0/cc.js?renew=false&referer=donatalk.com&dnt=false&init=false:0
+[   38528ms] SyntaxError: Failed to execute 'insertBefore' on 'Node': Unexpected token '<'
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:19201)
+    at window.CookieControl.Cookie.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:19297)
+    at window.CookieControl.Cookie.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:18529)
+    at window.CookieControl.Cookie.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:19297)
+    at window.CookieControl.Cookie.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at stopMutationObserver (https://consent.cookiebot.com/uc.js:2:12948)
+    at window.CookieControl.Cookie.stopMutationObserver (https://consent.cookiebot.com/uc.js:2:112964)
+[  403731ms] [WARNING] Error: The domain DONATALK.COM is not authorized to show the cookie banner for domain group ID 37c0885c-ce0c-49fe-ba2d-e87e81cd8be0. Please add it to the domain group in the Cookiebot Manager to authorize the domain. @ https://consent.cookiebot.com/37c0885c-ce0c-49fe-ba2d-e87e81cd8be0/cc.js?renew=false&referer=donatalk.com&dnt=false&init=false:0
+[  403750ms] SyntaxError: Failed to execute 'insertBefore' on 'Node': Unexpected token '<'
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:19201)
+    at window.CookieControl.Cookie.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:19297)
+    at window.CookieControl.Cookie.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:18529)
+    at window.CookieControl.Cookie.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:19297)
+    at window.CookieControl.Cookie.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at stopMutationObserver (https://consent.cookiebot.com/uc.js:2:12948)
+    at window.CookieControl.Cookie.stopMutationObserver (https://consent.cookiebot.com/uc.js:2:112964)
+[  418790ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.close call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9853
+[  418790ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.close call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9853
+[  450162ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.closed call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9068
+[  450162ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.closed call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9068
+[  468225ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.closed call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9068
+[  468225ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.closed call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9068
+[  469187ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.close call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9853
+[  469187ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.close call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9853

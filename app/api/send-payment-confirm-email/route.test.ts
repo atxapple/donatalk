@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { createJsonRequest } from "@/test/helpers";
+import { calculateTotalWithFee } from "@/lib/constants";
 
 const { mockSendMail } = vi.hoisted(() => ({
   mockSendMail: vi.fn().mockResolvedValue({ messageId: "test-id" }),
@@ -13,10 +14,13 @@ vi.mock("@/lib/mailer", () => ({
 
 import { POST } from "./route";
 
+const testDonation = 100;
+const testAmountPaid = calculateTotalWithFee(testDonation);
+
 const validBody = {
   pitcherName: "Alice",
   pitcherEmail: "alice@test.com",
-  amountPaid: 112.5,
+  amountPaid: testAmountPaid,
 };
 
 beforeEach(() => {
@@ -58,7 +62,7 @@ describe("POST /api/send-payment-confirm-email", () => {
     it("includes amount in email body", async () => {
       await POST(createJsonRequest(validBody));
       const mailOptions = mockSendMail.mock.calls[0][0];
-      expect(mailOptions.html).toContain("$112.5");
+      expect(mailOptions.html).toContain(`$${testAmountPaid}`);
     });
   });
 

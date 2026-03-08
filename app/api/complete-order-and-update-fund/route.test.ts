@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createJsonRequest } from "@/test/helpers";
+import { calculateTotalWithFee } from "@/lib/constants";
 
 const { mockUpdateFunds } = vi.hoisted(() => ({
   mockUpdateFunds: vi.fn().mockResolvedValue({ success: true, newBalance: 150 }),
@@ -11,13 +12,16 @@ vi.mock("@/lib/updateFunds", () => ({
 
 import { POST } from "./route";
 
+const testDonation = 100;
+const testAmountCaptured = calculateTotalWithFee(testDonation);
+
 const completedCaptureResponse = {
   id: "PAY-123",
   status: "COMPLETED",
   purchase_units: [
     {
       payments: {
-        captures: [{ amount: { value: "112.50" } }],
+        captures: [{ amount: { value: testAmountCaptured.toFixed(2) } }],
       },
     },
   ],
@@ -90,7 +94,7 @@ describe("POST /api/complete-order-and-update-fund", () => {
       expect(mockUpdateFunds).toHaveBeenCalledWith({
         refID: "PAY-123",
         pitcherId: "pid-1",
-        amount: 112.5,
+        amount: testAmountCaptured,
         eventType: "add_fund",
       });
     });

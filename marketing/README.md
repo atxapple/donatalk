@@ -1,6 +1,6 @@
 # DonaTalk Marketing Assets
 
-> Version 1.0 | Created 2026-03-01
+> Version 1.1 | Updated 2026-03-08
 
 Marketing creative assets for DonaTalk's LinkedIn-first sales professional acquisition campaign.
 

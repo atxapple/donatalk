@@ -1,0 +1,2 @@
+[    2131ms] [ERROR] [Fetch Data Error] Missing or insufficient permissions. @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_8f19e6fb._.js:1225
+[    2196ms] [ERROR] [Fetch Listener Status Error] FirebaseError: Missing or insufficient permissions. @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_8f19e6fb._.js:1225

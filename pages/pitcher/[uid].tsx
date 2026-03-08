@@ -10,6 +10,7 @@ import { Logo, Title, Subtitle, InfoBox } from '../../components/ui/shared';
 import { Input, Button } from '../../components/ui';
 import { useEffect, useState } from 'react';
 import { Pitcher } from '@/types/pitcher';
+import { calculateTotalWithFee } from '@/lib/constants';
 
 const Form = styled('form', {
   display: 'flex',
@@ -71,7 +72,7 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
     );
   }
 
-  const requiredBalance = Math.ceil(pitcher.donation * 1.125 * 100) / 100;
+  const requiredBalance = calculateTotalWithFee(pitcher.donation);
   const isActive = pitcher.credit_balance >= requiredBalance;
 
   const handleSubmit = async (e: React.FormEvent) => {
