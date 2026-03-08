@@ -1,6 +1,6 @@
 # DonaTalk - Developer Reference
 
-> Last updated: 2026-03-01 | Version: 0.6.1
+> Last updated: 2026-03-08 | Version: 0.7.0
 
 ## Project Overview
 
@@ -249,9 +249,9 @@ Profiles can be soft-deleted by admins via the admin dashboard. Soft delete sets
 ## Payment Flow
 
 ### Fee Structure
-- Platform fee: **12.5%** on top of donation amount
-- Formula: `requiredBalance = Math.ceil(donation * 1.125 * 100) / 100`
-- Example: $100 donation requires $112.50 in balance
+- Platform fee: **4.9%** on top of donation amount
+- Formula: `requiredBalance = Math.ceil(donation * 1.049 * 100) / 100`
+- Example: $100 donation requires $104.90 in balance
 
 ### Pitcher Add Funds
 1. Pitcher navigates to `/pitcher/add-fund`
@@ -265,13 +265,13 @@ Profiles can be soft-deleted by admins via the admin dashboard. Soft delete sets
 ### Listener Escrow Payment
 1. Listener visits `/listener/[uid]` (pitcher's public page)
 2. Fills form (name, email, message) -> redirected to `/listener/arrange-meeting`
-3. Escrow amount: `donation * 1.125`
+3. Escrow amount: `donation * 1.049`
 4. PayPal captures payment via `POST /api/escrow-log`
 5. Sends notification emails to both parties
 6. Creates meeting record
 
 ### Pitcher Active Status
-- Pitcher's shareable link is **active** only if `credit_balance >= donation * 1.125`
+- Pitcher's shareable link is **active** only if `credit_balance >= donation * 1.049`
 - If insufficient funds, the public page shows an "inactive" message
 
 ## Email Integration (Nodemailer SMTP)

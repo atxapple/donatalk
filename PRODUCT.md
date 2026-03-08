@@ -1,6 +1,6 @@
 # DonaTalk - Product Reference
 
-> Last updated: 2026-03-01 | Version: 0.3.0
+> Last updated: 2026-03-08 | Version: 0.7.0
 
 ## Product Vision
 
@@ -43,7 +43,7 @@ A person who wants to hear pitches and direct donations to non-profits. They:
 ### Pitcher Flow (6 steps)
 1. **Sign up** at `/pitcher/signup` (name, email, password, pitch description, donation amount)
 2. **Receive welcome email** with profile link
-3. **Add funds** via PayPal at `/pitcher/add-fund` (must cover donation + 12.5% fee)
+3. **Add funds** via PayPal at `/pitcher/add-fund` (must cover donation + 4.9% fee)
 4. **Share profile link** (e.g., `app.donatalk.com/pitcher/{uid}`) - link is active only when funds are sufficient
 5. **Listener fills out form** on public profile -> both get notification email with Zoom link
 6. **Meeting happens** -> donation is sent to Listener's non-profit
@@ -53,7 +53,7 @@ A person who wants to hear pitches and direct donations to non-profits. They:
 2. **Receive welcome email** with profile link
 3. **Share profile link** (e.g., `app.donatalk.com/listener/{uid}`)
 4. **Pitcher visits profile**, fills out form (name, email, availability)
-5. **Pitcher escrows payment** (donation + 12.5% fee via PayPal) -> both get notification email
+5. **Pitcher escrows payment** (donation + 4.9% fee via PayPal) -> both get notification email
 6. **Meeting happens** -> escrowed donation is sent to non-profit
 
 ## Feature Status
@@ -149,9 +149,9 @@ A person who wants to hear pitches and direct donations to non-profits. They:
 
 ## Revenue Model
 
-- **Fee:** 12.5% on top of every donation amount
-- **Calculation:** `total = donation * 1.125`
-- **Example:** For a $100 donation, the Pitcher/escrow pays $112.50. $100 goes to the non-profit, $12.50 is DonaTalk's revenue.
+- **Fee:** 4.9% on top of every donation amount
+- **Calculation:** `total = donation * 1.049`
+- **Example:** For a $100 donation, the Pitcher/escrow pays $104.90. $100 goes to the non-profit, $4.90 is DonaTalk's revenue.
 - **Payment processor:** PayPal (additional PayPal fees apply on top)
 
 ## Infrastructure & Accounts

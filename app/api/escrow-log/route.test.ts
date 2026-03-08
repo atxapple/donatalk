@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createJsonRequest } from "@/test/helpers";
+import { calculateTotalWithFee } from "@/lib/constants";
 
 const { mockSendEmail } = vi.hoisted(() => ({
   mockSendEmail: vi.fn().mockResolvedValue({ success: true }),
@@ -11,13 +12,16 @@ vi.mock("@/lib/sendEmailfromListenerPage", () => ({
 
 import { POST } from "./route";
 
+const testDonation = 100;
+const testAmountCaptured = calculateTotalWithFee(testDonation);
+
 const completedCaptureResponse = {
   id: "PAY-456",
   status: "COMPLETED",
   purchase_units: [
     {
       payments: {
-        captures: [{ amount: { value: "112.50" } }],
+        captures: [{ amount: { value: testAmountCaptured.toFixed(2) } }],
       },
     },
   ],
@@ -79,7 +83,7 @@ describe("POST /api/escrow-log", () => {
       expect(mockSendEmail).toHaveBeenCalledWith({
         pitcherName: "Alice",
         pitcherEmail: "alice@test.com",
-        amountCaptured: 112.5,
+        amountCaptured: testAmountCaptured,
         listenerId: "lid-1",
         message: "I'm interested",
       });

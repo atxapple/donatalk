@@ -3,6 +3,14 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.7.0] - 2026-03-08
+
+### Changed
+- Platform fee reduced from 12.5% to 4.9%
+- Centralized platform fee configuration in `lib/constants.ts`
+- Terms of Service updated to remove specific fee numbers for better maintainability
+- Unit tests refactored to use dynamic fee calculations
+
 ## [0.6.1] - 2026-03-01
 
 ### Changed

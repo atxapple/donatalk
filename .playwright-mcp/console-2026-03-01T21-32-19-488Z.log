@@ -1,0 +1,10 @@
+[   40841ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.closed call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9068
+[   40841ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.closed call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9068
+[   82543ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.closed call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9068
+[   82544ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.closed call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9068
+[  102624ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.closed call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9068
+[  102624ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.closed call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9068
+[  104626ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.closed call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9068
+[  104626ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.closed call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9068
+[  105506ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.close call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9853
+[  105506ms] [ERROR] Cross-Origin-Opener-Policy policy would block the window.close call. @ http://localhost:3000/_next/static/chunks/node_modules_%40firebase_auth_dist_esm2017_800c0efe._.js:9853

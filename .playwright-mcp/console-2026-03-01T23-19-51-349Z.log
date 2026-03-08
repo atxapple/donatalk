@@ -1,0 +1,2 @@
+[   17339ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ https://app.donatalk.com/api/send-reset-email:0
+[   17339ms] [ERROR] [Forgot Password Error] Failed to send @ https://app.donatalk.com/_next/static/chunks/684-8eba78ba13c64840.js:0

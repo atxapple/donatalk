@@ -2,6 +2,7 @@
 
 import { getFirestore } from 'firebase-admin/firestore';
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import { PLATFORM_FEE_MULTIPLIER } from '@/lib/constants';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
@@ -60,7 +61,7 @@ export async function sendEmailfromListenerPage({
 
     // Send email notification
 
-    const donation = Number((amountCaptured / 1.125).toFixed(2));
+    const donation = Number((amountCaptured / PLATFORM_FEE_MULTIPLIER).toFixed(2));
 
     const emailResponse = await fetch(`${BASE_URL}/api/send-notification`, {
       method: 'POST',

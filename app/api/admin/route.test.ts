@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { calculateTotalWithFee } from '@/lib/constants';
 
 const { mockVerifyIdToken, mockGet, mockOrderBy, mockDoc, mockGetAll, mockCollection } = vi.hoisted(() => {
   const mockGet = vi.fn();
@@ -76,9 +77,11 @@ describe('GET /api/admin', () => {
 
   it('returns 200 with dashboard data', async () => {
     mockVerifyIdToken.mockResolvedValue({ email: 'yunyoungmokk@gmail.com' });
+    const donation = 100;
+    const balance = calculateTotalWithFee(donation);
     mockGet.mockResolvedValue({
       docs: [
-        { data: () => ({ fullName: 'Alice', donation: 100, credit_balance: 200, isSetUp: true }) },
+        { data: () => ({ fullName: 'Alice', donation, credit_balance: balance, isSetUp: true }) },
       ],
     });
 

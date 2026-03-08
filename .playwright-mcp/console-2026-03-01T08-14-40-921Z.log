@@ -1,0 +1,27 @@
+[    1259ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/pitcher/KPe8yE1c7PZYnopOoZFsQJewIl13:0
+[    1383ms] Error: Error serializing `.pitcher.createdAt` returned from `getServerSideProps` in "/pitcher/[uid]".
+Reason: `object` ("[object Object]") cannot be serialized as JSON. Please only return JSON serializable data types.
+    at isSerializable (file://D:\dev\donatalk\node_modules\next\dist\compiled\next-server\pages-turbo.runtime.dev.js:64:1929)
+    at <unknown> (file://D:\dev\donatalk\node_modules\next\dist\compiled\next-server\pages-turbo.runtime.dev.js:64:1322)
+    at Array.every (<anonymous>)
+    at isSerializable (file://D:\dev\donatalk\node_modules\next\dist\compiled\next-server\pages-turbo.runtime.dev.js:64:1131)
+    at <unknown> (file://D:\dev\donatalk\node_modules\next\dist\compiled\next-server\pages-turbo.runtime.dev.js:64:1322)
+    at Array.every (<anonymous>)
+    at isSerializable (file://D:\dev\donatalk\node_modules\next\dist\compiled\next-server\pages-turbo.runtime.dev.js:64:1131)
+    at isSerializableProps (file://D:\dev\donatalk\node_modules\next\dist\compiled\next-server\pages-turbo.runtime.dev.js:64:2199)
+    at renderToHTMLImpl (file://D:\dev\donatalk\node_modules\next\dist\compiled\next-server\pages-turbo.runtime.dev.js:81:2715)
+    at async doRender (file://D:\dev\donatalk\node_modules\next\dist\server\base-server.js:1593:38)
+    at async DevServer.renderToResponseWithComponentsImpl (file://D:\dev\donatalk\node_modules\next\dist\server\base-server.js:1915:28)
+    at async DevServer.renderPageComponent (file://D:\dev\donatalk\node_modules\next\dist\server\base-server.js:2403:24)
+    at async DevServer.renderToResponseImpl (file://D:\dev\donatalk\node_modules\next\dist\server\base-server.js:2440:32)
+    at async DevServer.pipeImpl (file://D:\dev\donatalk\node_modules\next\dist\server\base-server.js:1007:25)
+    at async NextNodeServer.handleCatchallRenderRequest (file://D:\dev\donatalk\node_modules\next\dist\server\next-server.js:305:17)
+    at async DevServer.handleRequestImpl (file://D:\dev\donatalk\node_modules\next\dist\server\base-server.js:899:17)
+    at async (file://D:\dev\donatalk\node_modules\next\dist\server\dev\next-dev-server.js:371:20)
+    at async Span.traceAsyncFn (file://D:\dev\donatalk\node_modules\next\dist\trace\trace.js:157:20)
+    at async DevServer.handleRequest (file://D:\dev\donatalk\node_modules\next\dist\server\dev\next-dev-server.js:368:24)
+    at async invokeRender (file://D:\dev\donatalk\node_modules\next\dist\server\lib\router-server.js:237:21)
+    at async handleRequest (file://D:\dev\donatalk\node_modules\next\dist\server\lib\router-server.js:428:24)
+    at async requestHandlerImpl (file://D:\dev\donatalk\node_modules\next\dist\server\lib\router-server.js:452:13)
+    at async Server.requestListener (file://D:\dev\donatalk\node_modules\next\dist\server\lib\start-server.js:158:13)
+[   26106ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/node_modules_next_80660d5d._.js:21868

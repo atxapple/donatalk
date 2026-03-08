@@ -1,0 +1,2 @@
+[   14021ms] [ERROR] Missing or insufficient permissions. @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_8f19e6fb._.js:1225
+[   38222ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/d/dev/donatalk/firebase/clientApp:0

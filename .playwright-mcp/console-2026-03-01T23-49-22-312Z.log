@@ -1,0 +1,26 @@
+[    2737ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://securetoken.googleapis.com/v1/token?key=AIzaSyBeveUApQujgOZqjwSE56-uUXRNSgtQpPs:0
+[   65206ms] [WARNING] Error: The domain DONATALK.COM is not authorized to show the cookie banner for domain group ID 37c0885c-ce0c-49fe-ba2d-e87e81cd8be0. Please add it to the domain group in the Cookiebot Manager to authorize the domain. @ https://consent.cookiebot.com/37c0885c-ce0c-49fe-ba2d-e87e81cd8be0/cc.js?renew=false&referer=donatalk.com&dnt=false&init=false:0
+[  146303ms] [WARNING] Error: The domain DONATALK.COM is not authorized to show the cookie banner for domain group ID 37c0885c-ce0c-49fe-ba2d-e87e81cd8be0. Please add it to the domain group in the Cookiebot Manager to authorize the domain. @ https://consent.cookiebot.com/37c0885c-ce0c-49fe-ba2d-e87e81cd8be0/cc.js?renew=false&referer=donatalk.com&dnt=false&init=false:0
+[  146306ms] SyntaxError: Failed to execute 'insertBefore' on 'Node': Unexpected token '<'
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:19201)
+    at Object.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:19297)
+    at Object.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:18529)
+    at Object.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:19297)
+    at Object.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at stopMutationObserver (https://consent.cookiebot.com/uc.js:2:12948)
+    at Object.stopMutationObserver (https://consent.cookiebot.com/uc.js:2:112964)
+[  154333ms] [WARNING] Error: The domain DONATALK.COM is not authorized to show the cookie banner for domain group ID 37c0885c-ce0c-49fe-ba2d-e87e81cd8be0. Please add it to the domain group in the Cookiebot Manager to authorize the domain. @ https://consent.cookiebot.com/37c0885c-ce0c-49fe-ba2d-e87e81cd8be0/cc.js?renew=false&referer=donatalk.com&dnt=false&init=false:0
+[  154810ms] SyntaxError: Failed to execute 'insertBefore' on 'Node': Unexpected token '<'
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:19201)
+    at Object.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:19297)
+    at Object.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:18529)
+    at Object.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:19297)
+    at Object.dequeueNonAsyncScripts (https://consent.cookiebot.com/uc.js:2:112664)
+    at stopMutationObserver (https://consent.cookiebot.com/uc.js:2:12948)
+    at Object.stopMutationObserver (https://consent.cookiebot.com/uc.js:2:112964)
