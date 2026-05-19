@@ -34,6 +34,17 @@ vi.mock('@/lib/meetingEmails', () => ({
   sendReservationEmailToListener: mockSendReservationEmail,
 }));
 
+vi.mock('firebase-admin/firestore', () => ({
+  FieldValue: {
+    increment: (n: number) => ({ _type: 'increment', n }),
+    serverTimestamp: () => ({ _type: 'serverTimestamp' }),
+    delete: () => ({ _type: 'deleteField' }),
+  },
+  Timestamp: {
+    now: () => ({ _type: 'timestamp-now' }),
+  },
+}));
+
 import { POST } from './route';
 
 function makeRequest(body: unknown, token?: string): Request {
@@ -176,7 +187,7 @@ describe('POST /api/book-meeting-from-balance', () => {
       mockMeetingsWhere.mockReturnValue({ limit: () => ({ get: () => Promise.resolve(emptyMeetingsSnap()) }) });
     });
 
-    it('returns 200 with meeting info and triggers email', async () => {
+    it('returns 200 with meeting info and triggers email with all fields', async () => {
       mockRunTransaction.mockImplementation(async () => ({
         ok: {
           meetingId: 'new-meeting-id',
@@ -203,8 +214,12 @@ describe('POST /api/book-meeting-from-balance', () => {
       expect(mockSendReservationEmail.mock.calls[0][0]).toMatchObject({
         meetingId: 'new-meeting-id',
         rawToken: 'raw-token',
+        pitcherName: 'Pia Pitcher',
+        listenerName: 'Lara Listener',
         listenerEmail: 'lara@x.com',
         amount: 104.9,
+        donationAmount: 100,
+        availability: 'Mon 2pm',
       });
     });
 
@@ -225,6 +240,171 @@ describe('POST /api/book-meeting-from-balance', () => {
 
       const res = await POST(makeRequest({ listenerId: 'L', availability: 'a', idempotencyKey: 'k' }, 't'));
       expect(res.status).toBe(200);
+    });
+  });
+
+  // These tests exercise the actual transaction body — verifying that the route's
+  // mutating logic (set + update calls) is correct, not just its top-level branching.
+  describe('transaction body', () => {
+    beforeEach(() => {
+      mockVerifyIdToken.mockResolvedValue({ uid: 'P', email: 'p@x.com' });
+      mockMeetingsWhere.mockReturnValue({ limit: () => ({ get: () => Promise.resolve(emptyMeetingsSnap()) }) });
+    });
+
+    function makeTxMock(opts: {
+      pitcher?: Record<string, unknown>;
+      listener?: Record<string, unknown>;
+      pitcherExists?: boolean;
+      listenerExists?: boolean;
+    }) {
+      const tx = {
+        get: vi.fn(),
+        set: vi.fn(),
+        update: vi.fn(),
+      };
+      tx.get
+        .mockResolvedValueOnce({ exists: opts.pitcherExists ?? true, data: () => opts.pitcher ?? {} })
+        .mockResolvedValueOnce({ exists: opts.listenerExists ?? true, data: () => opts.listener ?? {} });
+      return tx;
+    }
+
+    it('writes a meeting doc with reserved status and increments pitcher counters', async () => {
+      let capturedTx: ReturnType<typeof makeTxMock> | undefined;
+      mockRunTransaction.mockImplementation(async (cb) => {
+        capturedTx = makeTxMock({
+          pitcher: { fullName: 'P', email: 'p@x.com', credit_balance: 200, reservedBalance: 0, pendingReservationCount: 0, isSetUp: true },
+          listener: { fullName: 'L', email: 'l@x.com', donation: 100, isSetUp: true },
+        });
+        return cb(capturedTx);
+      });
+
+      const res = await POST(makeRequest({ listenerId: 'L', availability: 'avail', idempotencyKey: 'k1' }, 't'));
+      expect(res.status).toBe(200);
+      const setCalls = capturedTx!.set.mock.calls;
+      const updateCalls = capturedTx!.update.mock.calls;
+      expect(setCalls).toHaveLength(1);
+      const meetingDoc = setCalls[0][1];
+      expect(meetingDoc).toMatchObject({
+        meetingsource: 'listenerPage',
+        pitcherId: 'P',
+        listenerId: 'L',
+        status: 'reserved',
+        paymentSource: 'pitcher-balance',
+        reservedAmount: 104.9, // 100 * 1.049
+        availability: 'avail',
+        idempotencyKey: 'k1',
+        tokenUsed: false,
+        acceptTokenHash: 'hashed-token',
+      });
+      expect(updateCalls).toHaveLength(1);
+      const pitcherUpdate = updateCalls[0][1];
+      expect(pitcherUpdate.reservedBalance).toMatchObject({ _type: 'increment', n: 104.9 });
+      expect(pitcherUpdate.pendingReservationCount).toMatchObject({ _type: 'increment', n: 1 });
+    });
+
+    it('rejects with 403 when pitcher doc missing', async () => {
+      mockRunTransaction.mockImplementation(async (cb) => {
+        const tx = makeTxMock({ pitcherExists: false });
+        return cb(tx);
+      });
+      const res = await POST(makeRequest({ listenerId: 'L', availability: 'a', idempotencyKey: 'k' }, 't'));
+      expect(res.status).toBe(403);
+    });
+
+    it('rejects with 403 when pitcher is soft-deleted', async () => {
+      mockRunTransaction.mockImplementation(async (cb) => {
+        const tx = makeTxMock({
+          pitcher: { deletedAt: { _seconds: 123 }, credit_balance: 200, isSetUp: true },
+          listener: { donation: 100, isSetUp: true },
+        });
+        return cb(tx);
+      });
+      const res = await POST(makeRequest({ listenerId: 'L', availability: 'a', idempotencyKey: 'k' }, 't'));
+      expect(res.status).toBe(403);
+      const body = await res.json();
+      expect(body.error).toMatch(/no longer active/i);
+    });
+
+    it('rejects with 403 when pitcher is not set up', async () => {
+      mockRunTransaction.mockImplementation(async (cb) => {
+        const tx = makeTxMock({
+          pitcher: { isSetUp: false, credit_balance: 200 },
+          listener: { donation: 100, isSetUp: true },
+        });
+        return cb(tx);
+      });
+      const res = await POST(makeRequest({ listenerId: 'L', availability: 'a', idempotencyKey: 'k' }, 't'));
+      expect(res.status).toBe(403);
+      const body = await res.json();
+      expect(body.error).toMatch(/not set up/i);
+    });
+
+    it('rejects with 404 when listener is soft-deleted', async () => {
+      mockRunTransaction.mockImplementation(async (cb) => {
+        const tx = makeTxMock({
+          pitcher: { credit_balance: 200, isSetUp: true },
+          listener: { deletedAt: { _seconds: 123 }, donation: 100, isSetUp: true },
+        });
+        return cb(tx);
+      });
+      const res = await POST(makeRequest({ listenerId: 'L', availability: 'a', idempotencyKey: 'k' }, 't'));
+      expect(res.status).toBe(404);
+    });
+
+    it('rejects with 404 when listener is not set up', async () => {
+      mockRunTransaction.mockImplementation(async (cb) => {
+        const tx = makeTxMock({
+          pitcher: { credit_balance: 200, isSetUp: true },
+          listener: { donation: 100, isSetUp: false },
+        });
+        return cb(tx);
+      });
+      const res = await POST(makeRequest({ listenerId: 'L', availability: 'a', idempotencyKey: 'k' }, 't'));
+      expect(res.status).toBe(404);
+    });
+
+    it('rejects with 429 when pendingReservationCount reaches the cap', async () => {
+      mockRunTransaction.mockImplementation(async (cb) => {
+        const tx = makeTxMock({
+          pitcher: { credit_balance: 1000, reservedBalance: 0, pendingReservationCount: 5, isSetUp: true },
+          listener: { donation: 100, isSetUp: true },
+        });
+        return cb(tx);
+      });
+      const res = await POST(makeRequest({ listenerId: 'L', availability: 'a', idempotencyKey: 'k' }, 't'));
+      expect(res.status).toBe(429);
+    });
+
+    it('rejects with 409 + available + required when balance insufficient', async () => {
+      mockRunTransaction.mockImplementation(async (cb) => {
+        const tx = makeTxMock({
+          pitcher: { credit_balance: 50, reservedBalance: 20, pendingReservationCount: 1, isSetUp: true },
+          listener: { donation: 100, isSetUp: true },
+        });
+        return cb(tx);
+      });
+      const res = await POST(makeRequest({ listenerId: 'L', availability: 'a', idempotencyKey: 'k' }, 't'));
+      expect(res.status).toBe(409);
+      const body = await res.json();
+      expect(body.code).toBe('insufficient-balance');
+      expect(body.available).toBe(30); // 50 - 20
+      expect(body.required).toBe(104.9); // 100 * 1.049
+    });
+
+    it('treats missing reservedBalance/pendingReservationCount as 0', async () => {
+      let capturedTx: ReturnType<typeof makeTxMock> | undefined;
+      mockRunTransaction.mockImplementation(async (cb) => {
+        capturedTx = makeTxMock({
+          pitcher: { credit_balance: 200, isSetUp: true }, // no reservedBalance, no pendingReservationCount
+          listener: { donation: 100, isSetUp: true },
+        });
+        return cb(capturedTx);
+      });
+      const res = await POST(makeRequest({ listenerId: 'L', availability: 'a', idempotencyKey: 'k' }, 't'));
+      expect(res.status).toBe(200);
+      const pitcherUpdate = capturedTx!.update.mock.calls[0][1];
+      // Available should have been treated as 200 - 0 = 200, well above 104.9
+      expect(pitcherUpdate.reservedBalance).toMatchObject({ n: 104.9 });
     });
   });
 });

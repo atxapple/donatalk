@@ -1,12 +1,10 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebaseAdmin';
 import { verifyUser } from '@/lib/verifyUser';
-import { calculateTotalWithFee } from '@/lib/constants';
+import { calculateTotalWithFee, MAX_PENDING_RESERVATIONS } from '@/lib/constants';
 import { generateToken } from '@/lib/meetingTokens';
 import { sendReservationEmailToListener } from '@/lib/meetingEmails';
 import { FieldValue, Timestamp } from 'firebase-admin/firestore';
-
-export const MAX_PENDING_RESERVATIONS = 5;
 
 type Body = {
   listenerId?: string;

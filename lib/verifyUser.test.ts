@@ -65,4 +65,13 @@ describe('verifyUser', () => {
     const result = await verifyUser(createRequest('valid'));
     expect(result).toEqual({ uid: 'uid-2', email: 'random@user.com' });
   });
+
+  it('returns 401 when Bearer header has empty token', async () => {
+    mockVerifyIdToken.mockRejectedValue(new Error('empty'));
+    const req = new Request('http://localhost:3000/api/test', {
+      headers: { Authorization: 'Bearer ' },
+    });
+    const result = await verifyUser(req);
+    expect((result as NextResponse).status).toBe(401);
+  });
 });

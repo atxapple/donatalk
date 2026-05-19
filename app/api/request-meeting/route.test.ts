@@ -102,6 +102,56 @@ describe('POST /api/request-meeting', () => {
     expect(res.status).toBe(404);
   });
 
+  it('400 when availability missing', async () => {
+    mockVerifyIdToken.mockResolvedValue({ uid: 'L', email: 'l@x.com' });
+    const res = await POST(makeRequest({ pitcherId: 'P', idempotencyKey: 'k' }, 't'));
+    expect(res.status).toBe(400);
+  });
+
+  it('400 when idempotencyKey missing', async () => {
+    mockVerifyIdToken.mockResolvedValue({ uid: 'L', email: 'l@x.com' });
+    const res = await POST(makeRequest({ pitcherId: 'P', availability: 'a' }, 't'));
+    expect(res.status).toBe(400);
+  });
+
+  it('400 on malformed JSON', async () => {
+    mockVerifyIdToken.mockResolvedValue({ uid: 'L', email: 'l@x.com' });
+    const req = new Request('http://localhost:3000/api/request-meeting', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer t' },
+      body: 'not-json',
+    });
+    const res = await POST(req);
+    expect(res.status).toBe(400);
+  });
+
+  it('403 when listener missing/soft-deleted', async () => {
+    mockVerifyIdToken.mockResolvedValue({ uid: 'L', email: 'l@x.com' });
+    mockRunTransaction.mockImplementation(async () => ({ error: { status: 403, message: 'Listener profile is no longer active' } }));
+    const res = await POST(makeRequest({ pitcherId: 'P', availability: 'a', idempotencyKey: 'k' }, 't'));
+    expect(res.status).toBe(403);
+  });
+
+  it('404 when pitcher soft-deleted', async () => {
+    mockVerifyIdToken.mockResolvedValue({ uid: 'L', email: 'l@x.com' });
+    mockRunTransaction.mockImplementation(async () => ({ error: { status: 404, message: 'Pitcher profile no longer available' } }));
+    const res = await POST(makeRequest({ pitcherId: 'P', availability: 'a', idempotencyKey: 'k' }, 't'));
+    expect(res.status).toBe(404);
+  });
+
+  it('still 200 when email send fails', async () => {
+    mockVerifyIdToken.mockResolvedValue({ uid: 'L', email: 'l@x.com' });
+    mockRunTransaction.mockImplementation(async () => ({
+      ok: {
+        meetingId: 'm', rawToken: 'r', reservedAmount: 50,
+        pitcherName: 'P', pitcherEmail: 'p@x.com', listenerName: 'L', donationAmount: 47, availability: 'a',
+      },
+    }));
+    mockSendPendingEmail.mockRejectedValueOnce(new Error('SMTP'));
+    const res = await POST(makeRequest({ pitcherId: 'P', availability: 'a', idempotencyKey: 'k' }, 't'));
+    expect(res.status).toBe(200);
+  });
+
   it('returns 200 and sends email on happy path', async () => {
     mockVerifyIdToken.mockResolvedValue({ uid: 'L', email: 'l@x.com' });
     mockRunTransaction.mockImplementation(async () => ({

@@ -127,5 +127,35 @@ describe('getSafeReturnPath', () => {
     it('rejects empty uid', () => {
       expect(getSafeReturnPath('/listener/')).toBeNull();
     });
+
+    it('rejects path with uid longer than 128 chars', () => {
+      expect(getSafeReturnPath('/listener/' + 'a'.repeat(129))).toBeNull();
+    });
+
+    it('accepts uid of exactly 128 chars (upper boundary)', () => {
+      const uid = 'a'.repeat(128);
+      expect(getSafeReturnPath(`/listener/${uid}`)).toBe(`/listener/${uid}`);
+    });
+
+    it('accepts uid of exactly 20 chars (lower boundary)', () => {
+      const uid = 'a'.repeat(20);
+      expect(getSafeReturnPath(`/listener/${uid}`)).toBe(`/listener/${uid}`);
+    });
+
+    it('rejects path with URL fragment', () => {
+      expect(getSafeReturnPath(`/listener/${REAL_UID}#section`)).toBeNull();
+    });
+
+    it('rejects path with whitespace prefix', () => {
+      expect(getSafeReturnPath(` /listener/${REAL_UID}`)).toBeNull();
+    });
+
+    it('rejects path with trailing slash', () => {
+      expect(getSafeReturnPath(`/listener/${REAL_UID}/`)).toBeNull();
+    });
+
+    it('rejects path with tab characters', () => {
+      expect(getSafeReturnPath(`/listener/${REAL_UID}\t`)).toBeNull();
+    });
   });
 });
