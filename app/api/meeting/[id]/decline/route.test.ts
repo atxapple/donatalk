@@ -98,6 +98,20 @@ describe('GET /api/meeting/[id]/decline', () => {
     }));
   });
 
+  it('shows already-used page when tokenUsed', async () => {
+    mockRunTransaction.mockImplementation(async () => ({ kind: 'token-used' }));
+    const res = await GET(makeReq('t'), ctx);
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain('Already Used');
+  });
+
+  it('returns 500 on unexpected error', async () => {
+    mockRunTransaction.mockRejectedValue(new Error('firestore broken'));
+    const res = await GET(makeReq('t'), ctx);
+    expect(res.status).toBe(500);
+  });
+
   it('still succeeds when decline email fails', async () => {
     mockRunTransaction.mockImplementation(async () => ({
       kind: 'declined',

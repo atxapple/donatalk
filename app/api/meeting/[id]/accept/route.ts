@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebaseAdmin';
 import { verifyToken } from '@/lib/meetingTokens';
 import { sendAcceptConfirmationEmail } from '@/lib/meetingEmails';
+import { RESERVATION_TTL_DAYS } from '@/lib/constants';
 import { FieldValue, Timestamp } from 'firebase-admin/firestore';
 
-export const RESERVATION_TTL_DAYS = 14;
 const TTL_MS = RESERVATION_TTL_DAYS * 24 * 60 * 60 * 1000;
 
 type RouteContext = { params: Promise<{ id: string }> };

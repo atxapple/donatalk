@@ -211,6 +211,106 @@ describe('DELETE /api/admin/[collection]/[id]', () => {
     expect(data.pairedCollection).toBe('listeners');
   });
 
+  it('listener-side delete sweeps meetings matching listenerId', async () => {
+    const pairedGet = vi.fn().mockResolvedValue({ exists: true });
+    const pairedDoc = vi.fn().mockReturnValue({ get: pairedGet });
+    const meetingDoc = {
+      id: 'm2',
+      ref: { id: 'm2' },
+      data: () => ({ status: 'pending', listenerId: 'abc123', pitcherId: 'someP', reservedAmount: 50, paymentSource: 'pitcher-balance' }),
+    };
+    const firstWhere = vi.fn();
+    const secondWhere = vi.fn().mockReturnValue({ get: vi.fn().mockResolvedValue({ docs: [meetingDoc], empty: false }) });
+    firstWhere.mockReturnValue({ where: secondWhere });
+    const meetingsWhere = vi.fn().mockReturnValue({ where: firstWhere });
+    mockCollection
+      .mockReturnValueOnce({ doc: mockDoc })
+      .mockReturnValueOnce({ where: meetingsWhere })
+      .mockReturnValueOnce({ doc: pairedDoc });
+    mockRunTransaction.mockImplementation(async (cb) => {
+      const tx = {
+        get: vi.fn().mockResolvedValue({ exists: true, data: () => meetingDoc.data() }),
+        update: vi.fn(),
+      };
+      return cb(tx);
+    });
+
+    const req = createRequest('DELETE', undefined, adminToken);
+    const res = await DELETE(req, makeContext('listeners', 'abc123'));
+    expect(res.status).toBe(200);
+    expect(meetingsWhere).toHaveBeenCalledWith('listenerId', '==', 'abc123');
+  });
+
+  it('does not sweep meetings already in terminal states', async () => {
+    const pairedGet = vi.fn().mockResolvedValue({ exists: false });
+    const pairedDoc = vi.fn().mockReturnValue({ get: pairedGet });
+    // Even if the query somehow returned a terminal-state doc, the in-transaction
+    // re-check should skip it (defensive against stale snapshots).
+    const meetingDoc = {
+      id: 'm3',
+      ref: { id: 'm3' },
+      data: () => ({ status: 'accepted', pitcherId: 'abc123', reservedAmount: 100 }),
+    };
+    const meetingsWhere = vi.fn().mockReturnValue({
+      where: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({ get: vi.fn().mockResolvedValue({ docs: [meetingDoc], empty: false }) }),
+      }),
+    });
+    mockCollection
+      .mockReturnValueOnce({ doc: mockDoc })
+      .mockReturnValueOnce({ where: meetingsWhere })
+      .mockReturnValueOnce({ doc: pairedDoc });
+
+    let txUpdateCount = 0;
+    mockRunTransaction.mockImplementation(async (cb) => {
+      const tx = {
+        get: vi.fn().mockResolvedValue({ exists: true, data: () => meetingDoc.data() }),
+        update: vi.fn(() => { txUpdateCount += 1; }),
+      };
+      return cb(tx);
+    });
+
+    const req = createRequest('DELETE', undefined, adminToken);
+    const res = await DELETE(req, makeContext('pitchers', 'abc123'));
+    expect(res.status).toBe(200);
+    // Transaction returned early — no updates should have been applied
+    expect(txUpdateCount).toBe(0);
+  });
+
+  it('sweep continues if one meeting transaction fails', async () => {
+    const pairedGet = vi.fn().mockResolvedValue({ exists: false });
+    const pairedDoc = vi.fn().mockReturnValue({ get: pairedGet });
+    const m1 = { id: 'm1', ref: { id: 'm1' }, data: () => ({ status: 'reserved', pitcherId: 'abc123', reservedAmount: 50 }) };
+    const m2 = { id: 'm2', ref: { id: 'm2' }, data: () => ({ status: 'reserved', pitcherId: 'abc123', reservedAmount: 75 }) };
+    const meetingsWhere = vi.fn().mockReturnValue({
+      where: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({ get: vi.fn().mockResolvedValue({ docs: [m1, m2], empty: false }) }),
+      }),
+    });
+    mockCollection
+      .mockReturnValueOnce({ doc: mockDoc })
+      .mockReturnValueOnce({ where: meetingsWhere })
+      .mockReturnValueOnce({ doc: pairedDoc });
+
+    let call = 0;
+    mockRunTransaction.mockImplementation(async (cb) => {
+      call += 1;
+      if (call === 1) throw new Error('contention');
+      const tx = {
+        get: vi.fn().mockResolvedValue({ exists: true, data: () => m2.data() }),
+        update: vi.fn(),
+      };
+      return cb(tx);
+    });
+
+    const req = createRequest('DELETE', undefined, adminToken);
+    const res = await DELETE(req, makeContext('pitchers', 'abc123'));
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    // Only the second meeting was successfully cancelled
+    expect(data.meetingsCancelled).toBe(1);
+  });
+
   it('sweeps reserved meetings: cancels them and releases reservations', async () => {
     const pairedGet = vi.fn().mockResolvedValue({ exists: false });
     const pairedDoc = vi.fn().mockReturnValue({ get: pairedGet });
