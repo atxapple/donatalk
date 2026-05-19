@@ -3,8 +3,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'; // ✅ App Router uses next/navigation
+import { useRouter, useSearchParams } from 'next/navigation'; // ✅ App Router uses next/navigation
 import { onAuthStateChanged } from 'firebase/auth';
+import { getSafeReturnPath } from '@/lib/safeReturn';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, firestore } from '@/firebase/clientApp';
 import Head from 'next/head';
@@ -24,6 +25,8 @@ const Form = styled('div', {
 
 export default function ListenerUpdateProfile() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnPath = getSafeReturnPath(searchParams?.get('return'));
   const [userId, setUserId] = useState<string | null>(null);
   const [form, setForm] = useState<Listener>({
     fullName: '',
@@ -83,7 +86,7 @@ export default function ListenerUpdateProfile() {
           donation: form.donation,
           isSetUp: true,
         });
-        router.push('/listener/profile'); // ✅ Updated push for App Router
+        router.push(returnPath ?? '/listener/profile'); // ✅ Updated push for App Router
       }
     } catch (err: unknown) {
       const error = err as Error;

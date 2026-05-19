@@ -3,6 +3,39 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.8.0] - 2026-05-19
+
+### Added
+- Generic `?return=` deep-link mechanism on login, both signup pages, both update-profile pages, and add-fund — strictly allowlisted to `/listener/{uid}` and `/pitcher/{uid}` to prevent open-redirect (`lib/safeReturn.ts` + 28 tests)
+- Server endpoints for two-phase booking (dark — not yet wired into UI):
+  - `POST /api/book-meeting-from-balance` — pitcher books a listener using their `credit_balance`; creates `reserved` meeting + reserves balance + emails listener Accept/Decline links
+  - `POST /api/request-meeting` — listener requests a meeting on a pitcher's page; creates `pending` meeting + emails pitcher Accept/Decline links (no balance touched)
+  - `GET /api/meeting/[id]/accept?token=X` — commit donation; handles `reserved` and `pending` flows; checks 14-day TTL; releases reservation if pitcher soft-deleted
+  - `GET /api/meeting/[id]/decline?token=X` — release reservation + polite-decline email
+  - `POST /api/meeting/[id]/cancel` — visitor withdraws their own request; notifies the page owner
+- `lib/verifyUser.ts` — Firebase ID-token verification helper without admin allowlist
+- `lib/meetingTokens.ts` — HMAC-keyed token generation and constant-time verification (env: `MEETING_TOKEN_SECRET` required)
+- `lib/meetingEmails.ts` — reservation, pending request, decline, cancellation, and accept-confirmation email templates
+- Admin soft-delete (`DELETE /api/admin/[collection]/[id]`) now sweeps related `pitcher-balance` meetings: cancels them and releases any reserved balance
+- Pitcher schema additions: `reservedBalance`, `pendingReservationCount`
+- Meeting schema additions: `paymentSource`, `reservedAmount`, `acceptTokenHash`, `tokenUsed`, `idempotencyKey`, `reservedAt`, `respondedAt`, `cancelReason`
+- Meeting status values added: `reserved`, `accepted`, `declined`, `expired`, `cancelled`
+- Fund-history `eventType` value added: `meeting_commit`
+- New env var: `MEETING_TOKEN_SECRET` (≥32 chars; endpoints throw if unset)
+- Plan doc: `docs/plans/2026-05-19-forced-signup-and-booking.md` (state machines, security spec, phasing, acceptance scenarios)
+
+### Changed
+- Hard cap of 5 simultaneous `reserved` meetings per pitcher (configurable later)
+- Idempotency enforced on booking endpoints via client-supplied `idempotencyKey`
+
+### Fixed
+- Vitest 4.0.18 + Node 22 `ERR_REQUIRE_ESM` loading `vitest.config.ts` — renamed to `vitest.config.mts`
+
+### Not yet shipped (Phase 3, separate release)
+- Public profile pages `/listener/{uid}` and `/pitcher/{uid}` still use the existing anonymous PayPal flow; the new endpoints are deployed dark.
+- Dashboard inbox of incoming requests (listener and pitcher sides).
+- Deletion of `app/listener/arrange-meeting/page.tsx`, `app/api/escrow-log/route.ts`, `app/api/complete-order/route.ts`.
+
 ## [0.7.0] - 2026-03-08
 
 ### Changed
