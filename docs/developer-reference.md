@@ -1,6 +1,6 @@
 # DonaTalk - Developer Reference
 
-> Last updated: 2026-05-19 | Version: 0.8.0
+> Last updated: 2026-05-19 | Version: 0.8.1
 
 ## Project Overview
 

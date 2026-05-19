@@ -3,6 +3,29 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.8.1] - 2026-05-19
+
+### Added
+- **Forced sign-up gate** on public profile pages:
+  - `/listener/{uid}`: anonymous visitors see a Sign-Up-as-Pitcher / Log-In gate. Authenticated pitchers see a pre-filled bookable form (or stub-completion / add-funds prompts based on state). The Book button reserves balance and calls `POST /api/book-meeting-from-balance`.
+  - `/pitcher/{uid}`: same shape, mirrored — visitors gate to Sign-Up-as-Listener / Log-In, then send the request via `POST /api/request-meeting` (no balance touched).
+- Self-visit shows the visitor view with a "👁️ You're viewing your own page" banner; submit button disabled (server also returns 400).
+- Owner profile dashboards now include inbox sections:
+  - `/pitcher/profile`: "Available balance" / "Reserved" / "Total" breakdown; "Pending pitches" section with Cancel buttons (calls `/api/meeting/[id]/cancel`); "Incoming requests" section (read-only, action via email)
+  - `/listener/profile`: "Incoming pitch requests" section (read-only, action via email)
+- Auto-recovery for orphan profiles: signed-in user without a pitcher (or listener) doc triggers `POST /api/create-profiles` `role:both-stubs` to repair the dual-profile invariant.
+
+### Changed
+- Public profile pages now use Firebase auth state on top of the existing SSR data fetch — Pages Router for SSR, client-side `onAuthStateChanged` for branch decisions.
+
+### Removed
+- `app/listener/arrange-meeting/page.tsx` — replaced by balance-based booking
+- `app/api/escrow-log/route.ts` and its tests — anonymous PayPal escrow path no longer wired
+
+### Fixed
+- Vercel production build was failing on 0.8.0 because Next.js 15 rejects non-handler exports from `app/api/*/route.ts`. Moved `MAX_PENDING_RESERVATIONS` and `RESERVATION_TTL_DAYS` to `lib/constants.ts`.
+- Added 39 missing test scenarios from a coverage audit (boundary `?return=` validation, transaction-body assertions for `book-from-balance` and `accept`, soft-delete edge cases, admin sweep listener-side and terminal-state guards).
+
 ## [0.8.0] - 2026-05-19
 
 ### Added

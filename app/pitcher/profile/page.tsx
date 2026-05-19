@@ -5,7 +5,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'; // ✅ Updated here
 import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, orderBy, getDocs, Timestamp } from 'firebase/firestore';
 import { auth, firestore } from '@/firebase/clientApp';
 import Head from 'next/head';
 import PageWrapper from '@/components/layout/PageWrapper';
@@ -22,6 +22,26 @@ type Pitcher = {
   pitch: string;
   donation: number;
   credit_balance: number;
+  reservedBalance?: number;
+  pendingReservationCount?: number;
+};
+
+type PendingPitch = {
+  id: string;
+  listenerName: string;
+  listenerEmail: string;
+  reservedAmount: number;
+  availability: string;
+  reservedAt: Timestamp | null;
+};
+
+type IncomingRequest = {
+  id: string;
+  listenerName: string;
+  listenerEmail: string;
+  reservedAmount: number;
+  availability: string;
+  reservedAt: Timestamp | null;
 };
 
 const InfoRow = styled('div', { display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' });
@@ -32,6 +52,17 @@ const SharableLink = styled('div', { fontSize: '14px', wordBreak: 'break-all', m
 const CopyButton = styled('button', { background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem', '&:hover': { color: '$heart' } });
 const AddFundSection = styled('div', { marginTop: '0.5rem', textAlign: 'center' });
 const AddFundButton = styled(Button, { marginTop: '0.25rem' });
+const InboxSection = styled('div', { marginTop: '1.5rem', padding: '1rem', backgroundColor: '#f9f9f9', borderRadius: '8px' });
+const InboxHeader = styled('h3', { margin: '0 0 0.75rem 0', fontSize: '16px', fontWeight: '600' });
+const MeetingCard = styled('div', { padding: '0.75rem', backgroundColor: '#fff', border: '1px solid #eee', borderRadius: '6px', marginBottom: '0.5rem', fontSize: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem' });
+const MeetingCardBody = styled('div', { flex: 1 });
+const MeetingMeta = styled('div', { fontSize: '12px', color: '#666', marginTop: '0.25rem' });
+const CancelButton = styled('button', {
+  background: '#c0392b', color: '#fff', border: 'none', borderRadius: '4px',
+  padding: '0.4rem 0.75rem', cursor: 'pointer', fontSize: '13px',
+  '&:hover': { background: '#a53224' },
+  '&:disabled': { background: '#888', cursor: 'not-allowed' },
+});
 
 export default function PitcherProfile() {
   const router = useRouter();
@@ -44,6 +75,9 @@ export default function PitcherProfile() {
   const [loading, setLoading] = useState(false);
   const [showFundInput, setShowFundInput] = useState(false);
   const [listenerSetUp, setListenerSetUp] = useState(true);
+  const [pendingPitches, setPendingPitches] = useState<PendingPitch[]>([]);
+  const [incomingRequests, setIncomingRequests] = useState<IncomingRequest[]>([]);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -59,12 +93,86 @@ export default function PitcherProfile() {
         } catch (err) {
           console.error('[Fetch Listener Status Error]', err);
         }
+        await refreshInboxes(user.uid);
       } else {
         router.push('/login');
       }
     });
     return () => unsubscribe();
   }, [router]);
+
+  const refreshInboxes = async (uid: string) => {
+    try {
+      const pendingQ = query(
+        collection(firestore, 'meetings'),
+        where('pitcherId', '==', uid),
+        where('status', '==', 'reserved'),
+        orderBy('reservedAt', 'desc'),
+      );
+      const pendingSnap = await getDocs(pendingQ);
+      setPendingPitches(pendingSnap.docs.map((d) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          listenerName: data.listenerName || '(unknown)',
+          listenerEmail: data.listenerEmail || '',
+          reservedAmount: Number(data.reservedAmount) || 0,
+          availability: data.availability || '',
+          reservedAt: data.reservedAt || null,
+        };
+      }));
+    } catch (err) {
+      console.error('[Fetch Pending Pitches Error]', err);
+    }
+    try {
+      const incomingQ = query(
+        collection(firestore, 'meetings'),
+        where('pitcherId', '==', uid),
+        where('status', '==', 'pending'),
+        orderBy('reservedAt', 'desc'),
+      );
+      const incomingSnap = await getDocs(incomingQ);
+      setIncomingRequests(incomingSnap.docs.map((d) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          listenerName: data.listenerName || '(unknown)',
+          listenerEmail: data.listenerEmail || '',
+          reservedAmount: Number(data.reservedAmount) || 0,
+          availability: data.availability || '',
+          reservedAt: data.reservedAt || null,
+        };
+      }));
+    } catch (err) {
+      console.error('[Fetch Incoming Requests Error]', err);
+    }
+  };
+
+  const handleCancel = async (meetingId: string) => {
+    if (!auth.currentUser || !userId) return;
+    if (!confirm('Withdraw this pitch request? The reserved balance will be released and the listener will be notified.')) return;
+    setCancellingId(meetingId);
+    try {
+      const token = await auth.currentUser.getIdToken();
+      const res = await fetch(`/api/meeting/${meetingId}/cancel`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: '{}',
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        alert(`Could not cancel: ${data.error || res.statusText}`);
+      } else {
+        await fetchPitcherData(userId);
+        await refreshInboxes(userId);
+      }
+    } catch (err) {
+      console.error('[Cancel Pitch Error]', err);
+      alert('Network error while cancelling.');
+    } finally {
+      setCancellingId(null);
+    }
+  };
 
   const fetchPitcherData = async (uid: string) => {
     try {
@@ -128,6 +236,8 @@ export default function PitcherProfile() {
   }
 
   const requiredBalance = calculateTotalWithFee(pitcher.donation);
+  const reservedBalance = Number(pitcher.reservedBalance) || 0;
+  const availableBalance = pitcher.credit_balance - reservedBalance;
 
   return (
     <>
@@ -140,7 +250,19 @@ export default function PitcherProfile() {
           <Title>My Pitcher Profile</Title>
           <Subtitle>Welcome, {pitcher.fullName}</Subtitle>
           <InfoRow>
-            <Label>Current Fund Balance ($):</Label>
+            <Label>Available Balance ($):</Label>
+            <Value>{availableBalance.toFixed(2)}</Value>
+          </InfoRow>
+
+          {reservedBalance > 0 && (
+            <InfoRow>
+              <Label>Reserved (pending pitches):</Label>
+              <Value>{reservedBalance.toFixed(2)}</Value>
+            </InfoRow>
+          )}
+
+          <InfoRow>
+            <Label>Total Balance ($):</Label>
             <Value>{pitcher.credit_balance.toFixed(2)}</Value>
           </InfoRow>
 
@@ -151,10 +273,10 @@ export default function PitcherProfile() {
 
           <p style={{ marginTop: '0.0rem', color: '#333', fontSize: '16px', textAlign: 'center' }}>
             <span style={{ color: '#e74c3c', marginRight: '0.3rem' }}>🚩</span>
-            Fund balance must be at least
+            Available balance must be at least
             <strong> ${requiredBalance.toFixed(2)} </strong>
             (Donation amount + {PLATFORM_FEE_PERCENTAGE}% process fee including tax).
-            Otherwise, your shareable link and Zoom meeting link will be inactive.
+            Otherwise, your shareable link will be inactive.
           </p>
 
           <AddFundSection>
@@ -199,6 +321,53 @@ export default function PitcherProfile() {
             <Label>About Pitch:</Label>
             <Value>{pitcher.pitch}</Value>
           </InfoRow>
+
+          {pendingPitches.length > 0 && (
+            <InboxSection>
+              <InboxHeader>Pending pitches ({pendingPitches.length})</InboxHeader>
+              <p style={{ fontSize: '13px', color: '#666', margin: '0 0 0.75rem 0' }}>
+                Waiting for the listener to accept. Cancel to release the reserved balance.
+              </p>
+              {pendingPitches.map((m) => (
+                <MeetingCard key={m.id}>
+                  <MeetingCardBody>
+                    <div>To <strong>{m.listenerName}</strong></div>
+                    <div>Reserved: <strong>${m.reservedAmount.toFixed(2)}</strong></div>
+                    {m.availability && <div>Your note: "{m.availability}"</div>}
+                    <MeetingMeta>
+                      {m.listenerEmail}
+                      {m.reservedAt && ` · Sent ${new Date(m.reservedAt.toMillis()).toLocaleDateString()}`}
+                    </MeetingMeta>
+                  </MeetingCardBody>
+                  <CancelButton onClick={() => handleCancel(m.id)} disabled={cancellingId === m.id}>
+                    {cancellingId === m.id ? 'Cancelling…' : 'Cancel'}
+                  </CancelButton>
+                </MeetingCard>
+              ))}
+            </InboxSection>
+          )}
+
+          {incomingRequests.length > 0 && (
+            <InboxSection>
+              <InboxHeader>Incoming requests ({incomingRequests.length})</InboxHeader>
+              <p style={{ fontSize: '13px', color: '#666', margin: '0 0 0.75rem 0' }}>
+                Listeners who want to hear your pitch. Use the Accept/Decline links in the email we sent you.
+              </p>
+              {incomingRequests.map((m) => (
+                <MeetingCard key={m.id}>
+                  <MeetingCardBody>
+                    <div><strong>{m.listenerName}</strong></div>
+                    <div>Donation if accepted: <strong>${m.reservedAmount.toFixed(2)}</strong></div>
+                    {m.availability && <div>Their note: "{m.availability}"</div>}
+                    <MeetingMeta>
+                      {m.listenerEmail}
+                      {m.reservedAt && ` · Received ${new Date(m.reservedAt.toMillis()).toLocaleDateString()}`}
+                    </MeetingMeta>
+                  </MeetingCardBody>
+                </MeetingCard>
+              ))}
+            </InboxSection>
+          )}
 
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '0rem' }}>
             <Button onClick={() => router.push('/pitcher/update-profile')}>Edit Profile</Button>
