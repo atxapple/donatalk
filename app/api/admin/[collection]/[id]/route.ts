@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebaseAdmin';
 import { verifyAdmin } from '@/lib/adminAuth';
-import { FieldValue } from 'firebase-admin/firestore';
+import { FieldValue, Timestamp } from 'firebase-admin/firestore';
 import slugify from 'slugify';
 
 const VALID_COLLECTIONS = ['pitchers', 'listeners'] as const;
@@ -117,6 +117,50 @@ export async function DELETE(req: Request, context: RouteContext) {
       isSetUp: false,
     });
 
+    // Sweep pending/reserved meetings that reference this user and release reservations.
+    // Filter to the new pitcher-balance flow so legacy escrow/pending meetings stay untouched.
+    const affectedField = collection === 'pitchers' ? 'pitcherId' : 'listenerId';
+    const meetingsSnap = await adminDb
+      .collection('meetings')
+      .where(affectedField, '==', id)
+      .where('paymentSource', '==', 'pitcher-balance')
+      .where('status', 'in', ['reserved', 'pending'])
+      .get();
+
+    let releasedCount = 0;
+    for (const meetingDoc of meetingsSnap.docs) {
+      const meeting = meetingDoc.data();
+      try {
+        await adminDb.runTransaction(async (tx) => {
+          const fresh = await tx.get(meetingDoc.ref);
+          if (!fresh.exists) return;
+          const data = fresh.data()!;
+          if (!['reserved', 'pending'].includes(data.status)) return;
+
+          if (data.status === 'reserved') {
+            const pitcherRef = adminDb.collection('pitchers').doc(data.pitcherId);
+            tx.update(pitcherRef, {
+              reservedBalance: FieldValue.increment(-Number(data.reservedAmount || 0)),
+              pendingReservationCount: FieldValue.increment(-1),
+            });
+          }
+          tx.update(meetingDoc.ref, {
+            status: 'cancelled',
+            cancelReason: 'admin-soft-delete',
+            tokenUsed: true,
+            respondedAt: Timestamp.now(),
+          });
+        });
+        releasedCount += 1;
+      } catch (sweepErr) {
+        console.error(`[Admin Sweep Failed meeting=${meetingDoc.id}]`, sweepErr);
+      }
+      // Note: caller is responsible for the affected-user notification policy.
+      // Skipping email here keeps the admin sweep idempotent and fast; we can
+      // surface affected meetings in the admin response if needed later.
+      void meeting;
+    }
+
     // Check if paired profile exists
     const pairedCollection = collection === 'pitchers' ? 'listeners' : 'pitchers';
     const pairedDoc = await adminDb.collection(pairedCollection).doc(id).get();
@@ -125,6 +169,7 @@ export async function DELETE(req: Request, context: RouteContext) {
       deleted: true,
       hasPairedProfile: pairedDoc.exists,
       pairedCollection,
+      meetingsCancelled: releasedCount,
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';

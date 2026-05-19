@@ -2,8 +2,9 @@
 
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { getSafeReturnPath } from '@/lib/safeReturn';
 import Head from 'next/head';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/firebase/clientApp';
@@ -51,6 +52,8 @@ const Divider = styled('div', {
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnPath = getSafeReturnPath(searchParams?.get('return'));
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -72,7 +75,7 @@ export default function LoginPage() {
     try {
       setLoading(true);
       await signInWithEmailAndPassword(auth, form.email, form.password);
-      router.push('/choose-a-profile');
+      router.push(returnPath ?? '/choose-a-profile');
     } catch (err: unknown) {
       const error = err as Error;
       console.error('[Login Error]', error.message);
@@ -117,7 +120,7 @@ export default function LoginPage() {
         });
       }
 
-      router.push('/choose-a-profile');
+      router.push(returnPath ?? '/choose-a-profile');
     } catch (err) {
       console.error('[Google Login Error]', err);
       setError('An error occurred during Google sign-in. Please try again.');

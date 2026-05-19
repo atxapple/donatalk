@@ -1,11 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const { mockVerifyIdToken, mockGet, mockUpdate, mockDoc, mockWhere, mockCollection } = vi.hoisted(() => {
+const { mockVerifyIdToken, mockGet, mockUpdate, mockDoc, mockWhere, mockCollection, mockRunTransaction } = vi.hoisted(() => {
   const mockGet = vi.fn();
   const mockUpdate = vi.fn();
   const mockDoc = vi.fn();
   const mockWhere = vi.fn();
   const mockCollection = vi.fn();
+  const mockRunTransaction = vi.fn();
   return {
     mockVerifyIdToken: vi.fn(),
     mockGet,
@@ -13,12 +14,13 @@ const { mockVerifyIdToken, mockGet, mockUpdate, mockDoc, mockWhere, mockCollecti
     mockDoc,
     mockWhere,
     mockCollection,
+    mockRunTransaction,
   };
 });
 
 vi.mock('@/lib/firebaseAdmin', () => ({
   adminAuth: { verifyIdToken: mockVerifyIdToken },
-  adminDb: { collection: mockCollection },
+  adminDb: { collection: mockCollection, runTransaction: mockRunTransaction },
 }));
 
 vi.mock('@/lib/adminConfig', () => ({
@@ -35,6 +37,10 @@ vi.mock('firebase-admin/firestore', () => ({
   FieldValue: {
     serverTimestamp: () => ({ _type: 'serverTimestamp' }),
     delete: () => ({ _type: 'deleteField' }),
+    increment: (n: number) => ({ _type: 'increment', n }),
+  },
+  Timestamp: {
+    now: () => ({ _type: 'timestamp-now' }),
   },
 }));
 
@@ -156,12 +162,17 @@ describe('DELETE /api/admin/[collection]/[id]', () => {
   });
 
   it('returns 200 and soft-deletes (sets deletedAt + isSetUp: false)', async () => {
-    // First get: doc exists, second get: paired doc check
     const pairedGet = vi.fn().mockResolvedValue({ exists: false });
     const pairedDoc = vi.fn().mockReturnValue({ get: pairedGet });
+    const meetingsWhere = vi.fn().mockReturnValue({
+      where: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({ get: vi.fn().mockResolvedValue({ docs: [], empty: true }) }),
+      }),
+    });
     mockCollection
-      .mockReturnValueOnce({ doc: mockDoc }) // pitchers collection
-      .mockReturnValueOnce({ doc: pairedDoc }); // listeners collection (paired)
+      .mockReturnValueOnce({ doc: mockDoc }) // pitchers (delete target)
+      .mockReturnValueOnce({ where: meetingsWhere }) // meetings sweep
+      .mockReturnValueOnce({ doc: pairedDoc }); // listeners (paired)
 
     const req = createRequest('DELETE', undefined, adminToken);
     const res = await DELETE(req, makeContext('pitchers', 'abc123'));
@@ -171,6 +182,7 @@ describe('DELETE /api/admin/[collection]/[id]', () => {
     expect(data.deleted).toBe(true);
     expect(data.hasPairedProfile).toBe(false);
     expect(data.pairedCollection).toBe('listeners');
+    expect(data.meetingsCancelled).toBe(0);
 
     expect(mockUpdate).toHaveBeenCalledWith(
       expect.objectContaining({ isSetUp: false })
@@ -180,8 +192,14 @@ describe('DELETE /api/admin/[collection]/[id]', () => {
   it('returns hasPairedProfile: true when paired doc exists', async () => {
     const pairedGet = vi.fn().mockResolvedValue({ exists: true });
     const pairedDoc = vi.fn().mockReturnValue({ get: pairedGet });
+    const meetingsWhere = vi.fn().mockReturnValue({
+      where: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({ get: vi.fn().mockResolvedValue({ docs: [], empty: true }) }),
+      }),
+    });
     mockCollection
       .mockReturnValueOnce({ doc: mockDoc })
+      .mockReturnValueOnce({ where: meetingsWhere })
       .mockReturnValueOnce({ doc: pairedDoc });
 
     const req = createRequest('DELETE', undefined, adminToken);
@@ -191,5 +209,39 @@ describe('DELETE /api/admin/[collection]/[id]', () => {
     const data = await res.json();
     expect(data.hasPairedProfile).toBe(true);
     expect(data.pairedCollection).toBe('listeners');
+  });
+
+  it('sweeps reserved meetings: cancels them and releases reservations', async () => {
+    const pairedGet = vi.fn().mockResolvedValue({ exists: false });
+    const pairedDoc = vi.fn().mockReturnValue({ get: pairedGet });
+    const meetingDoc = {
+      id: 'm1',
+      ref: { id: 'm1' },
+      data: () => ({ status: 'reserved', pitcherId: 'abc123', reservedAmount: 100 }),
+    };
+    const meetingsWhere = vi.fn().mockReturnValue({
+      where: vi.fn().mockReturnValue({
+        where: vi.fn().mockReturnValue({ get: vi.fn().mockResolvedValue({ docs: [meetingDoc], empty: false }) }),
+      }),
+    });
+    mockCollection
+      .mockReturnValueOnce({ doc: mockDoc })
+      .mockReturnValueOnce({ where: meetingsWhere })
+      .mockReturnValueOnce({ doc: pairedDoc });
+    mockRunTransaction.mockImplementation(async (cb) => {
+      // Simulate tx providing a fresh snap that confirms status
+      const tx = {
+        get: vi.fn().mockResolvedValue({ exists: true, data: () => meetingDoc.data() }),
+        update: vi.fn(),
+      };
+      return cb(tx);
+    });
+
+    const req = createRequest('DELETE', undefined, adminToken);
+    const res = await DELETE(req, makeContext('pitchers', 'abc123'));
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data.meetingsCancelled).toBe(1);
+    expect(mockRunTransaction).toHaveBeenCalledOnce();
   });
 });

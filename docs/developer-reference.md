@@ -1,6 +1,6 @@
 # DonaTalk - Developer Reference
 
-> Last updated: 2026-03-08 | Version: 0.7.0
+> Last updated: 2026-05-19 | Version: 0.8.0
 
 ## Project Overview
 
@@ -138,6 +138,11 @@ All routes located in `app/api/`.
 | `/api/send-reset-email` | POST | Send branded password reset email | Firebase Admin, Nodemailer |
 | `/api/send-signup-email` | POST | Send welcome email on registration | Nodemailer |
 | `/api/create-profiles` | POST | Create dual pitcher/listener profiles (supports `pitcher`, `listener`, `both-stubs` roles) | Firebase Admin |
+| `/api/book-meeting-from-balance` | POST | Pitcher reserves balance and creates a `reserved` meeting on a listener page; emails listener Accept/Decline links | Firebase Admin, Nodemailer |
+| `/api/request-meeting` | POST | Listener creates a `pending` meeting on a pitcher page; emails pitcher Accept/Decline links (no balance change) | Firebase Admin, Nodemailer |
+| `/api/meeting/[id]/accept` | GET | Token-authenticated email link; commits donation (deducts `credit_balance`, releases `reservedBalance` if applicable, logs fund_history) | Firebase Admin, Nodemailer |
+| `/api/meeting/[id]/decline` | GET | Token-authenticated email link; releases reservation if any; sends polite-decline notice | Firebase Admin, Nodemailer |
+| `/api/meeting/[id]/cancel` | POST | Visitor cancels their own pending/reserved request; releases reservation; notifies owner | Firebase Admin, Nodemailer |
 
 ## Database Schema (Firestore)
 
@@ -149,6 +154,8 @@ All routes located in `app/api/`.
 | `pitch` | string | Pitch description / cause |
 | `donation` | number | Donation amount per meeting (USD) |
 | `credit_balance` | number | Current fund balance (USD, stored as raw number) |
+| `reservedBalance` | number (optional) | Sum of amounts reserved for currently-`reserved` meetings. Missing = 0. Available balance = `credit_balance - reservedBalance` |
+| `pendingReservationCount` | number (optional) | Count of currently-`reserved` meetings. Missing = 0. Hard-capped at 5 |
 | `slug` | string | URL-safe unique slug (via slugify) |
 | `isSetUp` | boolean (optional) | Whether the profile has been fully set up. Missing = `true` for backward compat |
 | `deletedAt` | Timestamp (optional) | Soft-delete timestamp. If present, profile is hidden from public pages |
@@ -177,16 +184,27 @@ All routes located in `app/api/`.
 | `pitcherName` | string | Pitcher name |
 | `pitcherEmail` | string | Pitcher email |
 | `availability` | string | Message / available times |
-| `status` | string | `'pending'` (default) |
+| `donation` | number (optional) | Donation amount (USD) — snapshot of the donating party's per-meeting donation at request time |
+| `reservedAmount` | number (optional) | Snapshot of `calculateTotalWithFee(donation)` at request time. Used for commit/release accounting |
+| `paymentSource` | string (optional) | `'pitcher-balance'` for v0.8.0+ flow; legacy/unset for older docs |
+| `status` | string | `'pending'`, `'reserved'`, `'accepted'`, `'declined'`, `'expired'`, `'cancelled'` |
+| `acceptTokenHash` | string (optional) | Base64url sha256 of the HMAC-keyed accept/decline token (raw token never stored) |
+| `tokenUsed` | boolean (optional) | One-time-use flag; flipped on first accept/decline/cancel/expire |
+| `idempotencyKey` | string (optional) | Client-supplied UUID; duplicate keys short-circuit booking endpoints |
+| `reservedAt` | Timestamp (optional) | When the meeting was created; drives the 14-day TTL |
+| `respondedAt` | Timestamp \| null | When the owner accepted/declined or visitor cancelled |
+| `cancelReason` | string (optional) | `'pitcher-cancel' \| 'listener-cancel' \| 'admin-soft-delete' \| 'pitcher-deleted'` |
 | `createdAt` | Timestamp | Server timestamp |
 
 ### `fund_history/{auto-id}`
 | Field | Type | Description |
 |-------|------|-------------|
-| `amount` | number | Amount added (USD) |
-| `eventType` | string | `'add_fund'` |
-| `paymentIntentRefId` | string | PayPal order ID |
+| `amount` | number | Amount added or committed (USD) |
+| `eventType` | string | `'add_fund'` (PayPal deposit) or `'meeting_commit'` (donation committed at accept) |
+| `paymentIntentRefId` | string (optional) | PayPal order ID (only for `add_fund`) |
 | `pitcherId` | string | Pitcher UID |
+| `listenerId` | string (optional) | Listener UID (only for `meeting_commit`) |
+| `meetingId` | string (optional) | Meeting doc ID (only for `meeting_commit`) |
 | `timestamp` | Date | Transaction timestamp |
 
 ## Type Definitions
@@ -311,6 +329,9 @@ All emails use inline HTML templates with DonaTalk branding (logo, colors).
 
 ### Email (SMTP)
 - `EMAIL_PASSWORD`
+
+### Meeting tokens (v0.8.0+)
+- `MEETING_TOKEN_SECRET` — base64 secret of ≥ 32 characters. Used by `lib/meetingTokens.ts` to hash accept/decline link tokens. Endpoints throw if unset.
 
 ### App
 - `NEXT_PUBLIC_BASE_URL` (defaults to `http://localhost:3000`)

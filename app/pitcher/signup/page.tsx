@@ -4,8 +4,9 @@
 
 import slugify from 'slugify';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation'; // ✅ Updated for App Router
+import { useRouter, useSearchParams } from 'next/navigation'; // ✅ Updated for App Router
 import Head from 'next/head';
+import { getSafeReturnPath } from '@/lib/safeReturn';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '@/firebase/clientApp'; // ✅ Adjust path if needed
 import { doc, setDoc, Timestamp, collection, getDocs, query, where } from 'firebase/firestore';
@@ -58,6 +59,8 @@ const ProminentErrorBox = styled(ErrorBox, {
 
 export default function SignupPitcher() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnPath = getSafeReturnPath(searchParams?.get('return'));
   const [form, setForm] = useState({
     fullName: '',
     email: '',
@@ -119,7 +122,7 @@ export default function SignupPitcher() {
         }),
       });
 
-      router.push('/pitcher/profile'); // ✅ Navigate after sending the email
+      router.push(returnPath ?? '/pitcher/profile'); // ✅ Navigate after sending the email
     } catch (err: unknown) {
       const error = err as Error;
       console.error(error.message);
@@ -163,7 +166,7 @@ export default function SignupPitcher() {
         });
       }
 
-      router.push('/choose-a-profile');
+      router.push(returnPath ?? '/choose-a-profile');
     } catch (err) {
       console.error('[Google Signup Error]', err);
       setError('An error occurred during Google sign-in. Please try again.');
