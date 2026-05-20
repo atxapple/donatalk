@@ -163,6 +163,35 @@ const ResultCount = styled('span', {
   color: '$mediumgray',
 });
 
+const Badge = styled('span', {
+  display: 'inline-block',
+  padding: '2px 8px',
+  fontSize: '12px',
+  fontWeight: '600',
+  borderRadius: '999px',
+  textTransform: 'capitalize',
+  whiteSpace: 'nowrap',
+  variants: {
+    tone: {
+      slate:  { backgroundColor: '#f1f5f9', color: '#475569' },
+      blue:   { backgroundColor: '#dbeafe', color: '#1e40af' },
+      green:  { backgroundColor: '#dcfce7', color: '#166534' },
+      gray:   { backgroundColor: '#e5e7eb', color: '#374151' },
+      red:    { backgroundColor: '#fee2e2', color: '#991b1b' },
+      amber:  { backgroundColor: '#fef3c7', color: '#92400e' },
+    },
+  },
+});
+
+const STATUS_TONE: Record<string, 'slate' | 'blue' | 'green' | 'gray' | 'red' | 'amber'> = {
+  pending:   'slate',
+  reserved:  'blue',
+  accepted:  'green',
+  declined:  'gray',
+  cancelled: 'red',
+  expired:   'amber',
+};
+
 const ActionButton = styled('button', {
   padding: '4px 10px',
   fontSize: '12px',
@@ -657,11 +686,22 @@ export default function AdminPage() {
                   key={(row.id as string) || i}
                   style={deleted ? { opacity: 0.5, textDecoration: 'line-through' } : undefined}
                 >
-                  {columns.map((col) => (
-                    <Td key={col.key} title={String(row[col.key] ?? '')}>
-                      {formatCell(col.key, row[col.key])}
-                    </Td>
-                  ))}
+                  {columns.map((col) => {
+                    const raw = row[col.key];
+                    if (col.key === 'status' && typeof raw === 'string') {
+                      const tone = STATUS_TONE[raw] ?? 'slate';
+                      return (
+                        <Td key={col.key}>
+                          <Badge tone={tone}>{raw}</Badge>
+                        </Td>
+                      );
+                    }
+                    return (
+                      <Td key={col.key} title={String(raw ?? '')}>
+                        {formatCell(col.key, raw)}
+                      </Td>
+                    );
+                  })}
                   {hasActions && (
                     <Td style={{ whiteSpace: 'nowrap', maxWidth: 'none' }}>
                       {deleted ? (
