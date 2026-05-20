@@ -651,8 +651,8 @@ export default function AdminPage() {
   ];
 
   const meetingColumns = [
-    { key: 'pitcherName', label: 'Pitcher' },
-    { key: 'listenerName', label: 'Listener' },
+    { key: 'pitcherEmail', label: 'Pitcher' },
+    { key: 'listenerEmail', label: 'Listener' },
     { key: 'meetingsource', label: 'Source' },
     { key: 'status', label: 'Status' },
     { key: 'availability', label: 'Availability' },
