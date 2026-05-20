@@ -192,6 +192,21 @@ const STATUS_TONE: Record<string, 'slate' | 'blue' | 'green' | 'gray' | 'red' | 
   expired:   'amber',
 };
 
+const ExpandLink = styled('button', {
+  background: 'none',
+  border: 'none',
+  padding: 0,
+  marginLeft: '6px',
+  color: '#3b82f6',
+  fontSize: '12px',
+  cursor: 'pointer',
+  textDecoration: 'underline',
+  '&:hover': { color: '#1d4ed8' },
+});
+
+const LONG_TEXT_KEYS = new Set(['availability', 'intro', 'pitch']);
+const LONG_TEXT_THRESHOLD = 80;
+
 const ActionButton = styled('button', {
   padding: '4px 10px',
   fontSize: '12px',
@@ -385,6 +400,19 @@ export default function AdminPage() {
   // Restore loading state (track by row id)
   const [restoringId, setRestoringId] = useState<string | null>(null);
 
+  // Per-cell expand state for long text fields, keyed `${rowId}::${columnKey}`
+  const [expandedCells, setExpandedCells] = useState<Set<string>>(new Set());
+
+  const toggleCellExpand = useCallback((rowId: string, key: string) => {
+    setExpandedCells((prev) => {
+      const next = new Set(prev);
+      const id = `${rowId}::${key}`;
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -424,6 +452,7 @@ export default function AdminPage() {
         }
         setSort(null);
         setSearchQuery('');
+        setExpandedCells(new Set());
       })
       .catch((err) => setError(err.message));
   }, [token, activeTab]);
@@ -693,6 +722,25 @@ export default function AdminPage() {
                       return (
                         <Td key={col.key}>
                           <Badge tone={tone}>{raw}</Badge>
+                        </Td>
+                      );
+                    }
+                    if (LONG_TEXT_KEYS.has(col.key) && typeof raw === 'string' && raw.length > LONG_TEXT_THRESHOLD) {
+                      const rowId = String(row.id ?? i);
+                      const expanded = expandedCells.has(`${rowId}::${col.key}`);
+                      return (
+                        <Td
+                          key={col.key}
+                          style={expanded ? { whiteSpace: 'pre-wrap', maxWidth: '500px' } : undefined}
+                          title={expanded ? undefined : raw}
+                        >
+                          {expanded ? raw : `${raw.slice(0, LONG_TEXT_THRESHOLD).trimEnd()}…`}
+                          <ExpandLink
+                            type="button"
+                            onClick={() => toggleCellExpand(rowId, col.key)}
+                          >
+                            {expanded ? 'less' : 'more'}
+                          </ExpandLink>
                         </Td>
                       );
                     }
