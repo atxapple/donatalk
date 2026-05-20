@@ -79,7 +79,6 @@ donatalk/
 │   ├── meetingEmails.ts          # Reservation/pending/accept/decline/cancel templates
 │   ├── meetingTokens.ts          # HMAC-keyed token generation + constant-time verify
 │   ├── safeReturn.ts             # ?return= allowlist (open-redirect protection)
-│   ├── sendEmailfromListenerPage.ts
 │   ├── updateFunds.ts
 │   └── verifyUser.ts             # Firebase ID-token verification (no admin allowlist)
 ├── firebase/
