@@ -207,6 +207,20 @@ const ExpandLink = styled('button', {
 const LONG_TEXT_KEYS = new Set(['availability', 'intro', 'pitch']);
 const LONG_TEXT_THRESHOLD = 80;
 
+const DeletedBadge = styled('span', {
+  display: 'inline-block',
+  padding: '2px 6px',
+  marginRight: '6px',
+  fontSize: '10px',
+  fontWeight: '700',
+  letterSpacing: '0.04em',
+  borderRadius: '$sm',
+  backgroundColor: '#fee2e2',
+  color: '#991b1b',
+  textTransform: 'uppercase',
+  whiteSpace: 'nowrap',
+});
+
 const ActionButton = styled('button', {
   padding: '4px 10px',
   fontSize: '12px',
@@ -713,10 +727,18 @@ export default function AdminPage() {
               return (
                 <tr
                   key={(row.id as string) || i}
-                  style={deleted ? { opacity: 0.5, textDecoration: 'line-through' } : undefined}
+                  style={deleted ? { backgroundColor: '#fef2f2', color: '#7f1d1d' } : undefined}
                 >
                   {columns.map((col) => {
                     const raw = row[col.key];
+                    if (col.key === 'fullName' && deleted) {
+                      return (
+                        <Td key={col.key} title={String(raw ?? '')}>
+                          <DeletedBadge>Deleted</DeletedBadge>
+                          {formatCell(col.key, raw)}
+                        </Td>
+                      );
+                    }
                     if (col.key === 'status' && typeof raw === 'string') {
                       const tone = STATUS_TONE[raw] ?? 'slate';
                       return (
