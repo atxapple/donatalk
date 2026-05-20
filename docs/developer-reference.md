@@ -52,7 +52,6 @@ donatalk/
 │   │   └── send-signup-email/
 │   ├── listener/                 # Listener pages (signup, profile, update-profile)
 │   ├── pitcher/                  # Pitcher pages (signup, profile, update-profile, add-fund)
-│   ├── arrange-notification/
 │   ├── checkout/                 # Phase 3 cleanup pending — generic checkout page
 │   ├── choose-a-profile/
 │   ├── login/
@@ -118,7 +117,6 @@ donatalk/
 | `/listener/profile` | `app/listener/profile/page.tsx` | Listener dashboard |
 | `/listener/update-profile` | `app/listener/update-profile/page.tsx` | Edit listener profile |
 | `/checkout` | `app/checkout/page.tsx` | Generic checkout page (Phase 3 cleanup pending — only reachable via `/api/complete-order`) |
-| `/arrange-notification` | `app/arrange-notification/page.tsx` | Notification arrangement |
 
 ### Pages Router (`pages/`) - SSR
 
