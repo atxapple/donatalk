@@ -13,6 +13,7 @@ vi.mock('@/lib/mailer', () => ({
   transporter: { sendMail: mockSendMail },
   FROM_EMAIL: 'support@donatalk.com',
   BCC_EMAIL: 'atxapplellc@gmail.com',
+  APP_URL: 'https://app.donatalk.com',
 }));
 
 import { POST } from './route';

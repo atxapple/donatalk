@@ -1,7 +1,7 @@
 // app/api/send-notification/route.ts
 
 import { NextResponse } from 'next/server';
-import { transporter, FROM_EMAIL, BCC_EMAIL } from '@/lib/mailer';
+import { transporter, FROM_EMAIL, BCC_EMAIL, APP_URL } from '@/lib/mailer';
 
 export async function POST(req: Request) {
     try {
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
               <body style="margin: 0; padding: 0; background-color: #f5f5f5;">
                 <div style="font-family: Arial, sans-serif; background-color: #ffffff; padding: 30px; border-radius: 8px; max-width: 600px; margin: 5px auto; border: 1px solid #e0e0e0;">
                   <div style="text-align: center; margin-bottom: 20px;">
-                    <img src="https://app.donatalk.com/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" style="max-width: 88px; height: auto;">
+                    <img src="${APP_URL}/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" style="max-width: 88px; height: auto;">
                   </div>
                   <h2 style="color: #2C3E50; text-align: center; margin-bottom: 20px;">New ${bodyText1} Interest on DonaTalk</h2>
                   <p style="font-size: 16px; color: #333333;">Dear <strong>${bodyText2}</strong>,</p>
