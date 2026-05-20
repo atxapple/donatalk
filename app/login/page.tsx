@@ -2,9 +2,17 @@
 
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { getSafeReturnPath } from '@/lib/safeReturn';
+
+// Read at submit time from window.location, since useSearchParams() can return
+// null on statically-rendered routes (the login page is `○ /login` in the build).
+function readReturnPath(): string | null {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  return getSafeReturnPath(params.get('return'));
+}
 import Head from 'next/head';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/firebase/clientApp';
@@ -52,8 +60,6 @@ const Divider = styled('div', {
 
 export default function LoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const returnPath = getSafeReturnPath(searchParams?.get('return'));
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -75,7 +81,7 @@ export default function LoginPage() {
     try {
       setLoading(true);
       await signInWithEmailAndPassword(auth, form.email, form.password);
-      router.push(returnPath ?? '/choose-a-profile');
+      router.push(readReturnPath() ?? '/choose-a-profile');
     } catch (err: unknown) {
       const error = err as Error;
       console.error('[Login Error]', error.message);
@@ -120,7 +126,7 @@ export default function LoginPage() {
         });
       }
 
-      router.push(returnPath ?? '/choose-a-profile');
+      router.push(readReturnPath() ?? '/choose-a-profile');
     } catch (err) {
       console.error('[Google Login Error]', err);
       setError('An error occurred during Google sign-in. Please try again.');
