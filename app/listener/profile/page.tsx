@@ -28,6 +28,19 @@ const InboxSection = styled('div', { marginTop: '1.5rem', padding: '1rem', backg
 const InboxHeader = styled('h3', { margin: '0 0 0.75rem 0', fontSize: '16px', fontWeight: '600' });
 const MeetingCard = styled('div', { padding: '0.75rem', backgroundColor: '#fff', border: '1px solid #eee', borderRadius: '6px', marginBottom: '0.5rem', fontSize: '14px' });
 const MeetingMeta = styled('div', { fontSize: '12px', color: '#666', marginTop: '0.25rem' });
+const ActionRow = styled('div', { display: 'flex', gap: '0.5rem', marginTop: '0.5rem' });
+const AcceptButton = styled('button', {
+  background: '#27ae60', color: '#fff', border: 'none', borderRadius: '4px',
+  padding: '0.4rem 0.9rem', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
+  '&:hover': { background: '#1e8c4a' },
+  '&:disabled': { background: '#888', cursor: 'not-allowed' },
+});
+const DeclineButton = styled('button', {
+  background: '#c0392b', color: '#fff', border: 'none', borderRadius: '4px',
+  padding: '0.4rem 0.9rem', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
+  '&:hover': { background: '#a53224' },
+  '&:disabled': { background: '#888', cursor: 'not-allowed' },
+});
 
 type IncomingMeeting = {
   id: string;
@@ -49,6 +62,7 @@ export default function ListenerProfile() {
   const [loading, setLoading] = useState(false);
   const [pitcherSetUp, setPitcherSetUp] = useState(true);
   const [incoming, setIncoming] = useState<IncomingMeeting[]>([]);
+  const [respondingId, setRespondingId] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -120,6 +134,36 @@ export default function ListenerProfile() {
     }
   };
 
+  const respond = async (meetingId: string, action: 'accept' | 'decline') => {
+    if (!auth.currentUser) return;
+    const confirmMsg =
+      action === 'accept'
+        ? 'Accept this pitch request? The pitcher will be charged after confirmation.'
+        : "Decline this pitch request? The pitcher's reservation will be released.";
+    if (!confirm(confirmMsg)) return;
+    setRespondingId(meetingId);
+    try {
+      const token = await auth.currentUser.getIdToken();
+      const res = await fetch(`/api/meeting/${meetingId}/respond`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        alert(`Could not ${action}: ${data.error || res.statusText}`);
+      } else {
+        // Refetch the inbox to reflect the new state.
+        setIncoming((cur) => cur.filter((m) => m.id !== meetingId));
+      }
+    } catch (err) {
+      console.error('[Respond Error]', err);
+      alert(`Network error while attempting to ${action}.`);
+    } finally {
+      setRespondingId(null);
+    }
+  };
+
   if (error) {
     return (
       <PageWrapper>
@@ -181,18 +225,29 @@ export default function ListenerProfile() {
           {incoming.length > 0 && (
             <InboxSection>
               <InboxHeader>Incoming pitch requests ({incoming.length})</InboxHeader>
-              <p style={{ fontSize: '13px', color: '#666', margin: '0 0 0.75rem 0' }}>
-                Use the Accept/Decline buttons in the email we sent you for each one.
-              </p>
               {incoming.map((m) => (
                 <MeetingCard key={m.id}>
                   <div><strong>{m.pitcherName}</strong> wants to pitch to you.</div>
                   <div>Reserved donation: <strong>${m.reservedAmount.toFixed(2)}</strong></div>
-                  {m.availability && <div>Their note: "{m.availability}"</div>}
+                  {m.availability && <div>Their note: &quot;{m.availability}&quot;</div>}
                   <MeetingMeta>
                     Pitcher email: {m.pitcherEmail}
                     {m.reservedAt && ` · Sent ${new Date(m.reservedAt.toMillis()).toLocaleDateString()}`}
                   </MeetingMeta>
+                  <ActionRow>
+                    <AcceptButton
+                      onClick={() => respond(m.id, 'accept')}
+                      disabled={respondingId === m.id}
+                    >
+                      {respondingId === m.id ? 'Working…' : '✓ Accept'}
+                    </AcceptButton>
+                    <DeclineButton
+                      onClick={() => respond(m.id, 'decline')}
+                      disabled={respondingId === m.id}
+                    >
+                      ✗ Decline
+                    </DeclineButton>
+                  </ActionRow>
                 </MeetingCard>
               ))}
             </InboxSection>

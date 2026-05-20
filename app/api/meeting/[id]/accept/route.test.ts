@@ -59,7 +59,7 @@ describe('GET /api/meeting/[id]/accept', () => {
   });
 
   it('403 when token verification fails', async () => {
-    mockRunTransaction.mockImplementation(async () => ({ kind: 'invalid-token' }));
+    mockRunTransaction.mockImplementation(async () => ({ kind: 'invalid-auth' }));
     const res = await GET(makeReq('bad'), ctx);
     expect(res.status).toBe(403);
   });

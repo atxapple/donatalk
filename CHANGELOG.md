@@ -3,6 +3,19 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.9.0] - 2026-05-20
+
+### Added
+- **In-app Accept/Decline buttons** on both dashboards:
+  - `/listener/profile` "Incoming pitch requests" — each card now has green Accept / red Decline buttons.
+  - `/pitcher/profile` "Incoming requests" — same buttons for pending listener requests.
+- New endpoint `POST /api/meeting/[id]/respond` taking `{ action: 'accept' | 'decline' }` with Firebase ID-token auth. The caller's uid must match the page-owner role for the meeting (listener for `reserved`, pitcher for `pending`).
+- Shared `lib/meetingActions.ts` extracts the accept/decline transaction logic. Both the existing token-link GET routes and the new auth-POST route call the same helper — sub-branches like expiry, pitcher-soft-delete, and insufficient-balance behave identically across surfaces.
+
+### Changed
+- The Accept/Decline result kind `'invalid-token'` renamed to `'invalid-auth'` (now covers both wrong-token and wrong-caller cases in the shared helper). Existing route tests updated.
+- Dashboard inboxes no longer say "use the email link" — accept/decline is now first-class in-app.
+
 ## [0.8.4] - 2026-05-20
 
 ### Changed
