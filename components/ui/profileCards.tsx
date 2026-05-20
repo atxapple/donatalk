@@ -182,3 +182,191 @@ export const SelfVisitBanner = styled('div', {
   color: '#665',
   '& a': { color: '#665', fontWeight: 600 },
 });
+
+/* Dashboard primitives */
+
+const ShareCard = styled('div', {
+  width: '100%',
+  padding: '$md',
+  marginTop: '$md',
+  borderRadius: '$md',
+  border: '1px solid #e8eaec',
+  backgroundColor: '#fafbfc',
+  textAlign: 'center',
+});
+
+const ShareHint = styled('p', {
+  margin: '0 0 $sm',
+  fontSize: '13px',
+  color: '$darkgray',
+});
+
+const ShareUrlRow = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '$sm',
+  padding: '8px 12px',
+  backgroundColor: '$white',
+  border: '1px solid #e0e3e6',
+  borderRadius: '$sm',
+  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
+  fontSize: '13px',
+  wordBreak: 'break-all',
+  textAlign: 'left',
+});
+
+const ShareUrlText = styled('span', {
+  flex: 1,
+  color: '$dark',
+});
+
+const ShareCopyButton = styled('button', {
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  padding: '4px',
+  borderRadius: '$sm',
+  color: '$darkgray',
+  '&:hover': { color: '$heart' },
+});
+
+const CopiedFlash = styled('span', {
+  fontSize: '12px',
+  color: '#27ae60',
+  fontWeight: 600,
+});
+
+export function ShareLinkCard({
+  hint,
+  url,
+  copied,
+  onCopy,
+  copyIcon,
+}: {
+  hint: string;
+  url: string;
+  copied: boolean;
+  onCopy: () => void;
+  copyIcon: ReactNode;
+}) {
+  return (
+    <ShareCard>
+      <ShareHint>{hint}</ShareHint>
+      <ShareUrlRow>
+        <ShareUrlText>{url}</ShareUrlText>
+        <ShareCopyButton onClick={onCopy} aria-label="Copy link to clipboard">
+          {copyIcon}
+        </ShareCopyButton>
+        {copied && <CopiedFlash>Copied!</CopiedFlash>}
+      </ShareUrlRow>
+    </ShareCard>
+  );
+}
+
+const InfoLineRow = styled('div', {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '10px 4px',
+  borderBottom: '1px solid #f0f1f3',
+  fontSize: '14px',
+  '&:last-child': { borderBottom: 'none' },
+});
+
+const InfoLineLabel = styled('span', {
+  color: '$darkgray',
+  fontWeight: 500,
+});
+
+const InfoLineValue = styled('span', {
+  color: '$dark',
+  fontWeight: 500,
+  textAlign: 'right',
+});
+
+export function InfoLine({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <InfoLineRow>
+      <InfoLineLabel>{label}</InfoLineLabel>
+      <InfoLineValue>{children}</InfoLineValue>
+    </InfoLineRow>
+  );
+}
+
+export const InfoLineGroup = styled('div', {
+  width: '100%',
+  marginTop: '$md',
+});
+
+/* Pitcher balance breakdown — three stats side-by-side with available emphasized. */
+
+const BalanceRow = styled('div', {
+  display: 'flex',
+  width: '100%',
+  marginTop: '$md',
+  borderRadius: '$md',
+  border: '1px solid #e8eaec',
+  backgroundColor: '#fafbfc',
+  overflow: 'hidden',
+});
+
+const BalanceCell = styled('div', {
+  flex: 1,
+  padding: '14px 8px',
+  textAlign: 'center',
+  borderRight: '1px solid #e8eaec',
+  '&:last-child': { borderRight: 'none' },
+  variants: {
+    emphasis: {
+      true: { backgroundColor: '#fff' },
+    },
+  },
+});
+
+const BalanceCellLabel = styled('div', {
+  fontSize: '11px',
+  fontWeight: 600,
+  textTransform: 'uppercase',
+  letterSpacing: '0.05em',
+  color: '$darkgray',
+  marginBottom: '4px',
+});
+
+const BalanceCellValue = styled('div', {
+  fontSize: '$xl',
+  fontWeight: 700,
+  color: '$dark',
+  lineHeight: 1.1,
+  variants: {
+    muted: {
+      true: { color: '$darkgray' },
+    },
+  },
+});
+
+export function BalanceBreakdown({
+  available,
+  reserved,
+  total,
+}: {
+  available: number;
+  reserved: number;
+  total: number;
+}) {
+  return (
+    <BalanceRow>
+      <BalanceCell emphasis>
+        <BalanceCellLabel>Available</BalanceCellLabel>
+        <BalanceCellValue>${available.toFixed(2)}</BalanceCellValue>
+      </BalanceCell>
+      <BalanceCell>
+        <BalanceCellLabel>Reserved</BalanceCellLabel>
+        <BalanceCellValue muted>${reserved.toFixed(2)}</BalanceCellValue>
+      </BalanceCell>
+      <BalanceCell>
+        <BalanceCellLabel>Total</BalanceCellLabel>
+        <BalanceCellValue muted>${total.toFixed(2)}</BalanceCellValue>
+      </BalanceCell>
+    </BalanceRow>
+  );
+}
