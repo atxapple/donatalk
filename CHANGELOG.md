@@ -3,6 +3,18 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.9.1] - 2026-05-20
+
+### Changed
+- **Redesigned public profile pages** (`/listener/{uid}`, `/pitcher/{uid}`):
+  - User intro/pitch text now lives in a bordered "About {firstName}" / "{firstName}'s pitch" card to clearly distinguish from boilerplate copy.
+  - URLs in intros/pitches are auto-linkified (displayed without the `https://` prefix, open in a new tab).
+  - Donation amount surfaced in a dedicated stat card with emoji icon, large amount, and supporting caption.
+  - CTA hierarchy: primary action (Sign up / Add Funds / Set up Profile) is now a full-width coral button; "Log in" demoted to a text link below.
+  - Name repetition reduced — first reference uses full name, subsequent uses first name only.
+  - Same design pattern applied to all render branches (anonymous gate, stub-setup, add-funds, bookable form, self-visit, pending cap).
+- New shared `components/ui/profileCards.tsx` exports `IntroCard`, `StatCard`, `linkify`, `PrimaryCTA`, `SecondaryLink`, `PageHeading`, `PageSubheading`, `SelfVisitBanner` — reusable across both pages and any future variant.
+
 ## [0.9.0] - 2026-05-20
 
 ### Added

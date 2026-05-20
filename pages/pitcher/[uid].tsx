@@ -7,10 +7,20 @@ import { auth, firestore } from '../../firebase/clientApp';
 import { styled } from '../../styles/stitches.config';
 import PageWrapper from '../../components/layout/PageWrapper';
 import CardContainer from '../../components/layout/CardContainer';
-import { Logo, Title, Subtitle, InfoBox } from '../../components/ui/shared';
-import { Input, Button } from '../../components/ui';
+import { Logo, InfoBox } from '../../components/ui/shared';
+import { Input } from '../../components/ui';
+import {
+  IntroCard,
+  StatCard,
+  linkify,
+  PrimaryCTA,
+  SecondaryLink,
+  SecondaryHint,
+  PageHeading,
+  PageSubheading,
+  SelfVisitBanner,
+} from '../../components/ui/profileCards';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { Pitcher } from '@/types/pitcher';
 import { calculateTotalWithFee } from '@/lib/constants';
 
@@ -24,10 +34,10 @@ type ListenerViewerState = {
 const Form = styled('form', {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
+  alignItems: 'stretch',
   gap: '$sm',
   width: '100%',
-  maxWidth: '550px',
+  marginTop: '$md',
 });
 
 const Textarea = styled('textarea', {
@@ -42,29 +52,34 @@ const Textarea = styled('textarea', {
   '&:focus': { borderColor: '$heart', outline: 'none' },
 });
 
-const InputStyled = styled(Input, {
-  width: '100%',
+const InputStyled = styled(Input, { width: '100%' });
+
+const SubmitButton = styled('button', {
+  marginTop: '$sm',
+  padding: '14px 20px',
+  borderRadius: '$md',
+  backgroundColor: '$heart',
+  color: '$white',
+  border: 'none',
+  fontSize: '$md',
+  fontWeight: 600,
+  cursor: 'pointer',
+  transition: 'background-color 0.15s ease',
+  '&:hover:not(:disabled)': { backgroundColor: '#d63828' },
+  '&:disabled': { backgroundColor: '#bbb', cursor: 'not-allowed' },
 });
 
-const Banner = styled('div', {
-  width: '100%',
-  padding: '0.75rem 1rem',
-  backgroundColor: '#fff8e1',
-  border: '1px solid #ffe082',
-  borderRadius: '8px',
-  marginBottom: '1rem',
+const FootNote = styled('p', {
+  marginTop: '$lg',
+  fontSize: '13px',
+  color: '$darkgray',
   textAlign: 'center',
-  fontSize: '14px',
-  color: '#665',
+  '& a': { color: '$heart', textDecoration: 'underline' },
 });
 
-const ButtonRow = styled('div', {
-  display: 'flex',
-  gap: '0.75rem',
-  marginTop: '1rem',
-  flexWrap: 'wrap',
-  justifyContent: 'center',
-});
+function firstNameOf(full: string): string {
+  return (full || '').trim().split(/\s+/)[0] || full || 'them';
+}
 
 export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null; uid: string }) {
   const [hydrated, setHydrated] = useState(false);
@@ -176,22 +191,39 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
     );
   }
 
-  const requiredBalance = calculateTotalWithFee(pitcher.donation);
+  // Narrowed alias so nested helper components keep the non-null type.
+  const p: Pitcher = pitcher;
+  const requiredBalance = calculateTotalWithFee(p.donation);
   const isSelfVisit = authResolved && user && user.uid === uid;
-  const credit = Number(pitcher.credit_balance) || 0;
-  const reserved = Number((pitcher as unknown as { reservedBalance?: number }).reservedBalance) || 0;
+  const credit = Number(p.credit_balance) || 0;
+  const reserved = Number((p as unknown as { reservedBalance?: number }).reservedBalance) || 0;
   const pitcherAvailableBalance = credit - reserved;
   const isActive = pitcherAvailableBalance >= requiredBalance;
+  const firstName = firstNameOf(p.fullName);
+
+  function Header() {
+    return (
+      <>
+        <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
+        <PageHeading>{p.fullName}</PageHeading>
+        <PageSubheading>on DonaTalk</PageSubheading>
+      </>
+    );
+  }
+
+  function PitchCard() {
+    if (!p.pitch || !p.pitch.trim()) return null;
+    return <IntroCard label={`${firstName}'s pitch`}>{linkify(p.pitch)}</IntroCard>;
+  }
 
   // P1b: pitcher's link inactive (insufficient available balance)
   if (!isActive) {
     return (
       <PageWrapper>
         <CardContainer>
-          <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>{pitcher.fullName} on DonaTalk</Title>
+          <Header />
           <InfoBox>
-            ℹ️ This link is currently inactive because the pitcher's available balance is not sufficient
+            ℹ️ This link is currently inactive because the pitcher&rsquo;s available balance is not sufficient
             to cover the donation and processing fee.
           </InfoBox>
         </CardContainer>
@@ -203,9 +235,8 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
     return (
       <PageWrapper>
         <CardContainer>
-          <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>{pitcher.fullName} on DonaTalk</Title>
-          <Subtitle>Loading…</Subtitle>
+          <Header />
+          <PageSubheading>Loading…</PageSubheading>
         </CardContainer>
       </PageWrapper>
     );
@@ -217,22 +248,22 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
     return (
       <PageWrapper>
         <CardContainer>
-          <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>{pitcher.fullName} on DonaTalk</Title>
-          <Subtitle>The pitch is about — &quot;{pitcher.pitch}&quot;</Subtitle>
-          <Subtitle>
-            {pitcher.fullName} will donate <strong>${pitcher.donation.toFixed(2)}</strong> to a non-profit
-            of your choice after the meeting.
-          </Subtitle>
-          <Subtitle>Sign up as a Listener to hear {pitcher.fullName}'s pitch.</Subtitle>
-          <ButtonRow>
-            <Link href={`/listener/signup?return=${encodeURIComponent(returnTo)}`}>
-              <Button>Sign up as Listener</Button>
-            </Link>
-            <Link href={`/login?return=${encodeURIComponent(returnTo)}`}>
-              <Button>Log in</Button>
-            </Link>
-          </ButtonRow>
+          <Header />
+          <PitchCard />
+          <StatCard
+            icon="🎁"
+            amount={`$${p.donation.toFixed(2)} donation`}
+            caption={<>{firstName} will donate to a non&#8209;profit of your choice after the meeting</>}
+          />
+          <SecondaryHint>Want to hear {firstName}&rsquo;s pitch?</SecondaryHint>
+          <PrimaryCTA href={`/listener/signup?return=${encodeURIComponent(returnTo)}`}>
+            Sign up as Listener →
+          </PrimaryCTA>
+          <div style={{ textAlign: 'center' }}>
+            <SecondaryLink href={`/login?return=${encodeURIComponent(returnTo)}`}>
+              Already have an account? <strong>Log in</strong>
+            </SecondaryLink>
+          </div>
         </CardContainer>
       </PageWrapper>
     );
@@ -242,9 +273,8 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
     return (
       <PageWrapper>
         <CardContainer>
-          <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>{pitcher.fullName} on DonaTalk</Title>
-          <Subtitle>Loading your profile…</Subtitle>
+          <Header />
+          <PageSubheading>Loading your profile…</PageSubheading>
         </CardContainer>
       </PageWrapper>
     );
@@ -254,8 +284,7 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
     return (
       <PageWrapper>
         <CardContainer>
-          <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>{pitcher.fullName} on DonaTalk</Title>
+          <Header />
           <InfoBox>{viewerLoadError}</InfoBox>
         </CardContainer>
       </PageWrapper>
@@ -270,8 +299,7 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
     return (
       <PageWrapper>
         <CardContainer>
-          <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>{pitcher.fullName} on DonaTalk</Title>
+          <Header />
           <InfoBox>
             Your Listener profile was removed by an admin. Please contact{' '}
             <a href="mailto:support@donatalk.com">support@donatalk.com</a>.
@@ -286,14 +314,12 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
     return (
       <PageWrapper>
         <CardContainer>
-          <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>{pitcher.fullName} on DonaTalk</Title>
-          <Subtitle>
-            Finish setting up your Listener profile to send a meeting request to {pitcher.fullName}.
-          </Subtitle>
-          <Link href={`/listener/update-profile?return=${encodeURIComponent(returnTo)}`}>
-            <Button>Set up Listener Profile</Button>
-          </Link>
+          <Header />
+          <PitchCard />
+          <SecondaryHint>Finish setting up your Listener profile to send a meeting request.</SecondaryHint>
+          <PrimaryCTA href={`/listener/update-profile?return=${encodeURIComponent(returnTo)}`}>
+            Set up Listener Profile →
+          </PrimaryCTA>
         </CardContainer>
       </PageWrapper>
     );
@@ -321,7 +347,7 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
       const data = await res.json();
       if (res.ok) {
         setSubmitState('success');
-        setSubmitMessage(`Request sent — ${pitcher.fullName} has been notified by email.`);
+        setSubmitMessage(`Request sent — ${firstName} has been notified by email.`);
         setMessage('');
       } else {
         setSubmitState('error');
@@ -338,20 +364,22 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
   return (
     <PageWrapper>
       <CardContainer>
-        <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-        <Title>{pitcher.fullName} on DonaTalk</Title>
+        <Header />
         {isSelfVisit && (
-          <Banner>
-            👁️ You're viewing your own page as a visitor.{' '}
-            <Link href="/pitcher/profile">Go to your dashboard →</Link>
-          </Banner>
+          <SelfVisitBanner>
+            👁️ You&rsquo;re viewing your own page as a visitor.{' '}
+            <a href="/pitcher/profile">Go to your dashboard →</a>
+          </SelfVisitBanner>
         )}
-        <Subtitle>🙏 Thanks for your interest in listening to {pitcher.fullName}&rsquo;s story.</Subtitle>
-        <Subtitle>The pitch is about — &quot;{pitcher.pitch}&quot;</Subtitle>
-        <Subtitle>
-          {pitcher.fullName} will donate <strong>${pitcher.donation.toFixed(2)}</strong> to support your favorite
-          non-profit organization after the meeting.
-        </Subtitle>
+        <PitchCard />
+        <StatCard
+          icon="🎁"
+          amount={`$${p.donation.toFixed(2)} donation`}
+          caption={<>{firstName} will donate to a non&#8209;profit of your choice after the meeting</>}
+        />
+        <SecondaryHint>
+          {firstName} will only commit the donation once they accept your meeting request.
+        </SecondaryHint>
         <Form onSubmit={handleSubmit}>
           <InputStyled
             type="text"
@@ -374,10 +402,10 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
             onChange={(e) => setMessage(e.target.value)}
             required
           />
-          <Button
+          <SubmitButton
             type="submit"
             disabled={
-              isSelfVisit ||
+              !!isSelfVisit ||
               submitState === 'loading' ||
               submitState === 'success' ||
               !message.trim()
@@ -389,20 +417,20 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
                 ? 'Sending…'
                 : submitState === 'success'
                   ? 'Request sent ✓'
-                  : 'Send meeting request'}
-          </Button>
+                  : 'Send meeting request →'}
+          </SubmitButton>
           {submitMessage && (
             <p style={{ marginTop: '0.5rem', color: submitState === 'success' ? 'green' : '#c0392b', textAlign: 'center' }}>
               {submitMessage}
             </p>
           )}
         </Form>
-        <Subtitle style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-          ❗Listen to a pitch with donation{' '}
+        <FootNote>
+          New to DonaTalk?{' '}
           <a href="https://donatalk.com" target="_blank" rel="noopener noreferrer">
-            🙏Click here, DonaTalk❤️.
+            Learn how it works ❤
           </a>
-        </Subtitle>
+        </FootNote>
       </CardContainer>
     </PageWrapper>
   );
