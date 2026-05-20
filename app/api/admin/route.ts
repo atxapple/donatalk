@@ -71,7 +71,8 @@ async function getFundHistory() {
 
   return records.map((r) => ({
     ...r,
-    pitcherEmail: emailMap[r.pitcherId as string] || r.pitcherId || '—',
+    pitcherEmail: emailMap[r.pitcherId as string]
+      || (r.pitcherId ? '(deleted account)' : '—'),
   }));
 }
 
