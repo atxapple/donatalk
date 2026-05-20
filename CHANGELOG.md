@@ -3,6 +3,11 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.8.3] - 2026-05-19
+
+### Fixed
+- **Navbar was stripping `?return=` off the URL on initial /login load.** The auth-state-change listener treated `/login` as a non-public path and called `router.push('/login')` on every unauthenticated mount, clobbering the query string before the user could submit. Added `/` and `/login` to publicPaths. Diagnosed via Playwright pushState interception (the URL went `/login?return=…` → `/login` → `/choose-a-profile` instead of `/login?return=…` → `/listener/{uid}`).
+
 ## [0.8.2] - 2026-05-19
 
 ### Fixed
