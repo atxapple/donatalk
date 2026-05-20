@@ -139,6 +139,30 @@ const ErrorText = styled('p', {
   fontSize: '$base',
 });
 
+const SearchInput = styled('input', {
+  padding: '$sm',
+  fontSize: '$base',
+  borderRadius: '$sm',
+  border: '1px solid #ccc',
+  width: '100%',
+  maxWidth: '320px',
+  '&:focus': { borderColor: '$heart', outline: 'none' },
+});
+
+const TableToolbar = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '$sm',
+  marginBottom: '$sm',
+  flexWrap: 'wrap',
+});
+
+const ResultCount = styled('span', {
+  fontSize: '14px',
+  color: '$mediumgray',
+});
+
 const ActionButton = styled('button', {
   padding: '4px 10px',
   fontSize: '12px',
@@ -316,6 +340,7 @@ export default function AdminPage() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [tableData, setTableData] = useState<Record<string, unknown>[]>([]);
   const [sort, setSort] = useState<SortConfig | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [error, setError] = useState('');
   const [token, setToken] = useState('');
 
@@ -369,11 +394,24 @@ export default function AdminPage() {
           setDashboardData(null);
         }
         setSort(null);
+        setSearchQuery('');
       })
       .catch((err) => setError(err.message));
   }, [token, activeTab]);
 
   const sortedData = useMemo(() => sortData(tableData, sort), [tableData, sort]);
+
+  const filteredData = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return sortedData;
+    return sortedData.filter((row) =>
+      Object.entries(row).some(([k, v]) => {
+        if (v == null) return false;
+        if (k === 'createdAt' || k === 'timestamp' || k === 'deletedAt') return false;
+        return String(v).toLowerCase().includes(q);
+      })
+    );
+  }, [sortedData, searchQuery]);
 
   const handleSort = (key: string) => {
     setSort((prev) =>
@@ -577,8 +615,22 @@ export default function AdminPage() {
   const hasActions = activeTab === 'Pitchers' || activeTab === 'Listeners';
 
   const renderTable = (columns: { key: string; label: string }[]) => (
-    <div style={{ overflowX: 'auto' }}>
-      <Table>
+    <>
+      <TableToolbar>
+        <SearchInput
+          type="search"
+          placeholder={`Search ${activeTab}…`}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <ResultCount>
+          {searchQuery.trim()
+            ? `Showing ${filteredData.length} of ${tableData.length}`
+            : `${tableData.length} row${tableData.length === 1 ? '' : 's'}`}
+        </ResultCount>
+      </TableToolbar>
+      <div style={{ overflowX: 'auto' }}>
+        <Table>
         <thead>
           <tr>
             {columns.map((col) => (
@@ -591,14 +643,14 @@ export default function AdminPage() {
           </tr>
         </thead>
         <tbody>
-          {sortedData.length === 0 ? (
+          {filteredData.length === 0 ? (
             <tr>
               <Td colSpan={columns.length + (hasActions ? 1 : 0)} style={{ textAlign: 'center' }}>
-                No data
+                {searchQuery.trim() ? 'No matches' : 'No data'}
               </Td>
             </tr>
           ) : (
-            sortedData.map((row, i) => {
+            filteredData.map((row, i) => {
               const deleted = isDeleted(row);
               return (
                 <tr
@@ -637,8 +689,9 @@ export default function AdminPage() {
             })
           )}
         </tbody>
-      </Table>
-    </div>
+        </Table>
+      </div>
+    </>
   );
 
   const editFields = editState?.collection === 'pitchers' ? PITCHER_EDIT_FIELDS : LISTENER_EDIT_FIELDS;
