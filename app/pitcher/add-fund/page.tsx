@@ -29,8 +29,8 @@ const SuccessBox = styled('div', {
 export default function PitcherAddFund() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const encriptedAmount = searchParams?.get('a') || '0'; // Default to '0' if null
-  const amount: number = parseFloat(encriptedAmount) / 7900.0;
+  const encryptedAmount = searchParams?.get('a') || '0'; // Default to '0' if null
+  const amount: number = parseFloat(encryptedAmount) / 7900.0;
 
   if (!amount || amount <= 0) {
     return (

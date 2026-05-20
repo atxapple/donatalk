@@ -84,7 +84,7 @@ export async function sendEmailfromListenerPage({
     }
 
     // ✅ Call the send-payment-confirm-email API
-    const PyamentEmailResponse = await fetch(`${BASE_URL}/api/send-payment-confirm-email`, {
+    const paymentEmailResponse = await fetch(`${BASE_URL}/api/send-payment-confirm-email`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -94,7 +94,7 @@ export async function sendEmailfromListenerPage({
       }),
     });
 
-    if (!PyamentEmailResponse.ok) {
+    if (!paymentEmailResponse.ok) {
       console.error('⚠️ Payment confirmation email failed to send.');
     } else {
       console.log('✅ Payment confirmation email sent successfully.');
