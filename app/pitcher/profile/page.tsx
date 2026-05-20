@@ -63,6 +63,19 @@ const CancelButton = styled('button', {
   '&:hover': { background: '#a53224' },
   '&:disabled': { background: '#888', cursor: 'not-allowed' },
 });
+const ActionRow = styled('div', { display: 'flex', gap: '0.5rem', marginLeft: '0.5rem' });
+const AcceptButton = styled('button', {
+  background: '#27ae60', color: '#fff', border: 'none', borderRadius: '4px',
+  padding: '0.4rem 0.75rem', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
+  '&:hover': { background: '#1e8c4a' },
+  '&:disabled': { background: '#888', cursor: 'not-allowed' },
+});
+const DeclineButton = styled('button', {
+  background: '#c0392b', color: '#fff', border: 'none', borderRadius: '4px',
+  padding: '0.4rem 0.75rem', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
+  '&:hover': { background: '#a53224' },
+  '&:disabled': { background: '#888', cursor: 'not-allowed' },
+});
 
 export default function PitcherProfile() {
   const router = useRouter();
@@ -78,6 +91,7 @@ export default function PitcherProfile() {
   const [pendingPitches, setPendingPitches] = useState<PendingPitch[]>([]);
   const [incomingRequests, setIncomingRequests] = useState<IncomingRequest[]>([]);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
+  const [respondingId, setRespondingId] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -145,6 +159,40 @@ export default function PitcherProfile() {
       }));
     } catch (err) {
       console.error('[Fetch Incoming Requests Error]', err);
+    }
+  };
+
+  const handleRespond = async (meetingId: string, action: 'accept' | 'decline') => {
+    if (!auth.currentUser || !userId) return;
+    const confirmMsg =
+      action === 'accept'
+        ? 'Accept this listener request? Your balance will be deducted by the donation amount.'
+        : 'Decline this listener request? They will be notified.';
+    if (!confirm(confirmMsg)) return;
+    setRespondingId(meetingId);
+    try {
+      const token = await auth.currentUser.getIdToken();
+      const res = await fetch(`/api/meeting/${meetingId}/respond`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (data.error === 'pitcher-balance-insufficient') {
+          alert(`Insufficient balance — you have $${data.available?.toFixed(2)} available, $${data.required?.toFixed(2)} required. Add funds and try again.`);
+        } else {
+          alert(`Could not ${action}: ${data.error || res.statusText}`);
+        }
+      } else {
+        await fetchPitcherData(userId);
+        await refreshInboxes(userId);
+      }
+    } catch (err) {
+      console.error('[Respond Error]', err);
+      alert(`Network error while attempting to ${action}.`);
+    } finally {
+      setRespondingId(null);
     }
   };
 
@@ -350,20 +398,31 @@ export default function PitcherProfile() {
           {incomingRequests.length > 0 && (
             <InboxSection>
               <InboxHeader>Incoming requests ({incomingRequests.length})</InboxHeader>
-              <p style={{ fontSize: '13px', color: '#666', margin: '0 0 0.75rem 0' }}>
-                Listeners who want to hear your pitch. Use the Accept/Decline links in the email we sent you.
-              </p>
               {incomingRequests.map((m) => (
                 <MeetingCard key={m.id}>
                   <MeetingCardBody>
                     <div><strong>{m.listenerName}</strong></div>
                     <div>Donation if accepted: <strong>${m.reservedAmount.toFixed(2)}</strong></div>
-                    {m.availability && <div>Their note: "{m.availability}"</div>}
+                    {m.availability && <div>Their note: &quot;{m.availability}&quot;</div>}
                     <MeetingMeta>
                       {m.listenerEmail}
                       {m.reservedAt && ` · Received ${new Date(m.reservedAt.toMillis()).toLocaleDateString()}`}
                     </MeetingMeta>
                   </MeetingCardBody>
+                  <ActionRow>
+                    <AcceptButton
+                      onClick={() => handleRespond(m.id, 'accept')}
+                      disabled={respondingId === m.id}
+                    >
+                      {respondingId === m.id ? 'Working…' : '✓ Accept'}
+                    </AcceptButton>
+                    <DeclineButton
+                      onClick={() => handleRespond(m.id, 'decline')}
+                      disabled={respondingId === m.id}
+                    >
+                      ✗ Decline
+                    </DeclineButton>
+                  </ActionRow>
                 </MeetingCard>
               ))}
             </InboxSection>

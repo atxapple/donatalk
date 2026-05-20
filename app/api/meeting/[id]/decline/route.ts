@@ -1,7 +1,5 @@
-import { adminDb } from '@/lib/firebaseAdmin';
-import { verifyToken } from '@/lib/meetingTokens';
+import { declineMeeting } from '@/lib/meetingActions';
 import { sendDeclineNoticeToVisitor } from '@/lib/meetingEmails';
-import { FieldValue, Timestamp } from 'firebase-admin/firestore';
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -30,50 +28,12 @@ export async function GET(req: Request, context: RouteContext) {
   }
 
   try {
-    const meetingRef = adminDb.collection('meetings').doc(id);
-
-    const result = await adminDb.runTransaction(async (tx) => {
-      const meetingSnap = await tx.get(meetingRef);
-      if (!meetingSnap.exists) return { kind: 'not-found' as const };
-      const meeting = meetingSnap.data()!;
-
-      if (!['reserved', 'pending'].includes(meeting.status)) {
-        return { kind: 'terminal-state' as const, status: meeting.status };
-      }
-      if (meeting.tokenUsed) return { kind: 'token-used' as const };
-      if (!verifyToken(rawToken, meeting.acceptTokenHash || '')) return { kind: 'invalid-token' as const };
-
-      const wasReserved = meeting.status === 'reserved';
-      const amount = Number(meeting.reservedAmount || 0);
-
-      if (wasReserved) {
-        const pitcherRef = adminDb.collection('pitchers').doc(meeting.pitcherId);
-        tx.update(pitcherRef, {
-          reservedBalance: FieldValue.increment(-amount),
-          pendingReservationCount: FieldValue.increment(-1),
-        });
-      }
-      tx.update(meetingRef, {
-        status: 'declined',
-        tokenUsed: true,
-        respondedAt: Timestamp.now(),
-      });
-
-      return {
-        kind: 'declined' as const,
-        wasReserved,
-        amount,
-        visitorRole: wasReserved ? ('pitcher' as const) : ('listener' as const),
-        recipientName: wasReserved ? meeting.pitcherName : meeting.listenerName,
-        recipientEmail: wasReserved ? meeting.pitcherEmail : meeting.listenerEmail,
-        otherPartyName: wasReserved ? meeting.listenerName : meeting.pitcherName,
-      };
-    });
+    const result = await declineMeeting(id, { mode: 'token', rawToken });
 
     switch (result.kind) {
       case 'not-found':
         return htmlResponse(404, htmlPage('Meeting not found', '<p>This meeting does not exist or has been removed.</p>', '#c0392b'));
-      case 'invalid-token':
+      case 'invalid-auth':
         return htmlResponse(403, htmlPage('Invalid Link', '<p>The token in this link is invalid.</p>', '#c0392b'));
       case 'token-used':
         return htmlResponse(200, htmlPage('Already Used', '<p>This link has already been used.</p>'));

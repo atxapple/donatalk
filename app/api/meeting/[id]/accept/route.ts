@@ -1,11 +1,6 @@
-import { NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebaseAdmin';
-import { verifyToken } from '@/lib/meetingTokens';
+import { acceptMeeting } from '@/lib/meetingActions';
 import { sendAcceptConfirmationEmail } from '@/lib/meetingEmails';
 import { RESERVATION_TTL_DAYS } from '@/lib/constants';
-import { FieldValue, Timestamp } from 'firebase-admin/firestore';
-
-const TTL_MS = RESERVATION_TTL_DAYS * 24 * 60 * 60 * 1000;
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -34,142 +29,12 @@ export async function GET(req: Request, context: RouteContext) {
   }
 
   try {
-    const meetingRef = adminDb.collection('meetings').doc(id);
-
-    const result = await adminDb.runTransaction(async (tx) => {
-      const meetingSnap = await tx.get(meetingRef);
-      if (!meetingSnap.exists) {
-        return { kind: 'not-found' as const };
-      }
-      const meeting = meetingSnap.data()!;
-
-      if (!['reserved', 'pending'].includes(meeting.status)) {
-        return { kind: 'terminal-state' as const, status: meeting.status, respondedAt: meeting.respondedAt };
-      }
-      if (meeting.tokenUsed) {
-        return { kind: 'token-used' as const };
-      }
-      if (!verifyToken(rawToken, meeting.acceptTokenHash || '')) {
-        return { kind: 'invalid-token' as const };
-      }
-
-      // Expiry check
-      const reservedAt: Timestamp = meeting.reservedAt;
-      const ageMs = Date.now() - reservedAt.toMillis();
-      if (ageMs > TTL_MS) {
-        // Flip to expired and release reservation if applicable
-        if (meeting.status === 'reserved') {
-          const pitcherRef = adminDb.collection('pitchers').doc(meeting.pitcherId);
-          tx.update(pitcherRef, {
-            reservedBalance: FieldValue.increment(-Number(meeting.reservedAmount || 0)),
-            pendingReservationCount: FieldValue.increment(-1),
-          });
-        }
-        tx.update(meetingRef, {
-          status: 'expired',
-          tokenUsed: true,
-          respondedAt: Timestamp.now(),
-        });
-        return { kind: 'expired' as const };
-      }
-
-      // Verify pitcher is still active
-      const pitcherRef = adminDb.collection('pitchers').doc(meeting.pitcherId);
-      const pitcherSnap = await tx.get(pitcherRef);
-      if (!pitcherSnap.exists) {
-        return { kind: 'pitcher-gone' as const };
-      }
-      const pitcher = pitcherSnap.data()!;
-      if (pitcher.deletedAt) {
-        // Pitcher soft-deleted; release reservation if any, mark cancelled.
-        if (meeting.status === 'reserved') {
-          tx.update(pitcherRef, {
-            reservedBalance: FieldValue.increment(-Number(meeting.reservedAmount || 0)),
-            pendingReservationCount: FieldValue.increment(-1),
-          });
-        }
-        tx.update(meetingRef, {
-          status: 'cancelled',
-          cancelReason: 'pitcher-deleted',
-          tokenUsed: true,
-          respondedAt: Timestamp.now(),
-        });
-        return { kind: 'pitcher-gone' as const };
-      }
-
-      const amount = Number(meeting.reservedAmount || 0);
-
-      if (meeting.status === 'reserved') {
-        // Pitcher already reserved their balance. Commit: deduct from credit_balance,
-        // release from reservedBalance, log fund_history.
-        tx.update(pitcherRef, {
-          credit_balance: FieldValue.increment(-amount),
-          reservedBalance: FieldValue.increment(-amount),
-          pendingReservationCount: FieldValue.increment(-1),
-        });
-        const fhRef = adminDb.collection('fund_history').doc();
-        tx.set(fhRef, {
-          amount,
-          eventType: 'meeting_commit',
-          pitcherId: meeting.pitcherId,
-          listenerId: meeting.listenerId,
-          meetingId: id,
-          timestamp: Timestamp.now(),
-        });
-        tx.update(meetingRef, {
-          status: 'accepted',
-          tokenUsed: true,
-          respondedAt: Timestamp.now(),
-        });
-        return {
-          kind: 'accepted' as const,
-          amount,
-          pitcherName: meeting.pitcherName,
-          pitcherEmail: meeting.pitcherEmail,
-          listenerName: meeting.listenerName,
-          listenerEmail: meeting.listenerEmail,
-        };
-      }
-
-      // status === 'pending' — pitcher accepting on their own pitcher page.
-      // Check balance now (could have changed since request was sent).
-      const creditBalance = Number(pitcher.credit_balance) || 0;
-      const reservedBalance = Number(pitcher.reservedBalance) || 0;
-      const available = creditBalance - reservedBalance;
-      if (available < amount) {
-        return { kind: 'insufficient-balance' as const, available, required: amount };
-      }
-      tx.update(pitcherRef, {
-        credit_balance: FieldValue.increment(-amount),
-      });
-      const fhRef = adminDb.collection('fund_history').doc();
-      tx.set(fhRef, {
-        amount,
-        eventType: 'meeting_commit',
-        pitcherId: meeting.pitcherId,
-        listenerId: meeting.listenerId,
-        meetingId: id,
-        timestamp: Timestamp.now(),
-      });
-      tx.update(meetingRef, {
-        status: 'accepted',
-        tokenUsed: true,
-        respondedAt: Timestamp.now(),
-      });
-      return {
-        kind: 'accepted' as const,
-        amount,
-        pitcherName: meeting.pitcherName,
-        pitcherEmail: meeting.pitcherEmail,
-        listenerName: meeting.listenerName,
-        listenerEmail: meeting.listenerEmail,
-      };
-    });
+    const result = await acceptMeeting(id, { mode: 'token', rawToken });
 
     switch (result.kind) {
       case 'not-found':
         return htmlResponse(404, htmlPage('Meeting not found', '<p>This meeting does not exist or has been removed.</p>', '#c0392b'));
-      case 'invalid-token':
+      case 'invalid-auth':
         return htmlResponse(403, htmlPage('Invalid Link', '<p>The token in this link is invalid.</p>', '#c0392b'));
       case 'token-used':
         return htmlResponse(200, htmlPage('Already Used', '<p>This link has already been used.</p>'));
@@ -186,7 +51,6 @@ export async function GET(req: Request, context: RouteContext) {
           '#c0392b',
         ));
       case 'accepted': {
-        // Fire-and-forget confirmation emails to both parties.
         const sends = [
           sendAcceptConfirmationEmail({
             recipientName: result.pitcherName || 'there',
