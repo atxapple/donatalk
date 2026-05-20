@@ -3,6 +3,11 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.8.2] - 2026-05-19
+
+### Fixed
+- **`?return=` was ignored on login + signup + update-profile + add-fund** in production. Root cause: those pages are statically prerendered (`○` in build output), and `useSearchParams()` from `next/navigation` returned null on static routes, so the captured `returnPath` was null when the submit handler fired — every login fell through to `/choose-a-profile` regardless of the URL param. Replaced the hook with a `readReturnPath()` helper that parses `window.location.search` at submit time. Caught by Playwright e2e test (login + return roundtrip). Affected files: app/login/page.tsx, app/pitcher/signup/page.tsx, app/listener/signup/page.tsx, app/pitcher/update-profile/page.tsx, app/listener/update-profile/page.tsx, app/pitcher/add-fund/page.tsx.
+
 ## [0.8.1] - 2026-05-19
 
 ### Added

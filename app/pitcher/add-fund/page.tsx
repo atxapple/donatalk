@@ -3,6 +3,12 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { getSafeReturnPath } from '@/lib/safeReturn';
+
+function readReturnPath(): string | null {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  return getSafeReturnPath(params.get('return'));
+}
 import PageWrapper from '@/components/layout/PageWrapper';
 import CardContainer from '@/components/layout/CardContainer';
 import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
@@ -25,7 +31,6 @@ export default function PitcherAddFund() {
   const router = useRouter();
   const encriptedAmount = searchParams?.get('a') || '0'; // Default to '0' if null
   const amount: number = parseFloat(encriptedAmount) / 7900.0;
-  const returnPath = getSafeReturnPath(searchParams?.get('return'));
 
   if (!amount || amount <= 0) {
     return (
@@ -80,7 +85,7 @@ export default function PitcherAddFund() {
 
       if (result.status === 'COMPLETED') {
         // ✅ Redirect to return target if provided, else profile page
-        router.push(returnPath ?? '/pitcher/profile');
+        router.push(readReturnPath() ?? '/pitcher/profile');
       } else {
         alert(`⚠️ Payment was not completed. Status: ${result.status}`);
       }

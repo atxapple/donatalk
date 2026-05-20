@@ -4,9 +4,15 @@
 
 import slugify from 'slugify';
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation'; // ✅ Updated for App Router
+import { useRouter } from 'next/navigation'; // ✅ Updated for App Router
 import Head from 'next/head';
 import { getSafeReturnPath } from '@/lib/safeReturn';
+
+function readReturnPath(): string | null {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  return getSafeReturnPath(params.get('return'));
+}
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '@/firebase/clientApp'; // ✅ Adjust path if needed
 import { doc, setDoc, Timestamp, collection, getDocs, query, where } from 'firebase/firestore';
@@ -59,8 +65,6 @@ const ProminentErrorBox = styled(ErrorBox, {
 
 export default function SignupListener() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const returnPath = getSafeReturnPath(searchParams?.get('return'));
   const [form, setForm] = useState({
     fullName: '',
     email: '',
@@ -122,7 +126,7 @@ export default function SignupListener() {
         }),
       });
 
-      router.push(returnPath ?? '/listener/profile'); // ✅ Navigate after sending the email
+      router.push(readReturnPath() ?? '/listener/profile'); // ✅ Navigate after sending the email
     } catch (err: unknown) {
       const error = err as Error;
       console.error(error.message);
@@ -166,7 +170,7 @@ export default function SignupListener() {
         });
       }
 
-      router.push(returnPath ?? '/choose-a-profile');
+      router.push(readReturnPath() ?? '/choose-a-profile');
     } catch (err) {
       console.error('[Google Signup Error]', err);
       setError('An error occurred during Google sign-in. Please try again.');
