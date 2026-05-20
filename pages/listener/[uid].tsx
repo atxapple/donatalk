@@ -372,7 +372,7 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
 
   // L7: insufficient available balance
   if (available < requiredBalance && !isSelfVisit) {
-    const encodedAmount = (requiredBalance - available) * 7900;
+    const gap = (requiredBalance - available).toFixed(2);
     return (
       <PageWrapper>
         <CardContainer>
@@ -387,7 +387,7 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
             You have <strong>${available.toFixed(2)}</strong> available, but ${requiredBalance.toFixed(2)} is needed
             to send a request to {firstName}.
           </InfoBox>
-          <PrimaryCTA href={`/pitcher/add-fund?a=${encodedAmount}&return=${encodeURIComponent(returnTo)}`}>
+          <PrimaryCTA href={`/pitcher/add-fund?min=${gap}&return=${encodeURIComponent(returnTo)}`}>
             Add Funds →
           </PrimaryCTA>
         </CardContainer>

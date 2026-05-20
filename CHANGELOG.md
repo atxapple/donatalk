@@ -3,6 +3,24 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.10.0] - 2026-05-20
+
+### Added
+- **Free-amount add-fund flow with $5 increments.** Pitchers can now top up any multiple of $5 they choose, regardless of the listener's requested donation — letting them carry leftover balance into future meetings.
+  - Five presets ($5, $10, $25, $50, $100) plus a custom amount input that snaps to the next $5 on blur.
+  - Live "Current balance → After top-up" preview using `InfoLine`.
+  - Friendly warning when the chosen amount is below the gap needed to send a specific pending request — but pitcher can still proceed.
+  - Optional `?min=<gap>` hint from `/listener/{uid}` for context-aware default selection.
+  - Optional `?return=<safe-path>` to bring the pitcher back to whichever page sent them.
+- Server-side validation in `/api/create-order` now rejects: negative amounts, $0, non-$5-multiples, amounts over $5000.
+
+### Changed
+- `/pitcher/profile` "Add Fund" button now navigates straight to `/pitcher/add-fund` instead of toggling an inline amount input. Simpler, and amount picking lives in one place.
+- Listener public page L7 branch (insufficient balance) now redirects to `/pitcher/add-fund?min=<gap>&return=…` — the `min` is a UI hint only; the server never trusts client-supplied amounts.
+
+### Fixed
+- **K1 — `amount * 7900` URL obfuscation is gone.** The encoded-amount query param is no longer used anywhere; amount lives in React state on the add-fund page, the server enforces $5 increments + $5000 cap, so a tampered URL can no longer mismatch what the pitcher pays vs. what they think they're paying for.
+
 ## [0.9.2] - 2026-05-20
 
 ### Changed
