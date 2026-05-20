@@ -11,4 +11,5 @@ export const transporter = nodemailer.createTransport({
 });
 
 export const FROM_EMAIL = "support@donatalk.com";
-export const BCC_EMAIL = "atxapplellc@gmail.com";
+export const BCC_EMAIL = process.env.MAIL_BCC || "atxapplellc@gmail.com";
+export const APP_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://app.donatalk.com";
