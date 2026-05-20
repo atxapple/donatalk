@@ -186,7 +186,13 @@ export async function sendAcceptConfirmationEmail(p: AcceptConfirmationParams) {
       <p style="font-size:16px;color:#333;">Hi ${p.recipientName},</p>
       <p style="font-size:16px;color:#333;">
         Your meeting with <strong>${p.otherPartyName}</strong> is confirmed.
-        A donation of <strong>$${p.amount.toFixed(2)}</strong> has been committed.
+        The <strong>$${p.amount.toFixed(2)}</strong> donation is now held in escrow.
+      </p>
+      <p style="font-size:14px;color:#555;background:#f7f7f7;padding:12px;border-radius:6px;">
+        <strong>How escrow works:</strong> the donation stays in DonaTalk's hold until
+        the meeting happens. Either side can mark the meeting as completed in their
+        dashboard. If a no-show is reported, the donation is refunded to the pitcher.
+        After 30 days with no reports, the donation is treated as fulfilled.
       </p>
       <p style="font-size:16px;color:#333;">
         Meeting link: <a href="https://us05web.zoom.us/j/8316023167">Join via Zoom</a>
@@ -199,6 +205,74 @@ export async function sendAcceptConfirmationEmail(p: AcceptConfirmationParams) {
     to: p.recipientEmail,
     bcc: BCC_EMAIL,
     subject: 'Meeting confirmed on DonaTalk',
+    html,
+  });
+}
+
+type CompletionEmailParams = {
+  recipientName: string;
+  recipientEmail: string;
+  otherPartyName: string;
+  amount: number;
+  reason: 'mutual-confirm' | 'timeout-no-complaints';
+};
+
+export async function sendCompletionEmail(p: CompletionEmailParams) {
+  const reasonCopy = p.reason === 'mutual-confirm'
+    ? 'Both of you confirmed the meeting happened.'
+    : '30 days passed with no reports of a problem, so the donation is treated as fulfilled.';
+  const html = `
+    <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
+      <h2 style="color:#2C3E50;">Donation fulfilled on DonaTalk</h2>
+      <p style="font-size:16px;color:#333;">Hi ${p.recipientName},</p>
+      <p style="font-size:16px;color:#333;">
+        Your meeting with <strong>${p.otherPartyName}</strong> is now complete.
+        ${reasonCopy} The <strong>$${p.amount.toFixed(2)}</strong> donation has
+        been released from escrow.
+      </p>
+      ${footer()}
+    </div>
+  `;
+  await transporter.sendMail({
+    from: FROM_EMAIL,
+    to: p.recipientEmail,
+    bcc: BCC_EMAIL,
+    subject: 'Donation fulfilled on DonaTalk',
+    html,
+  });
+}
+
+type RefundEmailParams = {
+  recipientName: string;
+  recipientEmail: string;
+  otherPartyName: string;
+  amount: number;
+  reason: 'no-show-by-pitcher' | 'no-show-by-listener';
+  recipientRole: 'pitcher' | 'listener';
+};
+
+export async function sendRefundEmail(p: RefundEmailParams) {
+  const body =
+    p.recipientRole === 'pitcher'
+      ? p.reason === 'no-show-by-listener'
+        ? `A no-show was reported for your meeting with <strong>${p.otherPartyName}</strong>. The <strong>$${p.amount.toFixed(2)}</strong> donation has been refunded to your DonaTalk balance.`
+        : `You reported a no-show for your meeting with <strong>${p.otherPartyName}</strong>. The <strong>$${p.amount.toFixed(2)}</strong> donation has been refunded to your DonaTalk balance.`
+      : p.reason === 'no-show-by-pitcher'
+        ? `A no-show was reported for your meeting with <strong>${p.otherPartyName}</strong>. The escrowed donation has been refunded to them. You can still receive donations from future meetings.`
+        : `You reported a no-show for your meeting with <strong>${p.otherPartyName}</strong>. The escrowed donation has been refunded to them.`;
+  const html = `
+    <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
+      <h2 style="color:#2C3E50;">Meeting refunded on DonaTalk</h2>
+      <p style="font-size:16px;color:#333;">Hi ${p.recipientName},</p>
+      <p style="font-size:16px;color:#333;">${body}</p>
+      ${footer()}
+    </div>
+  `;
+  await transporter.sendMail({
+    from: FROM_EMAIL,
+    to: p.recipientEmail,
+    bcc: BCC_EMAIL,
+    subject: 'Meeting refunded on DonaTalk',
     html,
   });
 }

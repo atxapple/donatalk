@@ -55,6 +55,18 @@ type IncomingRequest = {
   reservedAt: Timestamp | null;
 };
 
+type EscrowedMeeting = {
+  id: string;
+  // The other party — listener if pitcher is on this dashboard.
+  listenerName: string;
+  listenerEmail: string;
+  escrowedAmount: number;
+  acceptedAt: Timestamp | null;
+  pitcherConfirmed: boolean;
+  listenerConfirmed: boolean;
+  role: 'pitcher' | 'listener';
+};
+
 const BalanceWarning = styled('p', {
   marginTop: '$sm',
   padding: '8px 12px',
@@ -134,6 +146,22 @@ const DeclineButton = styled('button', {
   '&:hover:not(:disabled)': { background: '#a53224' },
   '&:disabled': { background: '#888', cursor: 'not-allowed' },
 });
+const NoShowButton = styled('button', {
+  background: '#f39c12', color: '#fff', border: 'none', borderRadius: '$sm',
+  padding: '6px 12px', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
+  '&:hover:not(:disabled)': { background: '#d68910' },
+  '&:disabled': { background: '#888', cursor: 'not-allowed' },
+});
+const EscrowBadge = styled('span', {
+  display: 'inline-block',
+  padding: '2px 8px',
+  borderRadius: '10px',
+  fontSize: '11px',
+  fontWeight: 600,
+  background: '#fff8e1',
+  color: '#7a4c00',
+  marginLeft: '$sm',
+});
 
 function firstNameOf(full: string): string {
   return (full || '').trim().split(/\s+/)[0] || full || 'you';
@@ -149,8 +177,10 @@ export default function PitcherProfile() {
   const [listenerSetUp, setListenerSetUp] = useState(true);
   const [pendingPitches, setPendingPitches] = useState<PendingPitch[]>([]);
   const [incomingRequests, setIncomingRequests] = useState<IncomingRequest[]>([]);
+  const [escrowed, setEscrowed] = useState<EscrowedMeeting[]>([]);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
   const [respondingId, setRespondingId] = useState<string | null>(null);
+  const [escrowActionId, setEscrowActionId] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -218,6 +248,31 @@ export default function PitcherProfile() {
     } catch (err) {
       console.error('[Fetch Incoming Requests Error]', err);
     }
+    // Escrowed meetings — accepted, awaiting completion confirmation or no-show.
+    try {
+      const escrowQ = query(
+        collection(firestore, 'meetings'),
+        where('pitcherId', '==', uid),
+        where('status', '==', 'accepted'),
+        orderBy('acceptedAt', 'desc'),
+      );
+      const escrowSnap = await getDocs(escrowQ);
+      setEscrowed(escrowSnap.docs.map((d) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          listenerName: data.listenerName || '(unknown)',
+          listenerEmail: data.listenerEmail || '',
+          escrowedAmount: Number(data.escrowedAmount ?? data.reservedAmount) || 0,
+          acceptedAt: data.acceptedAt || null,
+          pitcherConfirmed: !!data.pitcherConfirmed,
+          listenerConfirmed: !!data.listenerConfirmed,
+          role: 'pitcher' as const,
+        };
+      }));
+    } catch (err) {
+      console.error('[Fetch Escrowed Error]', err);
+    }
   };
 
   const handleRespond = async (meetingId: string, action: 'accept' | 'decline') => {
@@ -251,6 +306,42 @@ export default function PitcherProfile() {
       alert(`Network error while attempting to ${action}.`);
     } finally {
       setRespondingId(null);
+    }
+  };
+
+  const handleEscrowAction = async (meetingId: string, action: 'confirm-completed' | 'report-no-show') => {
+    if (!auth.currentUser || !userId) return;
+    const confirmMsg =
+      action === 'confirm-completed'
+        ? 'Mark this meeting as completed? Once both parties confirm, the donation is treated as fulfilled.'
+        : 'Report a no-show for this meeting? The escrowed donation will be refunded to your balance.';
+    if (!confirm(confirmMsg)) return;
+    setEscrowActionId(meetingId);
+    try {
+      const token = await auth.currentUser.getIdToken();
+      const res = await fetch(`/api/meeting/${meetingId}/${action}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: '{}',
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        alert(`Could not ${action}: ${data.error || res.statusText}`);
+      } else {
+        const data = await res.json();
+        if (action === 'confirm-completed' && data.status !== 'completed') {
+          alert(`Confirmed. Waiting on the ${data.waitingFor} to also confirm.`);
+        } else if (data.status === 'refunded') {
+          alert(`Refund issued: $${data.refundedAmount?.toFixed(2)} returned to your balance.`);
+        }
+        await fetchPitcherData(userId);
+        await refreshInboxes(userId);
+      }
+    } catch (err) {
+      console.error('[Escrow Action Error]', err);
+      alert(`Network error while attempting ${action}.`);
+    } finally {
+      setEscrowActionId(null);
     }
   };
 
@@ -405,6 +496,48 @@ export default function PitcherProfile() {
                   <CancelButton onClick={() => handleCancel(m.id)} disabled={cancellingId === m.id}>
                     {cancellingId === m.id ? 'Cancelling…' : 'Cancel'}
                   </CancelButton>
+                </MeetingCard>
+              ))}
+            </InboxSection>
+          )}
+
+          {escrowed.length > 0 && (
+            <InboxSection>
+              <InboxHeader>Escrowed meetings ({escrowed.length})</InboxHeader>
+              <InboxNote>
+                The listener accepted — the donation is held until the meeting happens.
+                After 30 days with no reports, the donation is treated as fulfilled.
+              </InboxNote>
+              {escrowed.map((m) => (
+                <MeetingCard key={m.id}>
+                  <MeetingCardBody>
+                    <div>
+                      With <strong>{m.listenerName}</strong>
+                      {m.pitcherConfirmed && <EscrowBadge>You confirmed</EscrowBadge>}
+                      {m.listenerConfirmed && !m.pitcherConfirmed && <EscrowBadge>Listener confirmed</EscrowBadge>}
+                    </div>
+                    <div>Escrowed: <strong>${m.escrowedAmount.toFixed(2)}</strong></div>
+                    <MeetingMeta>
+                      {m.listenerEmail}
+                      {m.acceptedAt && ` · Accepted ${new Date(m.acceptedAt.toMillis()).toLocaleDateString()}`}
+                    </MeetingMeta>
+                  </MeetingCardBody>
+                  <ActionRow>
+                    {!m.pitcherConfirmed && (
+                      <AcceptButton
+                        onClick={() => handleEscrowAction(m.id, 'confirm-completed')}
+                        disabled={escrowActionId === m.id}
+                      >
+                        {escrowActionId === m.id ? 'Working…' : '✓ Meeting happened'}
+                      </AcceptButton>
+                    )}
+                    <NoShowButton
+                      onClick={() => handleEscrowAction(m.id, 'report-no-show')}
+                      disabled={escrowActionId === m.id}
+                    >
+                      ⚠ No-show
+                    </NoShowButton>
+                  </ActionRow>
                 </MeetingCard>
               ))}
             </InboxSection>

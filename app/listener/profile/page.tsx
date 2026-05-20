@@ -64,6 +64,24 @@ const DeclineButton = styled('button', {
   '&:hover:not(:disabled)': { background: '#a53224' },
   '&:disabled': { background: '#888', cursor: 'not-allowed' },
 });
+const NoShowButton = styled('button', {
+  background: '#f39c12', color: '#fff', border: 'none', borderRadius: '$sm',
+  padding: '6px 14px', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
+  '&:hover:not(:disabled)': { background: '#d68910' },
+  '&:disabled': { background: '#888', cursor: 'not-allowed' },
+});
+const EscrowBadge = styled('span', {
+  display: 'inline-block',
+  padding: '2px 8px',
+  borderRadius: '10px',
+  fontSize: '11px',
+  fontWeight: 600,
+  background: '#fff8e1',
+  color: '#7a4c00',
+  marginLeft: '$sm',
+});
+const MeetingCardBody = styled('div', { flex: 1 });
+const InboxNote = styled('p', { margin: '0 0 $sm', fontSize: '12px', color: '$darkgray' });
 
 type IncomingMeeting = {
   id: string;
@@ -72,6 +90,16 @@ type IncomingMeeting = {
   reservedAmount: number;
   availability: string;
   reservedAt: Timestamp | null;
+};
+
+type EscrowedMeeting = {
+  id: string;
+  pitcherName: string;
+  pitcherEmail: string;
+  escrowedAmount: number;
+  acceptedAt: Timestamp | null;
+  pitcherConfirmed: boolean;
+  listenerConfirmed: boolean;
 };
 
 function firstNameOf(full: string): string {
@@ -86,7 +114,9 @@ export default function ListenerProfile() {
   const [copied, setCopied] = useState(false);
   const [pitcherSetUp, setPitcherSetUp] = useState(true);
   const [incoming, setIncoming] = useState<IncomingMeeting[]>([]);
+  const [escrowed, setEscrowed] = useState<EscrowedMeeting[]>([]);
   const [respondingId, setRespondingId] = useState<string | null>(null);
+  const [escrowActionId, setEscrowActionId] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -123,6 +153,30 @@ export default function ListenerProfile() {
         } catch (err) {
           console.error('[Fetch Incoming Error]', err);
         }
+        // Escrowed meetings — accepted, waiting on completion or no-show report.
+        try {
+          const eq = query(
+            collection(firestore, 'meetings'),
+            where('listenerId', '==', user.uid),
+            where('status', '==', 'accepted'),
+            orderBy('acceptedAt', 'desc'),
+          );
+          const esnap = await getDocs(eq);
+          setEscrowed(esnap.docs.map((d) => {
+            const data = d.data();
+            return {
+              id: d.id,
+              pitcherName: data.pitcherName || '(unknown)',
+              pitcherEmail: data.pitcherEmail || '',
+              escrowedAmount: Number(data.escrowedAmount ?? data.reservedAmount) || 0,
+              acceptedAt: data.acceptedAt || null,
+              pitcherConfirmed: !!data.pitcherConfirmed,
+              listenerConfirmed: !!data.listenerConfirmed,
+            };
+          }));
+        } catch (err) {
+          console.error('[Fetch Escrowed Error]', err);
+        }
       } else {
         router.push('/login');
       }
@@ -153,6 +207,40 @@ export default function ListenerProfile() {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       });
+    }
+  };
+
+  const handleEscrowAction = async (meetingId: string, action: 'confirm-completed' | 'report-no-show') => {
+    if (!auth.currentUser || !userId) return;
+    const confirmMsg =
+      action === 'confirm-completed'
+        ? 'Mark this meeting as completed? Once both parties confirm, the donation is treated as fulfilled.'
+        : 'Report a no-show for this meeting? The donation will be refunded to the pitcher.';
+    if (!confirm(confirmMsg)) return;
+    setEscrowActionId(meetingId);
+    try {
+      const token = await auth.currentUser.getIdToken();
+      const res = await fetch(`/api/meeting/${meetingId}/${action}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: '{}',
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        alert(`Could not ${action}: ${data.error || res.statusText}`);
+      } else {
+        const data = await res.json();
+        if (action === 'confirm-completed' && data.status !== 'completed') {
+          alert(`Confirmed. Waiting on the ${data.waitingFor} to also confirm.`);
+        }
+        // Remove from list optimistically.
+        setEscrowed((cur) => cur.filter((m) => m.id !== meetingId));
+      }
+    } catch (err) {
+      console.error('[Escrow Action Error]', err);
+      alert(`Network error while attempting ${action}.`);
+    } finally {
+      setEscrowActionId(null);
     }
   };
 
@@ -240,6 +328,47 @@ export default function ListenerProfile() {
           <InfoLineGroup>
             <InfoLine label="Email">{listener.email}</InfoLine>
           </InfoLineGroup>
+
+          {escrowed.length > 0 && (
+            <InboxSection>
+              <InboxHeader>Upcoming meetings ({escrowed.length})</InboxHeader>
+              <InboxNote>
+                You accepted these pitches — the donation is held in escrow until the
+                meeting happens. After 30 days with no reports, the donation is
+                treated as fulfilled.
+              </InboxNote>
+              {escrowed.map((m) => (
+                <MeetingCard key={m.id}>
+                  <div>
+                    With <strong>{m.pitcherName}</strong>
+                    {m.listenerConfirmed && <EscrowBadge>You confirmed</EscrowBadge>}
+                    {m.pitcherConfirmed && !m.listenerConfirmed && <EscrowBadge>Pitcher confirmed</EscrowBadge>}
+                  </div>
+                  <div>Donation: <strong>${m.escrowedAmount.toFixed(2)}</strong></div>
+                  <MeetingMeta>
+                    {m.pitcherEmail}
+                    {m.acceptedAt && ` · Accepted ${new Date(m.acceptedAt.toMillis()).toLocaleDateString()}`}
+                  </MeetingMeta>
+                  <ActionRow>
+                    {!m.listenerConfirmed && (
+                      <AcceptButton
+                        onClick={() => handleEscrowAction(m.id, 'confirm-completed')}
+                        disabled={escrowActionId === m.id}
+                      >
+                        {escrowActionId === m.id ? 'Working…' : '✓ Meeting happened'}
+                      </AcceptButton>
+                    )}
+                    <NoShowButton
+                      onClick={() => handleEscrowAction(m.id, 'report-no-show')}
+                      disabled={escrowActionId === m.id}
+                    >
+                      ⚠ No-show
+                    </NoShowButton>
+                  </ActionRow>
+                </MeetingCard>
+              ))}
+            </InboxSection>
+          )}
 
           {incoming.length > 0 && (
             <InboxSection>

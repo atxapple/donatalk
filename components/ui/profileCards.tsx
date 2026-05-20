@@ -370,3 +370,69 @@ export function BalanceBreakdown({
     </BalanceRow>
   );
 }
+
+/* Post-submit success card — shown after a successful book/request to
+ * explain what happens next and where to track status. */
+
+const SuccessHeading = styled('h2', {
+  margin: '$md 0 4px',
+  fontSize: '$xl',
+  fontWeight: 700,
+  color: '#1c7a3a',
+  textAlign: 'center',
+});
+
+const SuccessBody = styled('p', {
+  margin: '4px 0',
+  fontSize: '$base',
+  color: '$dark',
+  lineHeight: 1.55,
+  textAlign: 'center',
+  '& strong': { color: '$dark' },
+});
+
+const SuccessTip = styled('p', {
+  margin: '$md 0 0',
+  fontSize: '13px',
+  color: '$darkgray',
+  textAlign: 'center',
+});
+
+const SuccessCardOuter = styled('div', {
+  width: '100%',
+  padding: '$md',
+  marginTop: '$md',
+  borderRadius: '$md',
+  border: '2px solid #2ecc71',
+  backgroundColor: '#e6f9e8',
+});
+
+const SuccessIcon = styled('div', {
+  fontSize: '36px',
+  textAlign: 'center',
+  marginBottom: '$sm',
+});
+
+export function BookingSuccessCard({
+  title,
+  body,
+  dashboardHref,
+  dashboardLabel,
+  tip,
+}: {
+  title: string;
+  body: ReactNode;
+  dashboardHref: string;
+  dashboardLabel: string;
+  tip?: ReactNode;
+}) {
+  return (
+    <SuccessCardOuter role="status">
+      <SuccessIcon aria-hidden>✓</SuccessIcon>
+      <SuccessHeading>{title}</SuccessHeading>
+      <SuccessBody>{body}</SuccessBody>
+      <PrimaryCTA href={dashboardHref}>{dashboardLabel}</PrimaryCTA>
+      {tip && <SuccessTip>{tip}</SuccessTip>}
+    </SuccessCardOuter>
+  );
+}

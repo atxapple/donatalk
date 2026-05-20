@@ -19,6 +19,7 @@ import {
   PageHeading,
   PageSubheading,
   SelfVisitBanner,
+  BookingSuccessCard,
 } from '../../components/ui/profileCards';
 import { useEffect, useState } from 'react';
 import { Pitcher } from '@/types/pitcher';
@@ -360,6 +361,34 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
     }
   };
 
+  // P7 success: after a successful request, replace the form with a focused
+  // success card explaining what happens next + linking to the dashboard.
+  if (submitState === 'success') {
+    return (
+      <PageWrapper>
+        <CardContainer>
+          <Header />
+          <BookingSuccessCard
+            title="Request sent"
+            body={
+              <>
+                <strong>{firstName}</strong> has been notified by email. They have up to{' '}
+                <strong>14 days</strong> to accept or decline.
+                <br /><br />
+                Nothing is committed on your end yet — when {firstName} accepts, their
+                donation will be held in escrow until the meeting happens. You&rsquo;ll
+                be notified by email when they respond.
+              </>
+            }
+            dashboardHref="/listener/profile"
+            dashboardLabel="View my Listener Profile →"
+            tip="Track this and other pending requests in your dashboard."
+          />
+        </CardContainer>
+      </PageWrapper>
+    );
+  }
+
   // P7 (and P2 self-visit): bookable form
   return (
     <PageWrapper>
@@ -404,23 +433,16 @@ export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null;
           />
           <SubmitButton
             type="submit"
-            disabled={
-              !!isSelfVisit ||
-              submitState === 'loading' ||
-              submitState === 'success' ||
-              !message.trim()
-            }
+            disabled={!!isSelfVisit || submitState === 'loading' || !message.trim()}
           >
             {isSelfVisit
               ? 'Disabled — this is your page'
               : submitState === 'loading'
                 ? 'Sending…'
-                : submitState === 'success'
-                  ? 'Request sent ✓'
-                  : 'Send meeting request →'}
+                : 'Send meeting request →'}
           </SubmitButton>
-          {submitMessage && (
-            <p style={{ marginTop: '0.5rem', color: submitState === 'success' ? 'green' : '#c0392b', textAlign: 'center' }}>
+          {submitMessage && submitState === 'error' && (
+            <p style={{ marginTop: '0.5rem', color: '#c0392b', textAlign: 'center' }}>
               {submitMessage}
             </p>
           )}
