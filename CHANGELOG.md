@@ -3,6 +3,11 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.8.4] - 2026-05-20
+
+### Changed
+- `/listener/arrange-meeting` now permanently redirects (308) to `/` via `next.config.ts`. Previously, the Pages Router catch-all `/listener/[uid]` matched the path with `uid="arrange-meeting"`, failed the Firestore lookup, and rendered "Listener not found" with HTTP 200 — confusing crawlers and dead-ending users on stale links from before the anonymous-escrow flow was removed in 0.8.1.
+
 ## [0.8.3] - 2026-05-19
 
 ### Fixed
