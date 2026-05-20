@@ -36,28 +36,33 @@ donatalk/
 ├── app/                          # Next.js App Router (primary)
 │   ├── admin/                    # Admin dashboard page
 │   ├── api/                      # API routes
-│   │   ├── admin/                # GET: admin dashboard data (token-authenticated)
-│   │   ├── complete-order/
+│   │   ├── admin/                # GET/PATCH/DELETE: admin dashboard data
+│   │   ├── book-meeting-from-balance/  # Pitcher reserves balance, books a listener
+│   │   ├── complete-order/             # Phase 3 cleanup pending — internal PayPal capture
 │   │   ├── complete-order-and-update-fund/
 │   │   ├── create-meeting/
 │   │   ├── create-order/
-│   │   ├── escrow-log/
+│   │   ├── create-profiles/            # Dual-profile creation (pitcher/listener/both-stubs)
+│   │   ├── meeting/[id]/accept/        # Token-gated accept commit
+│   │   ├── meeting/[id]/cancel/        # Visitor cancels their own request
+│   │   ├── meeting/[id]/decline/       # Token-gated decline + release
+│   │   ├── request-meeting/            # Listener requests a meeting on pitcher's page
 │   │   ├── send-notification/
 │   │   ├── send-payment-confirm-email/
 │   │   ├── send-reset-email/
 │   │   └── send-signup-email/
-│   ├── listener/                 # Listener pages (signup, profile, update, arrange-meeting)
-│   ├── pitcher/                  # Pitcher pages (signup, profile, update, add-fund)
+│   ├── listener/                 # Listener pages (signup, profile, update-profile)
+│   ├── pitcher/                  # Pitcher pages (signup, profile, update-profile, add-fund)
 │   ├── arrange-notification/
-│   ├── checkout/
+│   ├── checkout/                 # Phase 3 cleanup pending — generic checkout page
 │   ├── choose-a-profile/
 │   ├── login/
 │   ├── layout.tsx                # Root layout (Navbar, Footer, Providers, gtag)
 │   ├── page.tsx                  # Redirects to /login
 │   └── providers.tsx             # ThemeProvider wrapper
 ├── pages/                        # Next.js Pages Router (SSR public profiles)
-│   ├── pitcher/[uid].tsx         # Public pitcher profile (SSR)
-│   ├── listener/[uid].tsx        # Public listener profile (SSR)
+│   ├── pitcher/[uid].tsx         # Public pitcher profile (SSR + client auth gate)
+│   ├── listener/[uid].tsx        # Public listener profile (SSR + client auth gate)
 │   ├── _app.tsx
 │   └── _document.tsx
 ├── components/
@@ -70,10 +75,15 @@ donatalk/
 ├── lib/
 │   ├── adminAuth.ts              # Shared verifyAdmin() for admin API routes
 │   ├── adminConfig.ts            # Admin email whitelist + isAdminEmail()
+│   ├── constants.ts              # MAX_PENDING_RESERVATIONS, RESERVATION_TTL_DAYS, fee
 │   ├── firebaseAdmin.ts          # Shared Firebase Admin SDK init (adminDb, adminAuth)
-│   ├── mailer.ts                 # Nodemailer SMTP transporter + email constants
+│   ├── mailer.ts                 # Nodemailer SMTP transporter, FROM/BCC, APP_URL
+│   ├── meetingEmails.ts          # Reservation/pending/accept/decline/cancel templates
+│   ├── meetingTokens.ts          # HMAC-keyed token generation + constant-time verify
+│   ├── safeReturn.ts             # ?return= allowlist (open-redirect protection)
 │   ├── sendEmailfromListenerPage.ts
-│   └── updateFunds.ts
+│   ├── updateFunds.ts
+│   └── verifyUser.ts             # Firebase ID-token verification (no admin allowlist)
 ├── firebase/
 │   └── clientApp.ts              # Firebase client init (auth + firestore exports)
 ├── types/
@@ -84,7 +94,7 @@ donatalk/
 ├── styles/
 │   ├── globals.css
 │   └── stitches.config.ts        # Theme tokens (colors, fonts, spacing, radii)
-├── vitest.config.ts              # Vitest config with path aliases
+├── vitest.config.mts             # Vitest config with path aliases (.mts for ESM)
 └── public/
     ├── DonaTalk_icon_88x77.png
     ├── logo horizontal with text.png
@@ -108,8 +118,7 @@ donatalk/
 | `/listener/signup` | `app/listener/signup/page.tsx` | Listener registration |
 | `/listener/profile` | `app/listener/profile/page.tsx` | Listener dashboard |
 | `/listener/update-profile` | `app/listener/update-profile/page.tsx` | Edit listener profile |
-| `/listener/arrange-meeting` | `app/listener/arrange-meeting/page.tsx` | Meeting arrangement with payment |
-| `/checkout` | `app/checkout/page.tsx` | Generic checkout page |
+| `/checkout` | `app/checkout/page.tsx` | Generic checkout page (Phase 3 cleanup pending — only reachable via `/api/complete-order`) |
 | `/arrange-notification` | `app/arrange-notification/page.tsx` | Notification arrangement |
 
 ### Pages Router (`pages/`) - SSR
@@ -129,10 +138,9 @@ All routes located in `app/api/`.
 | `/api/admin/[collection]/[id]` | PATCH | Edit pitcher/listener profile fields (admin only) | Firebase Admin |
 | `/api/admin/[collection]/[id]` | DELETE | Soft-delete pitcher/listener profile (admin only) | Firebase Admin |
 | `/api/create-order` | POST | Create PayPal order | PayPal |
-| `/api/complete-order` | POST | Capture PayPal payment | PayPal |
+| `/api/complete-order` | POST | Capture PayPal payment (internal — called only by `complete-order-and-update-fund` and the legacy `/checkout` page) | PayPal |
 | `/api/complete-order-and-update-fund` | POST | Capture payment + update pitcher balance | PayPal, Firebase Admin |
 | `/api/create-meeting` | POST | Create meeting record in Firestore | Firebase Admin |
-| `/api/escrow-log` | POST | Handle listener-to-pitcher escrow payment | PayPal, Firebase Admin, Nodemailer |
 | `/api/send-notification` | POST | Send meeting interest email to both parties | Nodemailer |
 | `/api/send-payment-confirm-email` | POST | Send payment confirmation to pitcher | Nodemailer |
 | `/api/send-reset-email` | POST | Send branded password reset email | Firebase Admin, Nodemailer |
@@ -209,28 +217,7 @@ All routes located in `app/api/`.
 
 ## Type Definitions
 
-```typescript
-// types/pitcher.ts
-export type Pitcher = {
-  fullName: string;
-  pitch: string;
-  donation: number;
-  credit_balance: number;
-  email: string;
-  isSetUp?: boolean;
-  deletedAt?: unknown; // Firestore Timestamp (soft delete)
-};
-
-// types/listener.ts
-export type Listener = {
-  fullName: string;
-  intro: string;
-  donation: number;
-  email: string;
-  isSetUp?: boolean;
-  deletedAt?: unknown; // Firestore Timestamp (soft delete)
-};
-```
+See `types/pitcher.ts` and `types/listener.ts` for the canonical TypeScript shapes. The Firestore documents also carry `slug`, `createdAt`, and (for pitchers) `reservedBalance` / `pendingReservationCount`, as described in the Schema tables above.
 
 ## Authentication Flow
 
@@ -280,13 +267,24 @@ Profiles can be soft-deleted by admins via the admin dashboard. Soft delete sets
 6. Logs to `fund_history` collection
 7. Sends payment confirmation email
 
-### Listener Escrow Payment
-1. Listener visits `/listener/[uid]` (pitcher's public page)
-2. Fills form (name, email, message) -> redirected to `/listener/arrange-meeting`
-3. Escrow amount: `donation * 1.049`
-4. PayPal captures payment via `POST /api/escrow-log`
-5. Sends notification emails to both parties
-6. Creates meeting record
+### Two-Phase Booking (v0.8.0+)
+
+The anonymous PayPal escrow path was removed in 0.8.1. Public profile pages now require an authenticated visitor.
+
+**Pitcher books from balance (visitor on `/listener/[uid]`):**
+1. Visitor signs in (or signs up — both roles created as stubs); returns to the page via `?return=`.
+2. Visitor's pitcher profile must be set up and have `credit_balance - reservedBalance ≥ donation * 1.049`. Otherwise UI shows "Add funds" or "Finish your Pitcher profile".
+3. `POST /api/book-meeting-from-balance` creates a `reserved` meeting, increments `reservedBalance` and `pendingReservationCount` (capped at 5), emails the listener Accept/Decline links.
+4. Listener clicks `GET /api/meeting/[id]/accept?token=…` → commit: deducts `credit_balance`, releases the reservation, logs `fund_history { eventType: 'meeting_commit' }`, emails confirmation.
+5. Or listener clicks `GET /api/meeting/[id]/decline?token=…` → status `declined`, reservation released, polite-decline email sent.
+6. Visitor can cancel their own pending request via `POST /api/meeting/[id]/cancel` (also releases reservation).
+
+**Listener requests on `/pitcher/[uid]`:**
+1. Same auth gate; visitor must have a set-up listener profile.
+2. `POST /api/request-meeting` creates a `pending` meeting (no balance touched) and emails the pitcher Accept/Decline links.
+3. Pitcher's accept/decline goes through the same `/api/meeting/[id]/{accept,decline}` endpoints (commit path differs because no reservation existed).
+
+Tokens for accept/decline are HMAC-keyed via `MEETING_TOKEN_SECRET`; only the base64url SHA-256 hash is stored on the meeting doc, with one-time-use enforcement via `tokenUsed`. Meetings have a 14-day TTL (`reservedAt` + `RESERVATION_TTL_DAYS`).
 
 ### Pitcher Active Status
 - Pitcher's shareable link is **active** only if `credit_balance >= donation * 1.049`
@@ -328,13 +326,14 @@ All emails use inline HTML templates with DonaTalk branding (logo, colors).
 - `PAYPAL_API_URL` (production: `https://api-m.paypal.com`)
 
 ### Email (SMTP)
-- `EMAIL_PASSWORD`
+- `EMAIL_PASSWORD` — SMTP password for `support@donatalk.com` on `mail.donatalk.com:465`
+- `MAIL_BCC` (optional) — BCC address for all transactional emails. Defaults to `atxapplellc@gmail.com` when unset (`lib/mailer.ts`).
 
 ### Meeting tokens (v0.8.0+)
 - `MEETING_TOKEN_SECRET` — base64 secret of ≥ 32 characters. Used by `lib/meetingTokens.ts` to hash accept/decline link tokens. Endpoints throw if unset.
 
 ### App
-- `NEXT_PUBLIC_BASE_URL` (defaults to `http://localhost:3000`)
+- `NEXT_PUBLIC_BASE_URL` — base URL of the deployed app. Used at request time (e.g., server-side fetches into `/api/...`) and in transactional email templates via `APP_URL` in `lib/mailer.ts`. Falls back to `https://app.donatalk.com` for email links and to `http://localhost:3000` for in-app fetches.
 
 ## Build & Deploy
 
@@ -367,15 +366,12 @@ npm run test     # Run Vitest unit tests
 ## Known Issues
 
 1. **Amount obfuscation is weak:** `amount * 7900` in query params (e.g., `/pitcher/add-fund?a=79000`) is trivially reversible. Not true encryption.
-2. **Hardcoded Zoom link:** A single Zoom meeting URL is hardcoded in `send-notification/route.ts` and sent in all meeting emails.
-3. **Typos in code:** `encriptedAmount` (should be `encryptedAmount`), `ilstenerId` (should be `listenerId`) in listener/[uid].tsx query params, `PyamentEmailResponse` (should be `PaymentEmailResponse`) in `sendEmailfromListenerPage.ts`.
-4. **No server-side auth middleware:** Route protection is client-side only via `Navbar.tsx`. API routes have no authentication checks.
-5. **Hardcoded BCC email:** `atxapplellc@gmail.com` is hardcoded in `lib/mailer.ts`.
-6. **Hardcoded domain in emails:** `https://app.donatalk.com` hardcoded in email templates instead of using `NEXT_PUBLIC_BASE_URL`.
-7. **Commented-out isActive check:** In `pages/listener/[uid].tsx`, the `isActive` check is commented out (`// const isActive = pitcher.credit_balance >= requiredBalance;`).
-8. **Dual routing system:** Hybrid App Router + Pages Router - public profiles use Pages Router for SSR, everything else uses App Router.
-9. **No rate limiting** on API routes.
-10. **`create-meeting` called after notification error:** In `pages/pitcher/[uid].tsx`, the `create-meeting` API call runs outside the try/catch and after status is already set, regardless of notification success/failure.
+2. **Hardcoded Zoom link:** A single Zoom meeting URL is hardcoded in `app/api/send-notification/route.ts` and sent in all meeting emails. Needs per-user meeting link support.
+3. **No server-side auth middleware:** Route protection is client-side only via `Navbar.tsx`. Newer booking endpoints (`book-meeting-from-balance`, `request-meeting`, `meeting/[id]/*`) verify Firebase ID tokens or HMAC tokens, but the older routes (`create-meeting`, `send-notification`, etc.) still have no auth checks.
+4. **Dual routing system:** Hybrid App Router + Pages Router — public profiles use Pages Router for SSR, everything else uses App Router.
+5. **No rate limiting** on API routes.
+6. **Signup-email link role bug:** `app/api/send-signup-email/route.ts` always wraps the visible link in an `href` to `/pitcher/${userId}` and links the "your profile page" anchor to `/pitcher/profile`, even when the role is `listener`. Visible text uses the correct role.
+7. **Phase 3 cleanup pending:** `app/api/complete-order/route.ts` and `app/checkout/page.tsx` are remnants of the old anonymous escrow flow. Removable once `complete-order-and-update-fund` inlines the PayPal capture.
 
 ## Conventions
 
