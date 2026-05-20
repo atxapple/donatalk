@@ -44,6 +44,35 @@ describe("POST /api/create-order", () => {
       const res = await POST(createJsonRequest({ intent: "capture", amount: "-10" }));
       expect(res.status).toBe(400);
     });
+
+    it("returns 400 when amount is not a multiple of $5", async () => {
+      const res = await POST(createJsonRequest({ intent: "capture", amount: "7" }));
+      expect(res.status).toBe(400);
+      const data = await res.json();
+      expect(data.error).toMatch(/\$5 increments/);
+    });
+
+    it("returns 400 for fractional non-$5 amounts (e.g., 10.50)", async () => {
+      const res = await POST(createJsonRequest({ intent: "capture", amount: "10.50" }));
+      expect(res.status).toBe(400);
+    });
+
+    it("returns 400 when amount exceeds $5000 cap", async () => {
+      const res = await POST(createJsonRequest({ intent: "capture", amount: "5005" }));
+      expect(res.status).toBe(400);
+      const data = await res.json();
+      expect(data.error).toMatch(/maximum/);
+    });
+
+    it("accepts $5 (minimum increment)", async () => {
+      const res = await POST(createJsonRequest({ intent: "capture", amount: "5" }));
+      expect(res.status).toBe(200);
+    });
+
+    it("accepts $5000 (cap boundary)", async () => {
+      const res = await POST(createJsonRequest({ intent: "capture", amount: "5000" }));
+      expect(res.status).toBe(200);
+    });
   });
 
   describe("PayPal authentication", () => {
@@ -62,10 +91,10 @@ describe("POST /api/create-order", () => {
 
   describe("order creation", () => {
     it("formats amount to 2 decimal places", async () => {
-      await POST(createJsonRequest({ intent: "capture", amount: "10.5" }));
+      await POST(createJsonRequest({ intent: "capture", amount: "10" }));
       const fetchMock = vi.mocked(global.fetch);
       const body = JSON.parse((fetchMock.mock.calls[1][1] as RequestInit).body as string);
-      expect(body.purchase_units[0].amount.value).toBe("10.50");
+      expect(body.purchase_units[0].amount.value).toBe("10.00");
     });
 
     it("uppercases the intent value", async () => {

@@ -9,9 +9,20 @@ export async function POST(req: Request) {
 
   // console.log('[intent, amount] :', {intent, amount});
 
-  // ✅ Amount Validation (prevent abuse)
+  // Amount validation (prevent abuse):
+  //   - must be a positive number
+  //   - must be a multiple of $5 (the platform's fixed increment)
+  //   - capped at $5000 to catch typos / abuse
   if (isNaN(parsedAmount) || parsedAmount <= 0) {
     return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
+  }
+  if (parsedAmount > 5000) {
+    return NextResponse.json({ error: "Amount exceeds the $5000 maximum" }, { status: 400 });
+  }
+  // Allow a small epsilon for floating-point representation of 5-multiples.
+  const remainder = Math.abs(parsedAmount - Math.round(parsedAmount / 5) * 5);
+  if (remainder > 0.001) {
+    return NextResponse.json({ error: "Amount must be in $5 increments" }, { status: 400 });
   }
 
   const base = process.env.PAYPAL_API_URL;

@@ -11,7 +11,6 @@ import Head from 'next/head';
 import PageWrapper from '@/components/layout/PageWrapper';
 import CardContainer from '@/components/layout/CardContainer';
 import { Logo, ErrorBox } from '@/components/ui/shared';
-import { Input, Button } from '@/components/ui';
 import { styled } from '@/styles/stitches.config';
 import { ClipboardCopy } from 'lucide-react';
 import { PLATFORM_FEE_PERCENTAGE, calculateTotalWithFee } from '@/lib/constants';
@@ -66,14 +65,6 @@ const BalanceWarning = styled('p', {
   borderRadius: '$sm',
   textAlign: 'center',
   '& strong': { color: '#5a3700' },
-});
-
-const AddFundRow = styled('div', {
-  display: 'flex',
-  gap: '$sm',
-  alignItems: 'center',
-  marginTop: '$md',
-  width: '100%',
 });
 
 const AddFundCTA = styled('button', {
@@ -155,9 +146,6 @@ export default function PitcherProfile() {
   const [pitcher, setPitcher] = useState<Pitcher | null>(null);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
-  const [fundAmount, setFundAmount] = useState<string>('');
-  const [loading, setLoading] = useState(false);
-  const [showFundInput, setShowFundInput] = useState(false);
   const [listenerSetUp, setListenerSetUp] = useState(true);
   const [pendingPitches, setPendingPitches] = useState<PendingPitch[]>([]);
   const [incomingRequests, setIncomingRequests] = useState<IncomingRequest[]>([]);
@@ -318,15 +306,6 @@ export default function PitcherProfile() {
     }
   };
 
-  const handleAddFund = () => {
-    if (!fundAmount || parseFloat(fundAmount) <= 0) {
-      alert('Please enter a valid fund amount.');
-      return;
-    }
-    const encryptedAmount = parseFloat(fundAmount) * 7900;
-    router.push(`/pitcher/add-fund?a=${encryptedAmount}`);
-  };
-
   useEffect(() => {
     if (searchParams?.get('payment') === 'success' && userId) {
       fetchPitcherData(userId);
@@ -390,26 +369,7 @@ export default function PitcherProfile() {
             </BalanceWarning>
           )}
 
-          {!showFundInput ? (
-            <AddFundCTA onClick={() => setShowFundInput(true)}>+ Add funds via PayPal</AddFundCTA>
-          ) : (
-            <AddFundRow>
-              <Input
-                type="number"
-                placeholder="Amount ($)"
-                value={fundAmount}
-                onChange={(e) => setFundAmount(e.target.value)}
-                min="0"
-                style={{ flex: 1 }}
-              />
-              <Button onClick={handleAddFund} disabled={loading}>
-                {loading ? 'Processing…' : 'Confirm'}
-              </Button>
-              <Button onClick={() => { setShowFundInput(false); setFundAmount(''); }}>
-                Cancel
-              </Button>
-            </AddFundRow>
-          )}
+          <AddFundCTA onClick={() => router.push('/pitcher/add-fund')}>+ Add funds via PayPal</AddFundCTA>
 
           {pitcher.pitch && pitcher.pitch.trim() && (
             <IntroCard label={`${firstName}'s pitch`}>{linkify(pitcher.pitch)}</IntroCard>
