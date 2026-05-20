@@ -116,13 +116,12 @@ test.describe('?return= validation on login/signup pages', () => {
 });
 
 test.describe('Dead routes are gone', () => {
-  test('/listener/arrange-meeting falls through to listener[uid] showing "Listener not found"', async ({ page }) => {
-    // The page file was deleted, so /listener/arrange-meeting now matches the
-    // Pages Router catch-all [uid] route with uid="arrange-meeting" — Firestore
-    // lookup fails and the page renders the "Listener not found" infobox with
-    // HTTP 200. That's acceptable UX (no broken-link 500), even if not a clean 404.
+  test('/listener/arrange-meeting permanently redirects to /', async ({ page }) => {
+    // Configured in next.config.ts. 308 → / → Next.js root redirects to /login.
     await page.goto('/listener/arrange-meeting');
-    await expect(page.getByText(/Listener not found/i)).toBeVisible({ timeout: 15_000 });
+    // End state: user lands somewhere usable, not on a "Listener not found" dead end.
+    await page.waitForURL((url) => !url.pathname.startsWith('/listener/arrange-meeting'), { timeout: 15_000 });
+    expect(page.url()).not.toContain('/listener/arrange-meeting');
   });
 
   test('POST /api/escrow-log returns 404 (route deleted)', async ({ request }) => {
