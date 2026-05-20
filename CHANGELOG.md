@@ -3,6 +3,35 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.11.0] - 2026-05-20
+
+### Added
+- **Escrow + refund flow.** The `accepted` meeting state is no longer terminal — the donation now sits in escrow until the meeting actually happens.
+  - New meeting statuses: `completed`, `refunded`.
+  - New fields on `meetings/{id}`: `acceptedAt`, `escrowedAmount`, `pitcherConfirmed`, `listenerConfirmed`, `completedAt`, `refundedAt`, `completionReason`, `refundReason`.
+  - New fund_history `eventType` values: `meeting_fulfilled` (audit marker on completion), `meeting_refund` (positive amount returned to pitcher's credit_balance).
+- **New endpoints:**
+  - `POST /api/meeting/[id]/confirm-completed` — either party marks the meeting as having happened. Once both parties confirm, transitions to `completed`.
+  - `POST /api/meeting/[id]/report-no-show` — either party reports a no-show. Immediate refund: `credit_balance += escrowedAmount`, status `→ refunded`.
+- **`lib/meetingCompletion.ts`** — shared `confirmMeetingCompleted`, `refundMeeting`, `autoCompleteIfExpired` helpers. All transactional.
+- **Auto-complete rule**: after 30 days of `accepted` with no no-show reports, the meeting auto-transitions to `completed` (assume the meeting happened; donation treated as fulfilled). Constant `ESCROW_TIMEOUT_DAYS = 30`.
+- **Dashboard sections** on both `/pitcher/profile` and `/listener/profile`:
+  - "Escrowed meetings" (pitcher side) / "Upcoming meetings" (listener side) showing accepted meetings with action buttons: ✓ Meeting happened / ⚠ No-show.
+  - Badges showing partial confirmations ("You confirmed", "Listener confirmed", etc.).
+- **Post-submit success card** on both public pages (`/listener/{uid}` and `/pitcher/{uid}`):
+  - Replaces the bookable form after a successful submit.
+  - Explains the 14-day listener-response window AND the escrow + refund rules.
+  - Links straight to the relevant dashboard for status tracking.
+- **New email templates**:
+  - Updated accept-confirmation email explains the escrow + 30-day rule.
+  - `sendCompletionEmail` — both parties notified when meeting is fulfilled.
+  - `sendRefundEmail` — both parties notified when a no-show triggers a refund.
+- **Two new Firestore composite indexes** (`(pitcherId, status, acceptedAt)` and `(listenerId, status, acceptedAt)`) deployed alongside this release.
+
+### Tests
+- 15 new vitest cases (8 for `confirm-completed`, 7 for `report-no-show`).
+- Total: 299 tests passing.
+
 ## [0.10.0] - 2026-05-20
 
 ### Added

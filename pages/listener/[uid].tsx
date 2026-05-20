@@ -19,6 +19,7 @@ import {
   PageHeading,
   PageSubheading,
   SelfVisitBanner,
+  BookingSuccessCard,
 } from '../../components/ui/profileCards';
 import { useEffect, useState } from 'react';
 import { Listener } from '@/types/listener';
@@ -395,6 +396,35 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
     );
   }
 
+  // L8 success: after a successful book, replace the form with a focused
+  // success card explaining what happens next + linking to the dashboard.
+  if (submitState === 'success') {
+    return (
+      <PageWrapper>
+        <CardContainer>
+          <Header />
+          <BookingSuccessCard
+            title="Reservation made"
+            body={
+              <>
+                <strong>{firstName}</strong> has been notified by email. They have up to{' '}
+                <strong>14 days</strong> to accept or decline.
+                <br /><br />
+                <strong>${requiredBalance.toFixed(2)}</strong> is reserved from your balance.
+                If {firstName} accepts, the donation is held in escrow until the meeting
+                happens. After 30 days with no reports of a no-show, it&rsquo;s treated as
+                fulfilled. If a no-show is reported, the donation is refunded to you.
+              </>
+            }
+            dashboardHref="/pitcher/profile"
+            dashboardLabel="View my Pitcher Profile →"
+            tip="Track this and other pending pitches in your dashboard."
+          />
+        </CardContainer>
+      </PageWrapper>
+    );
+  }
+
   // L8 (and L2 self-visit): bookable form
   return (
     <PageWrapper>
@@ -440,23 +470,16 @@ export default function ListenerPage({ listener, uid }: { listener: Listener | n
           />
           <SubmitButton
             type="submit"
-            disabled={
-              !!isSelfVisit ||
-              submitState === 'loading' ||
-              submitState === 'success' ||
-              !message.trim()
-            }
+            disabled={!!isSelfVisit || submitState === 'loading' || !message.trim()}
           >
             {isSelfVisit
               ? 'Disabled — this is your page'
               : submitState === 'loading'
                 ? 'Sending…'
-                : submitState === 'success'
-                  ? 'Request sent ✓'
-                  : `Book meeting → uses $${requiredBalance.toFixed(2)} from your balance`}
+                : `Book meeting → uses $${requiredBalance.toFixed(2)} from your balance`}
           </SubmitButton>
-          {submitMessage && (
-            <p style={{ marginTop: '0.5rem', color: submitState === 'success' ? 'green' : '#c0392b', textAlign: 'center' }}>
+          {submitMessage && submitState === 'error' && (
+            <p style={{ marginTop: '0.5rem', color: '#c0392b', textAlign: 'center' }}>
               {submitMessage}
             </p>
           )}

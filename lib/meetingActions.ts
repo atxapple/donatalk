@@ -160,10 +160,18 @@ export async function acceptMeeting(meetingId: string, auth: ActionAuth): Promis
       meetingId,
       timestamp: Timestamp.now(),
     });
+    const now = Timestamp.now();
     tx.update(meetingRef, {
       status: 'accepted',
       tokenUsed: true,
-      respondedAt: Timestamp.now(),
+      respondedAt: now,
+      // Escrow tracking: the money is committed-but-not-yet-fulfilled. Either
+      // party can confirm the meeting happened (→ completed) or report a
+      // no-show (→ refunded). Auto-refund after ESCROW_TIMEOUT_DAYS.
+      acceptedAt: now,
+      escrowedAmount: amount,
+      pitcherConfirmed: false,
+      listenerConfirmed: false,
     });
     return {
       kind: 'accepted' as const,
