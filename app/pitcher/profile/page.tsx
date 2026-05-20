@@ -3,18 +3,30 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation'; // ✅ Updated here
+import { useRouter, useSearchParams } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, collection, query, where, orderBy, getDocs, Timestamp } from 'firebase/firestore';
 import { auth, firestore } from '@/firebase/clientApp';
 import Head from 'next/head';
 import PageWrapper from '@/components/layout/PageWrapper';
 import CardContainer from '@/components/layout/CardContainer';
-import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
+import { Logo, ErrorBox } from '@/components/ui/shared';
 import { Input, Button } from '@/components/ui';
 import { styled } from '@/styles/stitches.config';
 import { ClipboardCopy } from 'lucide-react';
-import { PLATFORM_FEE_PERCENTAGE, PLATFORM_FEE_MULTIPLIER, calculateTotalWithFee } from '@/lib/constants';
+import { PLATFORM_FEE_PERCENTAGE, calculateTotalWithFee } from '@/lib/constants';
+import {
+  PageHeading,
+  PageSubheading,
+  IntroCard,
+  ShareLinkCard,
+  InfoLine,
+  InfoLineGroup,
+  BalanceBreakdown,
+  PrimaryCTA,
+  SecondaryLink,
+  linkify,
+} from '@/components/ui/profileCards';
 
 type Pitcher = {
   fullName: string;
@@ -44,42 +56,101 @@ type IncomingRequest = {
   reservedAt: Timestamp | null;
 };
 
-const InfoRow = styled('div', { display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' });
-const Label = styled('div', { fontWeight: '600' });
-const Value = styled('div', { fontSize: '16px', color: '$dark' });
-const ShareSection = styled('div', { marginTop: '0.5rem', padding: '1rem', backgroundColor: '$lightgray', borderRadius: '8px', textAlign: 'center' });
-const SharableLink = styled('div', { fontSize: '14px', wordBreak: 'break-all', marginTop: '0.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', border: '1px dashed #ccc', borderRadius: '6px', backgroundColor: '#f9f9f9' });
-const CopyButton = styled('button', { background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem', '&:hover': { color: '$heart' } });
-const AddFundSection = styled('div', { marginTop: '0.5rem', textAlign: 'center' });
-const AddFundButton = styled(Button, { marginTop: '0.25rem' });
-const InboxSection = styled('div', { marginTop: '1.5rem', padding: '1rem', backgroundColor: '#f9f9f9', borderRadius: '8px' });
-const InboxHeader = styled('h3', { margin: '0 0 0.75rem 0', fontSize: '16px', fontWeight: '600' });
-const MeetingCard = styled('div', { padding: '0.75rem', backgroundColor: '#fff', border: '1px solid #eee', borderRadius: '6px', marginBottom: '0.5rem', fontSize: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem' });
+const BalanceWarning = styled('p', {
+  marginTop: '$sm',
+  padding: '8px 12px',
+  fontSize: '13px',
+  color: '#7a4c00',
+  backgroundColor: '#fff8e1',
+  border: '1px solid #ffe082',
+  borderRadius: '$sm',
+  textAlign: 'center',
+  '& strong': { color: '#5a3700' },
+});
+
+const AddFundRow = styled('div', {
+  display: 'flex',
+  gap: '$sm',
+  alignItems: 'center',
+  marginTop: '$md',
+  width: '100%',
+});
+
+const AddFundCTA = styled('button', {
+  marginTop: '$md',
+  padding: '12px 18px',
+  borderRadius: '$md',
+  backgroundColor: '$dark',
+  color: '$white',
+  border: 'none',
+  fontSize: '14px',
+  fontWeight: 600,
+  cursor: 'pointer',
+  width: '100%',
+  '&:hover': { backgroundColor: '#1f2d3a' },
+});
+
+const InboxSection = styled('div', {
+  width: '100%',
+  marginTop: '$md',
+  padding: '$md',
+  backgroundColor: '#f9fafb',
+  borderRadius: '$md',
+  border: '1px solid #e8eaec',
+});
+const InboxHeader = styled('h3', {
+  margin: '0 0 4px 0',
+  fontSize: '$md',
+  fontWeight: 600,
+  color: '$dark',
+});
+const InboxNote = styled('p', {
+  margin: '0 0 $sm',
+  fontSize: '12px',
+  color: '$darkgray',
+});
+const MeetingCard = styled('div', {
+  padding: '12px',
+  backgroundColor: '#fff',
+  border: '1px solid #e8eaec',
+  borderRadius: '$sm',
+  marginBottom: '$sm',
+  fontSize: '14px',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: '$sm',
+  '&:last-child': { marginBottom: 0 },
+});
 const MeetingCardBody = styled('div', { flex: 1 });
-const MeetingMeta = styled('div', { fontSize: '12px', color: '#666', marginTop: '0.25rem' });
+const MeetingMeta = styled('div', { fontSize: '12px', color: '$darkgray', marginTop: '4px' });
 const CancelButton = styled('button', {
-  background: '#c0392b', color: '#fff', border: 'none', borderRadius: '4px',
-  padding: '0.4rem 0.75rem', cursor: 'pointer', fontSize: '13px',
-  '&:hover': { background: '#a53224' },
+  background: '$heart', color: '#fff', border: 'none', borderRadius: '$sm',
+  padding: '6px 12px', cursor: 'pointer', fontSize: '13px',
+  '&:hover:not(:disabled)': { background: '#a53224' },
   '&:disabled': { background: '#888', cursor: 'not-allowed' },
 });
-const ActionRow = styled('div', { display: 'flex', gap: '0.5rem', marginLeft: '0.5rem' });
+const ActionRow = styled('div', { display: 'flex', gap: '$sm' });
 const AcceptButton = styled('button', {
-  background: '#27ae60', color: '#fff', border: 'none', borderRadius: '4px',
-  padding: '0.4rem 0.75rem', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
-  '&:hover': { background: '#1e8c4a' },
+  background: '#27ae60', color: '#fff', border: 'none', borderRadius: '$sm',
+  padding: '6px 12px', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
+  '&:hover:not(:disabled)': { background: '#1e8c4a' },
   '&:disabled': { background: '#888', cursor: 'not-allowed' },
 });
 const DeclineButton = styled('button', {
-  background: '#c0392b', color: '#fff', border: 'none', borderRadius: '4px',
-  padding: '0.4rem 0.75rem', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
-  '&:hover': { background: '#a53224' },
+  background: '$heart', color: '#fff', border: 'none', borderRadius: '$sm',
+  padding: '6px 12px', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
+  '&:hover:not(:disabled)': { background: '#a53224' },
   '&:disabled': { background: '#888', cursor: 'not-allowed' },
 });
 
+function firstNameOf(full: string): string {
+  return (full || '').trim().split(/\s+/)[0] || full || 'you';
+}
+
 export default function PitcherProfile() {
   const router = useRouter();
-  const searchParams = useSearchParams();                     // ✅ Updated
+  const searchParams = useSearchParams();
   const [userId, setUserId] = useState<string | null>(null);
   const [pitcher, setPitcher] = useState<Pitcher | null>(null);
   const [error, setError] = useState('');
@@ -98,7 +169,6 @@ export default function PitcherProfile() {
       if (user) {
         setUserId(user.uid);
         await fetchPitcherData(user.uid);
-        // Fetch listener isSetUp status for cross-role button
         try {
           const listenerDoc = await getDoc(doc(firestore, 'listeners', user.uid));
           if (listenerDoc.exists()) {
@@ -232,8 +302,8 @@ export default function PitcherProfile() {
         setError('Your profile was not found. Please contact support.');
       }
     } catch (err: unknown) {
-      const error = err as Error;
-      console.error('[Fetch Data Error]', error.message);
+      const e = err as Error;
+      console.error('[Fetch Data Error]', e.message);
       setError('Failed to load profile. Please try again later.');
     }
   };
@@ -277,7 +347,7 @@ export default function PitcherProfile() {
     return (
       <PageWrapper>
         <CardContainer>
-          <Subtitle>Loading your profile...</Subtitle>
+          <PageSubheading>Loading your profile…</PageSubheading>
         </CardContainer>
       </PageWrapper>
     );
@@ -286,6 +356,9 @@ export default function PitcherProfile() {
   const requiredBalance = calculateTotalWithFee(pitcher.donation);
   const reservedBalance = Number(pitcher.reservedBalance) || 0;
   const availableBalance = pitcher.credit_balance - reservedBalance;
+  const isActive = availableBalance >= requiredBalance;
+  const firstName = firstNameOf(pitcher.fullName);
+  const shareUrl = userId ? `${typeof window !== 'undefined' ? window.location.origin : ''}/pitcher/${userId}` : '';
 
   return (
     <>
@@ -295,93 +368,75 @@ export default function PitcherProfile() {
       <PageWrapper>
         <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>My Pitcher Profile</Title>
-          <Subtitle>Welcome, {pitcher.fullName}</Subtitle>
-          <InfoRow>
-            <Label>Available Balance ($):</Label>
-            <Value>{availableBalance.toFixed(2)}</Value>
-          </InfoRow>
+          <PageHeading>My Pitcher Profile</PageHeading>
+          <PageSubheading>Welcome, {pitcher.fullName}</PageSubheading>
 
-          {reservedBalance > 0 && (
-            <InfoRow>
-              <Label>Reserved (pending pitches):</Label>
-              <Value>{reservedBalance.toFixed(2)}</Value>
-            </InfoRow>
+          <BalanceBreakdown
+            available={availableBalance}
+            reserved={reservedBalance}
+            total={pitcher.credit_balance}
+          />
+
+          <InfoLineGroup>
+            <InfoLine label="Donation per meeting">${pitcher.donation.toFixed(2)}</InfoLine>
+            <InfoLine label="Required balance to stay active">${requiredBalance.toFixed(2)}</InfoLine>
+          </InfoLineGroup>
+
+          {!isActive && (
+            <BalanceWarning>
+              🚩 Your <strong>available balance</strong> must be at least <strong>${requiredBalance.toFixed(2)}</strong>{' '}
+              (donation + {PLATFORM_FEE_PERCENTAGE}% process fee).
+              Until then your shareable link is inactive.
+            </BalanceWarning>
           )}
 
-          <InfoRow>
-            <Label>Total Balance ($):</Label>
-            <Value>{pitcher.credit_balance.toFixed(2)}</Value>
-          </InfoRow>
+          {!showFundInput ? (
+            <AddFundCTA onClick={() => setShowFundInput(true)}>+ Add funds via PayPal</AddFundCTA>
+          ) : (
+            <AddFundRow>
+              <Input
+                type="number"
+                placeholder="Amount ($)"
+                value={fundAmount}
+                onChange={(e) => setFundAmount(e.target.value)}
+                min="0"
+                style={{ flex: 1 }}
+              />
+              <Button onClick={handleAddFund} disabled={loading}>
+                {loading ? 'Processing…' : 'Confirm'}
+              </Button>
+              <Button onClick={() => { setShowFundInput(false); setFundAmount(''); }}>
+                Cancel
+              </Button>
+            </AddFundRow>
+          )}
 
-          <InfoRow>
-            <Label>Donation per Meeting ($):</Label>
-            <Value>{pitcher.donation.toFixed(2)}</Value>
-          </InfoRow>
+          {pitcher.pitch && pitcher.pitch.trim() && (
+            <IntroCard label={`${firstName}'s pitch`}>{linkify(pitcher.pitch)}</IntroCard>
+          )}
 
-          <p style={{ marginTop: '0.0rem', color: '#333', fontSize: '16px', textAlign: 'center' }}>
-            <span style={{ color: '#e74c3c', marginRight: '0.3rem' }}>🚩</span>
-            Available balance must be at least
-            <strong> ${requiredBalance.toFixed(2)} </strong>
-            (Donation amount + {PLATFORM_FEE_PERCENTAGE}% process fee including tax).
-            Otherwise, your shareable link will be inactive.
-          </p>
+          <ShareLinkCard
+            hint="Share this link with your potential listeners:"
+            url={shareUrl}
+            copied={copied}
+            onCopy={handleCopy}
+            copyIcon={<ClipboardCopy size={18} />}
+          />
 
-          <AddFundSection>
-            {!showFundInput ? (
-              <AddFundButton onClick={() => setShowFundInput(true)}>Add Fund</AddFundButton>
-            ) : (
-              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginTop: '1rem' }}>
-                <Input
-                  type="number"
-                  placeholder="Enter amount ($)"
-                  value={fundAmount}
-                  onChange={(e) => setFundAmount(e.target.value)}
-                  min="0"
-                />
-                <Button onClick={handleAddFund} disabled={loading}>
-                  {loading ? 'Processing...' : 'Confirm Fund'}
-                </Button>
-                <Button onClick={() => { setShowFundInput(false); setFundAmount(''); }}>
-                  Cancel
-                </Button>
-              </div>
-            )}
-          </AddFundSection>
-
-          <ShareSection>
-            <p>Please share the following link with your potential listeners:</p>
-            <SharableLink>
-              {`${window.location.origin}/pitcher/${userId}`}
-              <CopyButton onClick={handleCopy} aria-label="Copy link to clipboard">
-                <ClipboardCopy size={18} />
-              </CopyButton>
-              {copied && <span style={{ fontSize: '12px', color: 'green' }}>Copied!</span>}
-            </SharableLink>
-          </ShareSection>
-
-          <InfoRow>
-            <Label>Email Address:</Label>
-            <Value>{pitcher.email}</Value>
-          </InfoRow>
-
-          <InfoRow>
-            <Label>About Pitch:</Label>
-            <Value>{pitcher.pitch}</Value>
-          </InfoRow>
+          <InfoLineGroup>
+            <InfoLine label="Email">{pitcher.email}</InfoLine>
+          </InfoLineGroup>
 
           {pendingPitches.length > 0 && (
             <InboxSection>
               <InboxHeader>Pending pitches ({pendingPitches.length})</InboxHeader>
-              <p style={{ fontSize: '13px', color: '#666', margin: '0 0 0.75rem 0' }}>
-                Waiting for the listener to accept. Cancel to release the reserved balance.
-              </p>
+              <InboxNote>Waiting for the listener to accept. Cancel to release the reserved balance.</InboxNote>
               {pendingPitches.map((m) => (
                 <MeetingCard key={m.id}>
                   <MeetingCardBody>
                     <div>To <strong>{m.listenerName}</strong></div>
                     <div>Reserved: <strong>${m.reservedAmount.toFixed(2)}</strong></div>
-                    {m.availability && <div>Your note: "{m.availability}"</div>}
+                    {m.availability && <div>Your note: &quot;{m.availability}&quot;</div>}
                     <MeetingMeta>
                       {m.listenerEmail}
                       {m.reservedAt && ` · Sent ${new Date(m.reservedAt.toMillis()).toLocaleDateString()}`}
@@ -398,6 +453,7 @@ export default function PitcherProfile() {
           {incomingRequests.length > 0 && (
             <InboxSection>
               <InboxHeader>Incoming requests ({incomingRequests.length})</InboxHeader>
+              <InboxNote>Listeners who want to hear your pitch.</InboxNote>
               {incomingRequests.map((m) => (
                 <MeetingCard key={m.id}>
                   <MeetingCardBody>
@@ -428,13 +484,18 @@ export default function PitcherProfile() {
             </InboxSection>
           )}
 
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '0rem' }}>
-            <Button onClick={() => router.push('/pitcher/update-profile')}>Edit Profile</Button>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-            <Button onClick={() => router.push(listenerSetUp ? '/listener/profile' : '/listener/update-profile')}>
-              {listenerSetUp ? 'Go to Listener Profile' : 'Set Up Listener Profile'}
-            </Button>
+          <PrimaryCTA as="button" onClick={() => router.push('/pitcher/update-profile')}>
+            Edit profile →
+          </PrimaryCTA>
+
+          <div style={{ textAlign: 'center' }}>
+            <SecondaryLink
+              as="button"
+              onClick={() => router.push(listenerSetUp ? '/listener/profile' : '/listener/update-profile')}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', font: 'inherit', padding: '8px 0' }}
+            >
+              {listenerSetUp ? <>Switch to <strong>Listener Profile</strong></> : <>Set up your <strong>Listener Profile</strong></>}
+            </SecondaryLink>
           </div>
         </CardContainer>
       </PageWrapper>

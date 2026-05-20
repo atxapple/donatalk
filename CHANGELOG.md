@@ -3,6 +3,18 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.9.2] - 2026-05-20
+
+### Changed
+- **Redesigned dashboard pages** (`/listener/profile`, `/pitcher/profile`) to match the new public-page design language:
+  - **Brief intro / pitch** moved into a labeled IntroCard with auto-linkified URLs (the main fix you asked for).
+  - **Donation amount** surfaced via the same StatCard component used on the public pages (listener side).
+  - **Pitcher balance** shown as a three-cell breakdown (Available / Reserved / Total) instead of stacked label-value rows.
+  - **Share link** now lives in a clean ShareLinkCard with monospace URL + inline copy icon.
+  - **Email** demoted to a small InfoLine row (it's not actionable on this page).
+  - **CTAs**: primary "Edit profile →" is now the dominant coral button; "Switch to Pitcher/Listener Profile" demoted to a text link below.
+- New shared components in `components/ui/profileCards.tsx`: `ShareLinkCard`, `InfoLine`, `InfoLineGroup`, `BalanceBreakdown`. Reused across both dashboard pages.
+
 ## [0.9.1] - 2026-05-20
 
 ### Changed

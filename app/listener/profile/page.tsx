@@ -3,42 +3,65 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation'; // ✅ Updated here
+import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, collection, query, where, orderBy, getDocs, Timestamp } from 'firebase/firestore';
 import { auth, firestore } from '@/firebase/clientApp';
 import Head from 'next/head';
 import PageWrapper from '@/components/layout/PageWrapper';
 import CardContainer from '@/components/layout/CardContainer';
-import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
-import { Input, Button } from '@/components/ui';
+import { Logo, ErrorBox } from '@/components/ui/shared';
 import { styled } from '@/styles/stitches.config';
 import { ClipboardCopy } from 'lucide-react';
-import {Listener} from '@/types/listener'
+import { Listener } from '@/types/listener';
+import {
+  PageHeading,
+  PageSubheading,
+  IntroCard,
+  StatCard,
+  ShareLinkCard,
+  InfoLine,
+  InfoLineGroup,
+  PrimaryCTA,
+  SecondaryLink,
+  linkify,
+} from '@/components/ui/profileCards';
 
-const InfoRow = styled('div', { display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' });
-const Label = styled('div', { fontWeight: '600' });
-const Value = styled('div', { fontSize: '16px', color: '$dark' });
-const ShareSection = styled('div', { marginTop: '0.5rem', padding: '1rem', backgroundColor: '$lightgray', borderRadius: '8px', textAlign: 'center' });
-const SharableLink = styled('div', { fontSize: '14px', wordBreak: 'break-all', marginTop: '0.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', border: '1px dashed #ccc', borderRadius: '6px', backgroundColor: '#f9f9f9' });
-const CopyButton = styled('button', { background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem', '&:hover': { color: '$heart' } });
-const AddFundSection = styled('div', { marginTop: '0.5rem', textAlign: 'center' });
-const AddFundButton = styled(Button, { marginTop: '0.25rem' });
-const InboxSection = styled('div', { marginTop: '1.5rem', padding: '1rem', backgroundColor: '#f9f9f9', borderRadius: '8px' });
-const InboxHeader = styled('h3', { margin: '0 0 0.75rem 0', fontSize: '16px', fontWeight: '600' });
-const MeetingCard = styled('div', { padding: '0.75rem', backgroundColor: '#fff', border: '1px solid #eee', borderRadius: '6px', marginBottom: '0.5rem', fontSize: '14px' });
-const MeetingMeta = styled('div', { fontSize: '12px', color: '#666', marginTop: '0.25rem' });
-const ActionRow = styled('div', { display: 'flex', gap: '0.5rem', marginTop: '0.5rem' });
+const InboxSection = styled('div', {
+  width: '100%',
+  marginTop: '$md',
+  padding: '$md',
+  backgroundColor: '#f9fafb',
+  borderRadius: '$md',
+  border: '1px solid #e8eaec',
+});
+const InboxHeader = styled('h3', {
+  margin: '0 0 $sm 0',
+  fontSize: '$md',
+  fontWeight: 600,
+  color: '$dark',
+});
+const MeetingCard = styled('div', {
+  padding: '12px',
+  backgroundColor: '#fff',
+  border: '1px solid #e8eaec',
+  borderRadius: '$sm',
+  marginBottom: '$sm',
+  fontSize: '14px',
+  '&:last-child': { marginBottom: 0 },
+});
+const MeetingMeta = styled('div', { fontSize: '12px', color: '$darkgray', marginTop: '4px' });
+const ActionRow = styled('div', { display: 'flex', gap: '$sm', marginTop: '$sm' });
 const AcceptButton = styled('button', {
-  background: '#27ae60', color: '#fff', border: 'none', borderRadius: '4px',
-  padding: '0.4rem 0.9rem', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
-  '&:hover': { background: '#1e8c4a' },
+  background: '#27ae60', color: '#fff', border: 'none', borderRadius: '$sm',
+  padding: '6px 14px', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
+  '&:hover:not(:disabled)': { background: '#1e8c4a' },
   '&:disabled': { background: '#888', cursor: 'not-allowed' },
 });
 const DeclineButton = styled('button', {
-  background: '#c0392b', color: '#fff', border: 'none', borderRadius: '4px',
-  padding: '0.4rem 0.9rem', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
-  '&:hover': { background: '#a53224' },
+  background: '$heart', color: '#fff', border: 'none', borderRadius: '$sm',
+  padding: '6px 14px', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
+  '&:hover:not(:disabled)': { background: '#a53224' },
   '&:disabled': { background: '#888', cursor: 'not-allowed' },
 });
 
@@ -51,15 +74,16 @@ type IncomingMeeting = {
   reservedAt: Timestamp | null;
 };
 
+function firstNameOf(full: string): string {
+  return (full || '').trim().split(/\s+/)[0] || full || 'you';
+}
+
 export default function ListenerProfile() {
-  
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [userId, setUserId] = useState<string | null>(null);
   const [listener, setListener] = useState<Listener | null>(null);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [pitcherSetUp, setPitcherSetUp] = useState(true);
   const [incoming, setIncoming] = useState<IncomingMeeting[]>([]);
   const [respondingId, setRespondingId] = useState<string | null>(null);
@@ -69,7 +93,6 @@ export default function ListenerProfile() {
       if (user) {
         setUserId(user.uid);
         await fetchListenerData(user.uid);
-        // Fetch pitcher isSetUp status for cross-role button
         try {
           const pitcherDoc = await getDoc(doc(firestore, 'pitchers', user.uid));
           if (pitcherDoc.exists()) {
@@ -78,7 +101,6 @@ export default function ListenerProfile() {
         } catch (err) {
           console.error('[Fetch Pitcher Status Error]', err);
         }
-        // Fetch incoming pitch requests
         try {
           const q = query(
             collection(firestore, 'meetings'),
@@ -118,8 +140,8 @@ export default function ListenerProfile() {
         setError('Your profile was not found. Please contact support.');
       }
     } catch (err: unknown) {
-      const error = err as Error;
-      console.error('[Fetch Data Error]', error.message);
+      const e = err as Error;
+      console.error('[Fetch Data Error]', e.message);
       setError('Failed to load profile. Please try again later.');
     }
   };
@@ -153,7 +175,6 @@ export default function ListenerProfile() {
         const data = await res.json().catch(() => ({}));
         alert(`Could not ${action}: ${data.error || res.statusText}`);
       } else {
-        // Refetch the inbox to reflect the new state.
         setIncoming((cur) => cur.filter((m) => m.id !== meetingId));
       }
     } catch (err) {
@@ -178,11 +199,14 @@ export default function ListenerProfile() {
     return (
       <PageWrapper>
         <CardContainer>
-          <Subtitle>Loading your profile...</Subtitle>
+          <PageSubheading>Loading your profile…</PageSubheading>
         </CardContainer>
       </PageWrapper>
     );
   }
+
+  const firstName = firstNameOf(listener.fullName);
+  const shareUrl = userId ? `${typeof window !== 'undefined' ? window.location.origin : ''}/listener/${userId}` : '';
 
   return (
     <>
@@ -192,35 +216,30 @@ export default function ListenerProfile() {
       <PageWrapper>
         <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
-          <Title>My Listener Profile</Title>
-          <Subtitle>Welcome, {listener.fullName}</Subtitle>
+          <PageHeading>My Listener Profile</PageHeading>
+          <PageSubheading>Welcome, {listener.fullName}</PageSubheading>
 
-          <ShareSection>
-            <p>Please share the following link with a potential pitcher:</p>
-            <SharableLink>
-              {`${window.location.origin}/listener/${userId}`}
-              <CopyButton onClick={handleCopy} aria-label="Copy link to clipboard">
-                <ClipboardCopy size={18} />
-              </CopyButton>
-              {copied && <span style={{ fontSize: '12px', color: 'green' }}>Copied!</span>}
-            </SharableLink>
-          </ShareSection>
+          {listener.intro && listener.intro.trim() && (
+            <IntroCard label="Brief intro">{linkify(listener.intro)}</IntroCard>
+          )}
 
-          <InfoRow>
-            <Label>Email Address:</Label>
-            <Value>{listener.email}</Value>
-          </InfoRow>
+          <StatCard
+            icon="💝"
+            amount={`$${listener.donation.toFixed(2)} per meeting`}
+            caption={<>donation supports {firstName}&rsquo;s chosen non&#8209;profit</>}
+          />
 
-          <InfoRow>
-            <Label>Donation per Meeting ($):</Label>
-            <Value>{listener.donation.toFixed(2)}</Value>
-          </InfoRow>
+          <ShareLinkCard
+            hint="Share this link with a potential pitcher:"
+            url={shareUrl}
+            copied={copied}
+            onCopy={handleCopy}
+            copyIcon={<ClipboardCopy size={18} />}
+          />
 
-          <InfoRow>
-            <Label>Brief Intro or LinkedIn Page Link:</Label>
-          </InfoRow>
-
-          <Subtitle>{listener.intro}</Subtitle>
+          <InfoLineGroup>
+            <InfoLine label="Email">{listener.email}</InfoLine>
+          </InfoLineGroup>
 
           {incoming.length > 0 && (
             <InboxSection>
@@ -253,13 +272,18 @@ export default function ListenerProfile() {
             </InboxSection>
           )}
 
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '0rem' }}>
-            <Button onClick={() => router.push('/listener/update-profile')}>Edit Profile</Button>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-            <Button onClick={() => router.push(pitcherSetUp ? '/pitcher/profile' : '/pitcher/update-profile')}>
-              {pitcherSetUp ? 'Go to Pitcher Profile' : 'Set Up Pitcher Profile'}
-            </Button>
+          <PrimaryCTA as="button" onClick={() => router.push('/listener/update-profile')}>
+            Edit profile →
+          </PrimaryCTA>
+
+          <div style={{ textAlign: 'center' }}>
+            <SecondaryLink
+              as="button"
+              onClick={() => router.push(pitcherSetUp ? '/pitcher/profile' : '/pitcher/update-profile')}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', font: 'inherit', padding: '8px 0' }}
+            >
+              {pitcherSetUp ? <>Switch to <strong>Pitcher Profile</strong></> : <>Set up your <strong>Pitcher Profile</strong></>}
+            </SecondaryLink>
           </div>
         </CardContainer>
       </PageWrapper>
