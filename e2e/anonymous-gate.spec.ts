@@ -6,15 +6,16 @@ const LISTENER_UID = 'ASrRQKr2g8NRBsAGOQAUZ7txzXi2';
 const PITCHER_UID = 'ASrRQKr2g8NRBsAGOQAUZ7txzXi2'; // same uid, dual-profile system
 
 test.describe('Anonymous gate on /listener/{uid}', () => {
-  test('shows Sign Up + Log In buttons; no anonymous form rendered', async ({ page }) => {
+  test('shows Sign Up + Log In links; no anonymous form rendered', async ({ page }) => {
     const errors: string[] = [];
     page.on('pageerror', (err) => errors.push(err.message));
 
     await page.goto(`/listener/${LISTENER_UID}`);
 
-    // Wait for client-side hydration to resolve (auth state -> render branch).
-    await expect(page.getByRole('button', { name: /Sign up as Pitcher/i })).toBeVisible({ timeout: 15_000 });
-    await expect(page.getByRole('button', { name: /Log in/i })).toBeVisible();
+    // Wait for client-side hydration. In 0.9.1 the CTAs became styled <a> elements
+    // (PrimaryCTA + SecondaryLink) — proper semantics since they navigate.
+    await expect(page.getByRole('link', { name: /Sign up as Pitcher/i })).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByRole('link', { name: /Log in/i })).toBeVisible();
 
     // No anonymous form: no "Your name" / "Your email" inputs.
     await expect(page.getByPlaceholder(/Your name/i)).toHaveCount(0);
