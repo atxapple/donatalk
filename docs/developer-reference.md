@@ -40,7 +40,6 @@ donatalk/
 │   │   ├── book-meeting-from-balance/  # Pitcher reserves balance, books a listener
 │   │   ├── complete-order/             # Phase 3 cleanup pending — internal PayPal capture
 │   │   ├── complete-order-and-update-fund/
-│   │   ├── create-meeting/
 │   │   ├── create-order/
 │   │   ├── create-profiles/            # Dual-profile creation (pitcher/listener/both-stubs)
 │   │   ├── meeting/[id]/accept/        # Token-gated accept commit
@@ -140,7 +139,6 @@ All routes located in `app/api/`.
 | `/api/create-order` | POST | Create PayPal order | PayPal |
 | `/api/complete-order` | POST | Capture PayPal payment (internal — called only by `complete-order-and-update-fund` and the legacy `/checkout` page) | PayPal |
 | `/api/complete-order-and-update-fund` | POST | Capture payment + update pitcher balance | PayPal, Firebase Admin |
-| `/api/create-meeting` | POST | Create meeting record in Firestore | Firebase Admin |
 | `/api/send-notification` | POST | Send meeting interest email to both parties | Nodemailer |
 | `/api/send-payment-confirm-email` | POST | Send payment confirmation to pitcher | Nodemailer |
 | `/api/send-reset-email` | POST | Send branded password reset email | Firebase Admin, Nodemailer |
@@ -367,7 +365,7 @@ npm run test     # Run Vitest unit tests
 
 1. **Amount obfuscation is weak:** `amount * 7900` in query params (e.g., `/pitcher/add-fund?a=79000`) is trivially reversible. Not true encryption.
 2. **Hardcoded Zoom link:** A single Zoom meeting URL is hardcoded in `app/api/send-notification/route.ts` and sent in all meeting emails. Needs per-user meeting link support.
-3. **No server-side auth middleware:** Route protection is client-side only via `Navbar.tsx`. Newer booking endpoints (`book-meeting-from-balance`, `request-meeting`, `meeting/[id]/*`) verify Firebase ID tokens or HMAC tokens, but the older routes (`create-meeting`, `send-notification`, etc.) still have no auth checks.
+3. **No server-side auth middleware:** Route protection is client-side only via `Navbar.tsx`. Newer booking endpoints (`book-meeting-from-balance`, `request-meeting`, `meeting/[id]/*`) verify Firebase ID tokens or HMAC tokens, but the older routes (`send-notification`, `send-signup-email`, etc.) still have no auth checks.
 4. **Dual routing system:** Hybrid App Router + Pages Router — public profiles use Pages Router for SSR, everything else uses App Router.
 5. **No rate limiting** on API routes.
 6. **Signup-email link role bug:** `app/api/send-signup-email/route.ts` always wraps the visible link in an `href` to `/pitcher/${userId}` and links the "your profile page" anchor to `/pitcher/profile`, even when the role is `listener`. Visible text uses the correct role.
@@ -379,7 +377,7 @@ npm run test     # Run Vitest unit tests
 - **Path alias:** `@/*` maps to project root (tsconfig paths).
 - **Components:** UI primitives in `components/ui/`, layout wrappers in `components/layout/`.
 - **API routes:** All use Next.js App Router route handlers (`route.ts` with named exports like `POST`).
-- **Firebase Admin init:** Guarded with `if (!getApps().length)` pattern, repeated in `lib/updateFunds.ts`, `lib/sendEmailfromListenerPage.ts`, and `app/api/create-meeting/route.ts`.
+- **Firebase Admin init:** Most server code uses the shared `lib/firebaseAdmin.ts` (`adminDb`, `adminAuth`). The older `lib/updateFunds.ts` still inlines the `if (!getApps().length)` guard pattern.
 - **Public pages:** Use Pages Router `getServerSideProps` for SSR with Firebase client SDK.
 - **Slug generation:** `slugify(fullName)` with uniqueness check via Firestore query; appends counter if duplicate.
 - **State management:** No global state library. Auth state via `onAuthStateChanged` in Navbar. Page-level state via `useState`.

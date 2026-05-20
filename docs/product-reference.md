@@ -188,7 +188,7 @@ A person who wants to hear pitches and direct donations to non-profits. They:
 - [ ] Implement meeting completion workflow (mark meetings as completed, trigger off-platform donation transfer)
 - [ ] Add non-profit organization selection/directory
 - [ ] Replace hardcoded Zoom link with user-configurable meeting links
-- [ ] Add server-side auth middleware so legacy API routes (`create-meeting`, `send-notification`, etc.) verify Firebase ID tokens
+- [ ] Add server-side auth middleware so legacy API routes (`send-notification`, `send-signup-email`, etc.) verify Firebase ID tokens
 - [ ] Phase 3 cleanup: inline the PayPal capture into `complete-order-and-update-fund` so `complete-order` and `/checkout` can be removed
 - [ ] Fix `send-signup-email` always linking to `/pitcher/${userId}` and `/pitcher/profile` (should respect role)
 
