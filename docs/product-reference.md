@@ -52,45 +52,50 @@ A person who wants to hear pitches and direct donations to non-profits. They:
 1. **Sign up** at `/listener/signup` (name, email, password, intro/LinkedIn, donation amount)
 2. **Receive welcome email** with profile link
 3. **Share profile link** (e.g., `app.donatalk.com/listener/{uid}`)
-4. **Pitcher visits profile**, fills out form (name, email, availability)
-5. **Pitcher escrows payment** (donation + 4.9% fee via PayPal) -> both get notification email
-6. **Meeting happens** -> escrowed donation is sent to non-profit
+4. **Pitcher visits profile** (signed in, with funded balance), fills name/email/availability
+5. **Pitcher books from balance** — the listener's required amount (donation + 4.9% fee) is reserved against the Pitcher's `credit_balance`; both get notification email with Accept/Decline links
+6. **Listener accepts** via email link -> reservation commits to a donation; **declines** -> reservation released
+7. **Meeting happens** -> committed donation is sent to non-profit
 
 ## Feature Status
 
 ### Implemented
-- User signup/login (Firebase Auth, email/password)
-- Dual-profile system (Pitcher + Listener per user)
-- Profile management (create, view, update)
-- Public shareable profile pages (SSR)
+- User signup/login (Firebase Auth: email/password + Google Sign-In)
+- Dual-profile system (Pitcher + Listener per user; signup creates both, one as a stub)
+- Profile management (create, view, update); self-serve profile completion of stubs
+- Public shareable profile pages (SSR) with client-side auth gate (forced sign-up to book)
 - PayPal fund addition (Pitcher)
-- PayPal escrow payment (Listener flow)
-- Email notifications (signup, payment, meeting interest)
-- Meeting record creation
-- Active/inactive link status based on fund balance
+- Two-phase booking: pitcher reserves from `credit_balance` → listener accepts/declines via email → commit/release
+- Meeting status state machine: `pending`, `reserved`, `accepted`, `declined`, `expired`, `cancelled`
+- 14-day reservation TTL + HMAC-signed accept/decline tokens (one-time-use)
+- Cap of 5 concurrent reservations per Pitcher
+- Visitor-side cancel for their own pending/reserved request
+- Email notifications (signup, payment, password reset, meeting reservation/pending/accept/decline/cancel)
+- Branded password-reset emails via Nodemailer (anti-enumeration response)
+- Admin dashboard (`/admin`): sortable tables, edit modal, soft-delete + restore, fund-history with resolved pitcher emails
+- Active/inactive link status based on Pitcher's available balance (`credit_balance - reservedBalance`)
 - Unique slug generation for profiles
+- Soft delete: profiles hidden from public + chooser; admin sweep cancels related reserved meetings
+- Open-redirect-safe `?return=` on login/signup/update-profile/add-fund (allowlist)
 - Google Ads conversion tracking
 - Light/dark theme support
 - Responsive design
 
 ### Not Yet Implemented
-- Admin dashboard
-- Meeting status tracking (only "pending" exists)
-- Meeting completion / donation fulfillment workflow
+- Meeting completion / donation fulfillment workflow (acceptance commits balance, but the actual donation transfer to a non-profit still happens off-platform)
 - Non-profit organization selection / directory
-- User-configurable Zoom/meeting links
-- Password reset / forgot password
-- Social login (Google, etc.)
+- User-configurable Zoom/meeting links (still a single hardcoded Zoom URL)
 - Profile image upload
 - Search / discovery of Pitchers and Listeners
 - Notification preferences
 - In-app messaging
-- Meeting calendar integration
+- Meeting calendar integration (.ics, Google Calendar)
 - Analytics dashboard for users
 - Rate limiting on API routes
-- Server-side auth middleware
+- Server-side auth middleware (only the booking endpoints currently verify Firebase ID tokens)
 - Cookie consent management
-- Proper amount encryption
+- Proper amount encryption (current `amount * 7900` URL obfuscation is trivially reversible)
+- Dashboard inbox for incoming requests on the pitcher/listener sides (action is currently email-only)
 
 ## User Flow Diagram
 
@@ -162,7 +167,7 @@ A person who wants to hear pitches and direct donations to non-profits. They:
 | Landing page hosting | WordPress | donatalk.com |
 | App hosting | Vercel | Auto-deploy from GitHub main branch |
 | Database | Firebase / Cloud Firestore | 4 collections: pitchers, listeners, meetings, fund_history |
-| Authentication | Firebase Auth | Email/password only |
+| Authentication | Firebase Auth | Email/password + Google Sign-In |
 | Payments | PayPal | Live (production API URL) |
 | Transactional email | Nodemailer (SMTP) | From: support@donatalk.com via mail.donatalk.com |
 | Source control | GitHub | Private repository |
@@ -176,33 +181,28 @@ A person who wants to hear pitches and direct donations to non-profits. They:
 - **Legal pages:** Terms of Service, Privacy Policy (linked from app footer)
 - **Known issues:**
   - No cookie consent management (Cookiebot or equivalent) is implemented
-  - Footer copyright in app now uses dynamic year via `new Date().getFullYear()`
 
 ## Backlog / TODO
 
 ### High Priority
-- [ ] Implement meeting completion workflow (mark meetings as completed, trigger donation)
+- [ ] Implement meeting completion workflow (mark meetings as completed, trigger off-platform donation transfer)
 - [ ] Add non-profit organization selection/directory
 - [ ] Replace hardcoded Zoom link with user-configurable meeting links
-- [ ] Add server-side auth middleware for API route protection
-- [ ] Fix typos in codebase (`encriptedAmount`, `ilstenerId`, `PyamentEmailResponse`)
-- [ ] Fix commented-out `isActive` check on listener public page
+- [ ] Add server-side auth middleware so legacy API routes (`create-meeting`, `send-notification`, etc.) verify Firebase ID tokens
+- [ ] Phase 3 cleanup: inline the PayPal capture into `complete-order-and-update-fund` so `complete-order` and `/checkout` can be removed
+- [ ] Fix `send-signup-email` always linking to `/pitcher/${userId}` and `/pitcher/profile` (should respect role)
 
 ### Medium Priority
 - [ ] Replace weak amount obfuscation (`amount * 7900`) with proper approach
-- [ ] Move hardcoded BCC email and domain URLs to environment variables
-- [ ] Add password reset / forgot password flow
 - [ ] Add API rate limiting
-- [ ] Create admin dashboard for monitoring meetings and payments
 - [ ] Add cookie consent management
-- [ ] Fix `create-meeting` call placement in pitcher/[uid].tsx (runs outside try/catch)
+- [ ] Dashboard inbox UI for incoming pending requests (currently action is email-only)
+- [ ] Surface reserved/available balance breakdown in pitcher dashboard with better UX
 
 ### Low Priority
-- [ ] Add social login (Google)
 - [ ] Profile image upload
 - [ ] Search/discovery of Pitchers and Listeners
 - [ ] In-app messaging between matched users
-- [ ] Meeting calendar integration
+- [ ] Meeting calendar integration (.ics / Google Calendar)
 - [ ] User analytics dashboard
 - [ ] Create `.env.example` file
-- [ ] Update footer copyright year to be dynamic
