@@ -76,6 +76,8 @@ export default function Navbar() {
         setUserEmail(null);
   
         const publicPaths = [
+          '/',
+          '/login',
           '/pitcher/signup',
           '/listener/signup',
           /^\/pitcher\/[^\/]+$/,    // e.g. /pitcher/abc123
