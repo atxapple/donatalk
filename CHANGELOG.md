@@ -3,6 +3,18 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.11.1] - 2026-05-23
+
+### Added (admin dashboard — merged from feat/admin-quickwins)
+- Per-tab search/filter on the admin tables.
+- Color-coded status badges in the Meetings tab.
+- Truncate-with-expand for long text fields.
+- Explicit "Deleted" badge on soft-deleted rows.
+- Meetings tab shows pitcher/listener email instead of name.
+
+### Fixed
+- Fund History no longer leaks the raw pitcher UID when the pitcher doc has been deleted.
+
 ## [0.11.0] - 2026-05-20
 
 ### Added
