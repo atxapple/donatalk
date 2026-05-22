@@ -144,7 +144,7 @@ describe('GET /api/admin', () => {
       expect(json.data[1].pitcherEmail).toBe('bob@test.com');
     });
 
-    it('falls back to pitcherId when pitcher doc does not exist', async () => {
+    it('falls back to "(deleted account)" when pitcher doc does not exist', async () => {
       mockVerifyIdToken.mockResolvedValue({ email: 'yunyoungmokk@gmail.com' });
       mockGet.mockResolvedValue({
         docs: [
@@ -159,7 +159,10 @@ describe('GET /api/admin', () => {
       const req = createAdminRequest('fund_history', 'valid-token');
       const res = await GET(req as any);
       const json = await res.json();
-      expect(json.data[0].pitcherEmail).toBe('deleted-uid');
+      // pitcherId stays on the row for forensics; only the displayed
+      // pitcherEmail no longer leaks the raw UID.
+      expect(json.data[0].pitcherEmail).toBe('(deleted account)');
+      expect(json.data[0].pitcherId).toBe('deleted-uid');
     });
 
     it('returns dash when pitcherId is missing', async () => {

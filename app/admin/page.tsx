@@ -139,6 +139,88 @@ const ErrorText = styled('p', {
   fontSize: '$base',
 });
 
+const SearchInput = styled('input', {
+  padding: '$sm',
+  fontSize: '$base',
+  borderRadius: '$sm',
+  border: '1px solid #ccc',
+  width: '100%',
+  maxWidth: '320px',
+  '&:focus': { borderColor: '$heart', outline: 'none' },
+});
+
+const TableToolbar = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '$sm',
+  marginBottom: '$sm',
+  flexWrap: 'wrap',
+});
+
+const ResultCount = styled('span', {
+  fontSize: '14px',
+  color: '$mediumgray',
+});
+
+const Badge = styled('span', {
+  display: 'inline-block',
+  padding: '2px 8px',
+  fontSize: '12px',
+  fontWeight: '600',
+  borderRadius: '999px',
+  textTransform: 'capitalize',
+  whiteSpace: 'nowrap',
+  variants: {
+    tone: {
+      slate:  { backgroundColor: '#f1f5f9', color: '#475569' },
+      blue:   { backgroundColor: '#dbeafe', color: '#1e40af' },
+      green:  { backgroundColor: '#dcfce7', color: '#166534' },
+      gray:   { backgroundColor: '#e5e7eb', color: '#374151' },
+      red:    { backgroundColor: '#fee2e2', color: '#991b1b' },
+      amber:  { backgroundColor: '#fef3c7', color: '#92400e' },
+    },
+  },
+});
+
+const STATUS_TONE: Record<string, 'slate' | 'blue' | 'green' | 'gray' | 'red' | 'amber'> = {
+  pending:   'slate',
+  reserved:  'blue',
+  accepted:  'green',
+  declined:  'gray',
+  cancelled: 'red',
+  expired:   'amber',
+};
+
+const ExpandLink = styled('button', {
+  background: 'none',
+  border: 'none',
+  padding: 0,
+  marginLeft: '6px',
+  color: '#3b82f6',
+  fontSize: '12px',
+  cursor: 'pointer',
+  textDecoration: 'underline',
+  '&:hover': { color: '#1d4ed8' },
+});
+
+const LONG_TEXT_KEYS = new Set(['availability', 'intro', 'pitch']);
+const LONG_TEXT_THRESHOLD = 80;
+
+const DeletedBadge = styled('span', {
+  display: 'inline-block',
+  padding: '2px 6px',
+  marginRight: '6px',
+  fontSize: '10px',
+  fontWeight: '700',
+  letterSpacing: '0.04em',
+  borderRadius: '$sm',
+  backgroundColor: '#fee2e2',
+  color: '#991b1b',
+  textTransform: 'uppercase',
+  whiteSpace: 'nowrap',
+});
+
 const ActionButton = styled('button', {
   padding: '4px 10px',
   fontSize: '12px',
@@ -316,6 +398,7 @@ export default function AdminPage() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [tableData, setTableData] = useState<Record<string, unknown>[]>([]);
   const [sort, setSort] = useState<SortConfig | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [error, setError] = useState('');
   const [token, setToken] = useState('');
 
@@ -330,6 +413,19 @@ export default function AdminPage() {
 
   // Restore loading state (track by row id)
   const [restoringId, setRestoringId] = useState<string | null>(null);
+
+  // Per-cell expand state for long text fields, keyed `${rowId}::${columnKey}`
+  const [expandedCells, setExpandedCells] = useState<Set<string>>(new Set());
+
+  const toggleCellExpand = useCallback((rowId: string, key: string) => {
+    setExpandedCells((prev) => {
+      const next = new Set(prev);
+      const id = `${rowId}::${key}`;
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -369,11 +465,25 @@ export default function AdminPage() {
           setDashboardData(null);
         }
         setSort(null);
+        setSearchQuery('');
+        setExpandedCells(new Set());
       })
       .catch((err) => setError(err.message));
   }, [token, activeTab]);
 
   const sortedData = useMemo(() => sortData(tableData, sort), [tableData, sort]);
+
+  const filteredData = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return sortedData;
+    return sortedData.filter((row) =>
+      Object.entries(row).some(([k, v]) => {
+        if (v == null) return false;
+        if (k === 'createdAt' || k === 'timestamp' || k === 'deletedAt') return false;
+        return String(v).toLowerCase().includes(q);
+      })
+    );
+  }, [sortedData, searchQuery]);
 
   const handleSort = (key: string) => {
     setSort((prev) =>
@@ -541,8 +651,8 @@ export default function AdminPage() {
   ];
 
   const meetingColumns = [
-    { key: 'pitcherName', label: 'Pitcher' },
-    { key: 'listenerName', label: 'Listener' },
+    { key: 'pitcherEmail', label: 'Pitcher' },
+    { key: 'listenerEmail', label: 'Listener' },
     { key: 'meetingsource', label: 'Source' },
     { key: 'status', label: 'Status' },
     { key: 'availability', label: 'Availability' },
@@ -577,8 +687,22 @@ export default function AdminPage() {
   const hasActions = activeTab === 'Pitchers' || activeTab === 'Listeners';
 
   const renderTable = (columns: { key: string; label: string }[]) => (
-    <div style={{ overflowX: 'auto' }}>
-      <Table>
+    <>
+      <TableToolbar>
+        <SearchInput
+          type="search"
+          placeholder={`Search ${activeTab}…`}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <ResultCount>
+          {searchQuery.trim()
+            ? `Showing ${filteredData.length} of ${tableData.length}`
+            : `${tableData.length} row${tableData.length === 1 ? '' : 's'}`}
+        </ResultCount>
+      </TableToolbar>
+      <div style={{ overflowX: 'auto' }}>
+        <Table>
         <thead>
           <tr>
             {columns.map((col) => (
@@ -591,25 +715,63 @@ export default function AdminPage() {
           </tr>
         </thead>
         <tbody>
-          {sortedData.length === 0 ? (
+          {filteredData.length === 0 ? (
             <tr>
               <Td colSpan={columns.length + (hasActions ? 1 : 0)} style={{ textAlign: 'center' }}>
-                No data
+                {searchQuery.trim() ? 'No matches' : 'No data'}
               </Td>
             </tr>
           ) : (
-            sortedData.map((row, i) => {
+            filteredData.map((row, i) => {
               const deleted = isDeleted(row);
               return (
                 <tr
                   key={(row.id as string) || i}
-                  style={deleted ? { opacity: 0.5, textDecoration: 'line-through' } : undefined}
+                  style={deleted ? { backgroundColor: '#fef2f2', color: '#7f1d1d' } : undefined}
                 >
-                  {columns.map((col) => (
-                    <Td key={col.key} title={String(row[col.key] ?? '')}>
-                      {formatCell(col.key, row[col.key])}
-                    </Td>
-                  ))}
+                  {columns.map((col) => {
+                    const raw = row[col.key];
+                    if (col.key === 'fullName' && deleted) {
+                      return (
+                        <Td key={col.key} title={String(raw ?? '')}>
+                          <DeletedBadge>Deleted</DeletedBadge>
+                          {formatCell(col.key, raw)}
+                        </Td>
+                      );
+                    }
+                    if (col.key === 'status' && typeof raw === 'string') {
+                      const tone = STATUS_TONE[raw] ?? 'slate';
+                      return (
+                        <Td key={col.key}>
+                          <Badge tone={tone}>{raw}</Badge>
+                        </Td>
+                      );
+                    }
+                    if (LONG_TEXT_KEYS.has(col.key) && typeof raw === 'string' && raw.length > LONG_TEXT_THRESHOLD) {
+                      const rowId = String(row.id ?? i);
+                      const expanded = expandedCells.has(`${rowId}::${col.key}`);
+                      return (
+                        <Td
+                          key={col.key}
+                          style={expanded ? { whiteSpace: 'pre-wrap', maxWidth: '500px' } : undefined}
+                          title={expanded ? undefined : raw}
+                        >
+                          {expanded ? raw : `${raw.slice(0, LONG_TEXT_THRESHOLD).trimEnd()}…`}
+                          <ExpandLink
+                            type="button"
+                            onClick={() => toggleCellExpand(rowId, col.key)}
+                          >
+                            {expanded ? 'less' : 'more'}
+                          </ExpandLink>
+                        </Td>
+                      );
+                    }
+                    return (
+                      <Td key={col.key} title={String(raw ?? '')}>
+                        {formatCell(col.key, raw)}
+                      </Td>
+                    );
+                  })}
                   {hasActions && (
                     <Td style={{ whiteSpace: 'nowrap', maxWidth: 'none' }}>
                       {deleted ? (
@@ -637,8 +799,9 @@ export default function AdminPage() {
             })
           )}
         </tbody>
-      </Table>
-    </div>
+        </Table>
+      </div>
+    </>
   );
 
   const editFields = editState?.collection === 'pitchers' ? PITCHER_EDIT_FIELDS : LISTENER_EDIT_FIELDS;
