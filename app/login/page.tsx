@@ -17,6 +17,7 @@ import Head from 'next/head';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/firebase/clientApp';
 import { signInWithGoogle, checkProfilesExist } from '@/lib/googleAuth';
+import { trackSignup } from '@/lib/analytics';
 import { GoogleSignInButton } from '@/components/ui/GoogleSignInButton';
 import { Input, Button, Field, Label } from '@/components/ui';
 import PageWrapper from '@/components/layout/PageWrapper';
@@ -147,6 +148,7 @@ export default function LoginPage() {
             role: 'pitcher',
           }),
         });
+        trackSignup('pitcher', 'google');
       }
 
       router.push(readReturnPath() ?? '/choose-a-profile');
