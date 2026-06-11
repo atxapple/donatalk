@@ -15,7 +15,7 @@ function readReturnPath(): string | null {
 }
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '@/firebase/clientApp'; // ✅ Adjust path if needed
-import { doc, setDoc, Timestamp, collection, getDocs, query, where } from 'firebase/firestore';
+import { doc, setDoc, Timestamp, collection, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { signInWithGoogle, checkProfilesExist } from '@/lib/googleAuth';
 import { GoogleSignInButton } from '@/components/ui/GoogleSignInButton';
 import { Input, Textarea, Button, Field, Label } from '@/components/ui';
@@ -23,6 +23,15 @@ import PageWrapper from '@/components/layout/PageWrapper';
 import CardContainer from '@/components/layout/CardContainer';
 import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
 import { MIN_DONATION_USD } from '@/lib/constants';
+import { useEffect } from 'react';
+
+// When signup is reached from a pitcher's public page (?return=/pitcher/{uid}),
+// the visitor's goal is to hear THAT pitch — intro/donation details about their
+// own listener page are deferred to safe defaults they can edit later.
+function invitePitcherUidFrom(returnPath: string | null): string | null {
+  const m = returnPath?.match(/^\/pitcher\/([A-Za-z0-9_-]+)/);
+  return m ? m[1] : null;
+}
 import { styled } from '@/styles/stitches.config';
 import Script from 'next/script';
 
@@ -75,6 +84,25 @@ export default function SignupListener() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [inviteUid, setInviteUid] = useState<string | null>(null);
+  const [invitePitcher, setInvitePitcher] = useState<{ fullName: string } | null>(null);
+
+  useEffect(() => {
+    const uid = invitePitcherUidFrom(readReturnPath());
+    setInviteUid(uid);
+    if (!uid) return;
+    getDoc(doc(firestore, 'pitchers', uid))
+      .then((snap) => {
+        if (!snap.exists()) return;
+        const d = snap.data();
+        if (d.isSetUp !== false && !d.deletedAt) {
+          setInvitePitcher({ fullName: d.fullName || '' });
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const isInvite = !!inviteUid;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -83,11 +111,11 @@ export default function SignupListener() {
 
   const handleSignup = async () => {
     setError('');
-    if (!form.fullName || !form.email || !form.password || !form.intro || !form.donation) {
+    if (!form.fullName || !form.email || !form.password || (!isInvite && (!form.intro || !form.donation))) {
       setError('Please fill in all fields.');
       return;
     }
-    if (parseFloat(form.donation) < MIN_DONATION_USD) {
+    if (!isInvite && parseFloat(form.donation) < MIN_DONATION_USD) {
       setError(`Donation request per meeting must be at least $${MIN_DONATION_USD}.`);
       return;
     }
@@ -101,8 +129,8 @@ export default function SignupListener() {
       await setDoc(doc(firestore, 'listeners', uid), {
         fullName: form.fullName,
         email: form.email,
-        intro: form.intro,
-        donation: parseFloat(form.donation),
+        intro: isInvite ? '' : form.intro,
+        donation: isInvite ? MIN_DONATION_USD : parseFloat(form.donation),
         slug,
         isSetUp: true,
         createdAt: Timestamp.now(),
@@ -162,7 +190,11 @@ export default function SignupListener() {
             uid,
             fullName: displayName || '',
             email: email || '',
-            role: 'both-stubs',
+            // Invite flow: create a ready-to-request listener profile with safe
+            // defaults instead of stubs, so the visitor isn't detoured through
+            // update-profile before they can send a meeting request.
+            role: isInvite ? 'listener' : 'both-stubs',
+            ...(isInvite && { donation: MIN_DONATION_USD }),
           }),
         });
         await fetch('/api/send-signup-email', {
@@ -217,7 +249,15 @@ export default function SignupListener() {
         <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
           <Title>Sign Up as a Listener</Title>
-          <Subtitle>Discover pitches and support community.</Subtitle>
+          {isInvite ? (
+            <Subtitle>
+              One quick step before you can hear
+              {invitePitcher?.fullName ? ` ${invitePitcher.fullName}'s` : ' this'} pitch — their
+              donation goes to a cause you care about.
+            </Subtitle>
+          ) : (
+            <Subtitle>Discover pitches and support community.</Subtitle>
+          )}
 
           {error && <ProminentErrorBox>{error}</ProminentErrorBox>}
 
@@ -240,15 +280,19 @@ export default function SignupListener() {
             <Input name="password" type="password" value={form.password} onChange={onChange} onKeyPress={handleKeyPress} />
           </Field>
 
-          <Field>
-            <Label>Brief Intro or LinkedIn Page Link</Label>
-            <Textarea name="intro" rows={3} value={form.intro} onChange={onChange} />
-          </Field>
+          {!isInvite && (
+            <>
+              <Field>
+                <Label>Brief Intro or LinkedIn Page Link</Label>
+                <Textarea name="intro" rows={3} value={form.intro} onChange={onChange} />
+              </Field>
 
-          <Field>
-            <Label>Donation Request per Meeting ($ — minimum {MIN_DONATION_USD})</Label>
-            <Input name="donation" type="number" min={MIN_DONATION_USD} placeholder={`${MIN_DONATION_USD} or more`} value={form.donation} onChange={onChange} onKeyPress={handleKeyPress} />
-          </Field>
+              <Field>
+                <Label>Donation Request per Meeting ($ — minimum {MIN_DONATION_USD})</Label>
+                <Input name="donation" type="number" min={MIN_DONATION_USD} placeholder={`${MIN_DONATION_USD} or more`} value={form.donation} onChange={onChange} onKeyPress={handleKeyPress} />
+              </Field>
+            </>
+          )}
 
           <Button onClick={handleSignup} disabled={loading}>
             {loading ? 'Creating Account...' : 'Sign Up'}

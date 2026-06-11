@@ -43,6 +43,7 @@ export async function POST(req: Request) {
     }
 
     const batch = db.batch();
+    const profileSlug = slug || await generateUniqueSlug(fullName || 'user');
 
     if (role === 'pitcher') {
       batch.set(db.collection('pitchers').doc(uid), {
@@ -51,7 +52,7 @@ export async function POST(req: Request) {
         pitch: pitch || '',
         donation: typeof donation === 'number' ? donation : parseFloat(donation) || 0,
         credit_balance: 0,
-        slug,
+        slug: profileSlug,
         isSetUp: true,
         createdAt: FieldValue.serverTimestamp(),
       });
@@ -61,7 +62,7 @@ export async function POST(req: Request) {
         email,
         intro: '',
         donation: 0,
-        slug,
+        slug: profileSlug,
         isSetUp: false,
         createdAt: FieldValue.serverTimestamp(),
       });
@@ -71,7 +72,7 @@ export async function POST(req: Request) {
         email,
         intro: intro || '',
         donation: typeof donation === 'number' ? donation : parseFloat(donation) || 0,
-        slug,
+        slug: profileSlug,
         isSetUp: true,
         createdAt: FieldValue.serverTimestamp(),
       });
@@ -82,13 +83,11 @@ export async function POST(req: Request) {
         pitch: '',
         donation: 0,
         credit_balance: 0,
-        slug,
+        slug: profileSlug,
         isSetUp: false,
         createdAt: FieldValue.serverTimestamp(),
       });
     } else if (role === 'both-stubs') {
-      const profileSlug = slug || await generateUniqueSlug(fullName);
-
       batch.set(db.collection('pitchers').doc(uid), {
         fullName,
         email,
