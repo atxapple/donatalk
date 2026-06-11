@@ -11,6 +11,7 @@ import { Logo, ErrorBox } from '@/components/ui/shared';
 import { styled } from '@/styles/stitches.config';
 import { auth, firestore } from '@/firebase/clientApp';
 import { getSafeReturnPath } from '@/lib/safeReturn';
+import { trackAddFund } from '@/lib/analytics';
 import {
   PageHeading,
   PageSubheading,
@@ -263,6 +264,7 @@ export default function PitcherAddFund() {
       }
       const result = await res.json();
       if (result.status === 'COMPLETED') {
+        trackAddFund(amount, data.orderID);
         setSuccessMessage(`✓ $${amount.toFixed(2)} added to your balance.`);
         // Refresh balance shown on this page.
         try {
