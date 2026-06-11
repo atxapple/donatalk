@@ -22,6 +22,7 @@ import { Input, Textarea, Button, Field, Label } from '@/components/ui';
 import PageWrapper from '@/components/layout/PageWrapper';
 import CardContainer from '@/components/layout/CardContainer';
 import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
+import { MIN_DONATION_USD } from '@/lib/constants';
 import { styled } from '@/styles/stitches.config';
 import Script from 'next/script';
 
@@ -84,6 +85,10 @@ export default function SignupListener() {
     setError('');
     if (!form.fullName || !form.email || !form.password || !form.intro || !form.donation) {
       setError('Please fill in all fields.');
+      return;
+    }
+    if (parseFloat(form.donation) < MIN_DONATION_USD) {
+      setError(`Donation request per meeting must be at least $${MIN_DONATION_USD}.`);
       return;
     }
 
@@ -166,6 +171,8 @@ export default function SignupListener() {
           body: JSON.stringify({
             email: email || '',
             fullName: displayName || '',
+            userId: uid,
+            role: 'listener',
           }),
         });
       }
@@ -202,7 +209,7 @@ export default function SignupListener() {
       </Script>
 
       <Head>
-        <title>Sign Up as Pitcher | DonaTalk</title>
+        <title>Sign Up as Listener | DonaTalk</title>
         <meta name="description" content="Sign up as a listener and discover pitches that inspire donations." />
       </Head>
 
@@ -239,8 +246,8 @@ export default function SignupListener() {
           </Field>
 
           <Field>
-            <Label>Donation Request per Meeting ($)</Label>
-            <Input name="donation" type="number" value={form.donation} onChange={onChange} onKeyPress={handleKeyPress} />
+            <Label>Donation Request per Meeting ($ — minimum {MIN_DONATION_USD})</Label>
+            <Input name="donation" type="number" min={MIN_DONATION_USD} placeholder={`${MIN_DONATION_USD} or more`} value={form.donation} onChange={onChange} onKeyPress={handleKeyPress} />
           </Field>
 
           <Button onClick={handleSignup} disabled={loading}>
