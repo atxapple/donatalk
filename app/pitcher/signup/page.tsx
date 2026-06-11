@@ -22,6 +22,7 @@ import { Input, Textarea, Button, Field, Label } from '@/components/ui';
 import PageWrapper from '@/components/layout/PageWrapper';
 import CardContainer from '@/components/layout/CardContainer';
 import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
+import { MIN_DONATION_USD } from '@/lib/constants';
 import { styled } from '@/styles/stitches.config';
 import Script from 'next/script';
 
@@ -84,6 +85,10 @@ export default function SignupPitcher() {
     setError('');
     if (!form.fullName || !form.email || !form.password || !form.aboutPitch || !form.donation) {
       setError('Please fill in all fields.');
+      return;
+    }
+    if (parseFloat(form.donation) < MIN_DONATION_USD) {
+      setError(`Donation per meeting must be at least $${MIN_DONATION_USD}.`);
       return;
     }
 
@@ -166,6 +171,8 @@ export default function SignupPitcher() {
           body: JSON.stringify({
             email: email || '',
             fullName: displayName || '',
+            userId: uid,
+            role: 'pitcher',
           }),
         });
       }
@@ -238,8 +245,8 @@ export default function SignupPitcher() {
           </Field>
 
           <Field>
-            <Label>Donation per Meeting ($)</Label>
-            <Input name="donation" type="number" value={form.donation} onChange={onChange} onKeyPress={handleKeyPress} />
+            <Label>Donation per Meeting ($ — minimum {MIN_DONATION_USD})</Label>
+            <Input name="donation" type="number" min={MIN_DONATION_USD} placeholder={`${MIN_DONATION_USD} or more`} value={form.donation} onChange={onChange} onKeyPress={handleKeyPress} />
           </Field>
 
           <Button onClick={handleSignup} disabled={loading}>

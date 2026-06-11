@@ -20,6 +20,7 @@ import CardContainer from '@/components/layout/CardContainer';
 import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
 import { Input, Textarea, Button, Field, Label } from '@/components/ui';
 import { styled } from '@/styles/stitches.config';
+import { MIN_DONATION_USD } from '@/lib/constants';
 
 type Pitcher = {
   fullName: string;
@@ -86,6 +87,10 @@ export default function PitcherUpdateProfile() {
       setError('Full Name, About Pitch, and Donation fields are required.');
       return;
     }
+    if (form.donation < MIN_DONATION_USD) {
+      setError(`Donation per meeting must be at least $${MIN_DONATION_USD}.`);
+      return;
+    }
     setLoading(true);
     try {
       if (userId) {
@@ -145,8 +150,8 @@ export default function PitcherUpdateProfile() {
             </Field>
 
             <Field>
-              <Label>Donation Request per Meeting ($)</Label>
-              <Input name="donation" type="number" value={form.donation} onChange={onChange} />
+              <Label>Donation Request per Meeting ($ — minimum {MIN_DONATION_USD})</Label>
+              <Input name="donation" type="number" min={MIN_DONATION_USD} value={form.donation} onChange={onChange} />
             </Field>
 
             <Button onClick={handleUpdate} disabled={loading}>

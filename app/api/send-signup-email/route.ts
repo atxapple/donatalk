@@ -12,6 +12,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     }
 
+    if (role !== 'pitcher' && role !== 'listener') {
+      return NextResponse.json({ error: 'Invalid role.' }, { status: 400 });
+    }
+
     let customMsg1 = '';
     let customMsg2 = '';
     let customMsg3 = '';
@@ -25,6 +29,9 @@ export async function POST(req: Request) {
       customMsg2 = 'You can update your information at '
       customMsg3 = '';
     }
+
+    const profileUrl = `${APP_URL}/${role}/profile`;
+    const publicPageUrl = `${APP_URL}/${role}/${userId}`;
 
     const mailOptions = {
       to: [email],
@@ -49,12 +56,12 @@ export async function POST(req: Request) {
             </p>
 
             <p style="font-size: 16px; color: #333333;">
-              Your personal page has been created below. ${customMsg2} <a href="${APP_URL}/pitcher/profile"> your profile page</a>. ${customMsg3}
+              Your personal page has been created below. ${customMsg2} <a href="${profileUrl}"> your profile page</a>. ${customMsg3}
             </p>
 
             <blockquote style="background-color: #F8A5A5; margin: 5px; padding-top: 30px; padding-bottom: 10px; font-size: 16px; border-left: 5px solid #E74C3C; border-radius: 6px; color: #000000; white-space: pre-wrap; text-align: center; display: flex; align-items: center; justify-content: center; min-height: 50px; width: 100%;">
-              <a href="${APP_URL}/pitcher/${userId}" style="color: #2C3E50; text-decoration: none; font-weight: bold;">
-                ${APP_URL}/${role}/${userId}
+              <a href="${publicPageUrl}" style="color: #2C3E50; text-decoration: none; font-weight: bold;">
+                ${publicPageUrl}
               </a>
             </blockquote>
 
