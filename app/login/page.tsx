@@ -3,7 +3,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getSafeReturnPath } from '@/lib/safeReturn';
 
 // Read at submit time from window.location, since useSearchParams() can return
@@ -41,6 +41,19 @@ const ProminentErrorBox = styled(ErrorBox, {
   backgroundColor: '#ffe5e5',
 });
 
+const SignupPrompt = styled('p', {
+  marginTop: '1.25rem',
+  fontSize: '14px',
+  color: '$darkgray',
+  textAlign: 'center',
+  '& a': {
+    color: '$heart',
+    fontWeight: 600,
+    textDecoration: 'none',
+    '&:hover': { textDecoration: 'underline' },
+  },
+});
+
 const Divider = styled('div', {
   display: 'flex',
   alignItems: 'center',
@@ -64,6 +77,14 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  // Carry an invite ?return= through to the signup links so gated visitors
+  // who detour through login don't lose their destination.
+  const [returnSuffix, setReturnSuffix] = useState('');
+
+  useEffect(() => {
+    const r = readReturnPath();
+    if (r) setReturnSuffix(`?return=${encodeURIComponent(r)}`);
+  }, []);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -115,13 +136,15 @@ export default function LoginPage() {
             role: 'both-stubs',
           }),
         });
-        // Send welcome email
+        // Send welcome email (role defaults to pitcher; stubs cover both)
         await fetch('/api/send-signup-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: email || '',
             fullName: displayName || '',
+            userId: uid,
+            role: 'pitcher',
           }),
         });
       }
@@ -210,6 +233,13 @@ export default function LoginPage() {
           <Button onClick={handleLogin} disabled={loading}>
             {loading ? 'Logging in...' : 'Login'}
           </Button>
+
+          <SignupPrompt>
+            New to DonaTalk?{' '}
+            <a href={`/pitcher/signup${returnSuffix}`}>Sign up as a Pitcher</a>
+            {' '}·{' '}
+            <a href={`/listener/signup${returnSuffix}`}>as a Listener</a>
+          </SignupPrompt>
         </CardContainer>
       </PageWrapper>
     </>
