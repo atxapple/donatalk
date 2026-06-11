@@ -6,6 +6,10 @@ export const PLATFORM_FEE_MULTIPLIER = 1 + (PLATFORM_FEE_PERCENTAGE / 100);
 export const MAX_PENDING_RESERVATIONS = 5;
 export const RESERVATION_TTL_DAYS = 14;
 
+// Floor for the per-meeting donation a profile can ask for. Sub-$10 asks made
+// the 4.9% fee round to pennies and undercut the "meaningful donation" pitch.
+export const MIN_DONATION_USD = 10;
+
 // After the listener accepts, money sits in escrow until both parties confirm
 // the meeting happened. If neither acts within this window, the meeting is
 // auto-refunded back to the pitcher.

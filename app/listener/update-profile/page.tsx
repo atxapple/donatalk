@@ -21,6 +21,7 @@ import { Logo, Title, Subtitle, ErrorBox } from '@/components/ui/shared';
 import { Input, Textarea, Button, Field, Label } from '@/components/ui';
 import { styled } from '@/styles/stitches.config';
 import {Listener} from '@/types/listener'
+import { MIN_DONATION_USD } from '@/lib/constants';
 
 const Form = styled('div', {
   display: 'flex',
@@ -78,6 +79,10 @@ export default function ListenerUpdateProfile() {
   const handleUpdate = async () => {
     if (!form.fullName || !form.intro || !form.donation) {
       setError('Full Name, Intro, and Donation fields are required.');
+      return;
+    }
+    if (form.donation < MIN_DONATION_USD) {
+      setError(`Donation request per meeting must be at least $${MIN_DONATION_USD}.`);
       return;
     }
     setLoading(true);
@@ -139,8 +144,8 @@ export default function ListenerUpdateProfile() {
             </Field>
 
             <Field>
-              <Label>Donation Request per Meeting ($)</Label>
-              <Input name="donation" type="number" value={form.donation} onChange={onChange} />
+              <Label>Donation Request per Meeting ($ — minimum {MIN_DONATION_USD})</Label>
+              <Input name="donation" type="number" min={MIN_DONATION_USD} value={form.donation} onChange={onChange} />
             </Field>
 
             <Button onClick={handleUpdate} disabled={loading}>
