@@ -73,6 +73,20 @@ const ProminentErrorBox = styled(ErrorBox, {
   backgroundColor: '#ffe5e5',
 });
 
+const HowItWorks = styled('ol', {
+  width: '100%',
+  margin: '0 0 16px',
+  padding: '14px 16px 14px 34px',
+  backgroundColor: '#f8f6f4',
+  border: '1px solid #eee',
+  borderRadius: '8px',
+  fontSize: '14px',
+  color: '#333',
+  lineHeight: 1.55,
+  '& li': { marginBottom: '4px' },
+  '& strong': { color: '#3498DB' },
+});
+
 export default function SignupListener() {
   const router = useRouter();
   const [form, setForm] = useState({
@@ -245,6 +259,14 @@ export default function SignupListener() {
             </Subtitle>
           ) : (
             <Subtitle>Discover pitches and support community.</Subtitle>
+          )}
+
+          {!isInvite && (
+            <HowItWorks>
+              <li>Create your profile and name the cause you care about.</li>
+              <li>People who want to pitch you commit a <strong>$10+ donation</strong> to it.</li>
+              <li>You accept only the pitches you like — <strong>your charity gets paid</strong> for your time.</li>
+            </HowItWorks>
           )}
 
           {error && <ProminentErrorBox>{error}</ProminentErrorBox>}
