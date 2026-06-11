@@ -73,6 +73,20 @@ const ProminentErrorBox = styled(ErrorBox, {
   backgroundColor: '#ffe5e5',
 });
 
+const HowItWorks = styled('ol', {
+  width: '100%',
+  margin: '0 0 16px',
+  padding: '14px 16px 14px 34px',
+  backgroundColor: '#f8f6f4',
+  border: '1px solid #eee',
+  borderRadius: '8px',
+  fontSize: '14px',
+  color: '#333',
+  lineHeight: 1.55,
+  '& li': { marginBottom: '4px' },
+  '& strong': { color: '#C26148' },
+});
+
 export default function SignupPitcher() {
   const router = useRouter();
   const [form, setForm] = useState({
@@ -257,6 +271,14 @@ export default function SignupPitcher() {
             </Subtitle>
           ) : (
             <Subtitle>Share your cause and connect with supporters</Subtitle>
+          )}
+
+          {!isInvite && (
+            <HowItWorks>
+              <li>Find a person you want to pitch on DonaTalk.</li>
+              <li>Commit a <strong>$10+ donation</strong> to the cause they care about.</li>
+              <li>They accept, you meet — their charity gets paid. <strong>No acceptance, no charge.</strong></li>
+            </HowItWorks>
           )}
 
           {error && <ProminentErrorBox>{error}</ProminentErrorBox>}
