@@ -33,7 +33,7 @@ function inviteListenerUidFrom(returnPath: string | null): string | null {
   return m ? m[1] : null;
 }
 import { styled } from '@/styles/stitches.config';
-import Script from 'next/script';
+import { trackSignup } from '@/lib/analytics';
 
 const Divider = styled('div', {
   display: 'flex',
@@ -171,6 +171,7 @@ export default function SignupPitcher() {
         }),
       });
 
+      trackSignup('pitcher', 'email');
       router.push(nextAfterSignup()); // ✅ Navigate after sending the email
     } catch (err: unknown) {
       const error = err as Error;
@@ -219,6 +220,7 @@ export default function SignupPitcher() {
             role: 'pitcher',
           }),
         });
+        trackSignup('pitcher', 'google');
       }
 
       router.push(isInvite ? nextAfterSignup() : (readReturnPath() ?? '/choose-a-profile'));
@@ -238,19 +240,6 @@ export default function SignupPitcher() {
 
   return (
     <>
-      {/* Google Tag Manager */}
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=AW-17050482317"
-        strategy="afterInteractive"
-      />
-      <Script id="gtag-init" strategy="afterInteractive">
-        {`
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'AW-17050482317');
-      `}
-      </Script>
       <Head>
         <title>Sign Up as Pitcher | DonaTalk</title>
         <meta name="description" content="Sign up as a pitcher to share your cause on DonaTalk." />
