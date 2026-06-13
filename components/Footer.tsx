@@ -37,6 +37,7 @@ export default function Footer() {
     <FooterContainer>
       <div>© {new Date().getFullYear()} DonaTalk. All rights reserved.</div>
       <FooterLinks>
+        <FooterLink href="https://donatalk.com/category/blog/">Blog</FooterLink>
         <FooterLink href="https://donatalk.com/terms-of-service/">Terms of Service</FooterLink>
         <FooterLink href="https://donatalk.com/privacy-policy/">Privacy Policy</FooterLink>
         <FooterLink href="mailto:support@donatalk.com">Contact Us</FooterLink>
