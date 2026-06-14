@@ -78,6 +78,7 @@ export default function Navbar() {
         const publicPaths = [
           '/',
           '/login',
+          '/listeners',
           '/pitcher/signup',
           '/listener/signup',
           /^\/pitcher\/[^\/]+$/,    // e.g. /pitcher/abc123
