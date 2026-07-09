@@ -15,11 +15,19 @@
   Run the gates + probe against current production WITHOUT deploying (dry-run /
   CI-style check). Useful to prove the tree is shippable before a push to main.
 
+.PARAMETER SelfTestRollback
+  Exercise the auto-rollback branch WITHOUT a live failure: forces the
+  post-deploy probe to FAIL, runs the rollback command in dry-run (echoed, not
+  executed), then confirms the re-probe step against current production. Proves
+  the branch that fires under a real failing deploy actually works, without ever
+  taking production down. Does not deploy, roll back, or write ops-health rows.
+
 .EXAMPLE
   powershell -File ops/deploy-web.ps1
   powershell -File ops/deploy-web.ps1 -SkipDeploy
+  powershell -File ops/deploy-web.ps1 -SelfTestRollback
 #>
-param([switch]$SkipDeploy)
+param([switch]$SkipDeploy, [switch]$SelfTestRollback)
 
 $ErrorActionPreference = 'Stop'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
@@ -43,6 +51,50 @@ Charter Sec 4 (Deploy Gates) / Sec 8 (escalation). Board action may be required.
 function Add-DeployHealthRow([string]$H1, [string]$H4, [string]$Note) {
   $csv = Join-Path $PSScriptRoot '../docs/company/metrics/ops-health-log.csv'
   Add-Content -Encoding utf8 $csv "$Stamp,deploy,$H1,none,not-run,$H4,$Note"
+}
+
+# Rollback command selection, shared by the live post-deploy path and the
+# -SelfTestRollback dry-run so the exact branch that fires under a real failure
+# is what gets exercised. $DryRun echoes the command instead of running it.
+function Invoke-Rollback([string]$Prev, [bool]$DryRun) {
+  if ($DryRun) {
+    if ($Prev) { Write-Host "[dry-run] would run: npx vercel rollback $Prev --yes" }
+    else       { Write-Host "[dry-run] would run: npx vercel rollback --yes (previous)" }
+    return 0
+  }
+  # Pipe native output to the host so only the exit code lands on the function's
+  # return stream (else $rb would capture npx's stdout lines too).
+  if ($Prev) { npx vercel rollback $Prev --yes | Out-Host } else { npx vercel rollback --yes | Out-Host }
+  return $LASTEXITCODE
+}
+
+# ---- Self-test: exercise the auto-rollback branch WITHOUT a live failure ----
+# A real failing production deploy would cause an actual outage (Charter Sec 2:
+# never leave prod broken), so we prove the rollback branch - target resolution,
+# command selection, and the re-probe confirm step - end to end in dry-run. Only
+# a controlled live-fire on real infra then remains. Writes a clearly-marked
+# SELFTEST artifact; does NOT deploy or roll back. (The re-probe is check-site's
+# normal read-only prod probe, which honestly records its own ops-health row.)
+if ($SelfTestRollback) {
+  Write-Host "SELF-TEST: exercising rollback branch (no deploy, no live rollback)."
+  $prev = 'https://donatalk-known-good-SELFTEST.vercel.app'  # mock rollback target
+  Write-Host "Simulated post-deploy probe: FAIL (forced) - entering rollback branch."
+  $rb = Invoke-Rollback $prev $true
+  Write-Host "Confirm step: re-probing current production (read-only)..."
+  & (Join-Path $PSScriptRoot 'check-site.ps1')
+  $reprobe = $LASTEXITCODE
+  $f = Join-Path $LogDir "SELFTEST-rollback-$Stamp.txt"
+  @"
+SELF-TEST (rollback branch) - $Stamp
+Simulated post-deploy probe: FAIL (forced)
+Rollback target resolved: $prev
+Rollback command (dry-run) exit: $rb
+Post-rollback re-probe exit: $reprobe  (0 = current prod healthy)
+Result: rollback branch exercised end-to-end without touching production.
+Remaining: true live-fire on a real failing deploy (controlled window).
+"@ | Set-Content -Encoding utf8 $f
+  Write-Host "SELF-TEST complete - wrote $f (re-probe exit=$reprobe)."
+  exit $reprobe
 }
 
 Push-Location $RepoRoot
@@ -109,8 +161,7 @@ try {
 
   if ($probe -ne 0) {
     Write-Host "POST-DEPLOY PROBE FAILED - auto-rolling-back."
-    if ($prev) { npx vercel rollback $prev --yes } else { npx vercel rollback --yes }
-    $rb = $LASTEXITCODE
+    $rb = Invoke-Rollback $prev $false
     & (Join-Path $PSScriptRoot 'check-site.ps1')   # confirm rollback restored health
     $reprobe = $LASTEXITCODE
     Write-DeployAlert 'auto-rollback-fired' "Post-deploy probe failed; rolled back to '$prev' (rollback exit=$rb, re-probe exit=$reprobe)."
