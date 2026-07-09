@@ -1,3 +1,3 @@
 date_utc,A1,A2,A3,A4,A5,A6,A7,note
 2026-07-08,,,,,,,,baseline pending GSC + analytics access
-2026-07-09,n/a,n/a,n/a,n/a,n/a,n/a,0,A1-A6 pending GSC/GA4 creds; A7 from ledger
+2026-07-09,364,,10,37,4,12.2,0,"GSC baseline 28d (donatalk.com domain prop, both surfaces); A1=GA4 90d active users; queries all branded"

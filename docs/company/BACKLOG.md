@@ -24,12 +24,17 @@
 | 11 | JSON-LD (Organization, WebSite, per-profile Person/Offer) | 2-2a | ⬜ |
 | 12 | Keyword-strategy doc — 3 non-branded clusters → target pages | 2-1 | ⬜ |
 
-## Blocked on board
-| # | Item | Needs |
-|---|------|-------|
-| 13 | Verify GSC on both domains, submit sitemaps, pull baseline | GSC access | 🔴 |
-| 14 | WordPress publishing pipeline | WP app-password | 🔴 |
-| 15 | Autonomous posting — supervised ramp (first 5 posts) | approved accounts | 🔴 |
+## Board-provisioned (2026-07-09)
+| # | Item | Status |
+|---|------|--------|
+| 13 | GSC verified (both domains) + baseline pulled | ✅ done; app sitemap still to submit (item 8) |
+| 14 | WordPress credential (App Password, admin) stored in Vercel | ✅ done; build publish pipeline next |
+| 15 | Autonomous posting — supervised ramp (first 5 posts) | 🔴 needs approved accounts |
+
+## Still blocked on board
+- Always-on scheduler host (item 6).
+- Approved posting accounts (item 15).
+- **Rotate** WordPress App Password (transited chat).
 
 ## Later
 - `/vs` competitor/comparison pages; cost-of-cold-outreach calculator.
