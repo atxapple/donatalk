@@ -17,7 +17,7 @@
 | KR | Target | Measure | Status |
 |----|--------|---------|--------|
 | **2-1** | Keyword-strategy doc: **3 validated non-branded clusters** (volume + difficulty), each mapped to a target page. | `plans/seo-keyword-strategy.md` | ⬜ not started |
-| **2-2** | GSC verified on **both** `donatalk.com` and `app.donatalk.com`; sitemaps submitted; baseline captured (indexed pages, impressions, avg position, top-10 queries); metric funnel defined. | `metrics/` + GSC | 🔴 BLOCKED: board must verify GSC |
+| **2-2** | GSC verified on **both** `donatalk.com` and `app.donatalk.com`; sitemaps submitted; baseline captured (indexed pages, impressions, avg position, top-10 queries); metric funnel defined. | `metrics/` + GSC | 🟡 GSC+GA4 confirmed, baseline captured 2026-07-09; app sitemap still to submit (→2-2a) |
 | **2-2a** | App SEO foundation shipped: `app/robots.ts`, `app/sitemap.ts`, OG/Twitter tags, per-profile metadata, JSON-LD. | app source + deploy | ⬜ not started (no blocker) |
 | **2-3** | ≥ **[TBD after baseline]** do-follow backlinks from ≥ **[TBD]** distinct domains, tracked in `backlink-ledger.md`. | `metrics/backlink-ledger.md` | ⬜ not started |
 
@@ -32,7 +32,7 @@ blind would be guessing. Placeholder `[TBD]` until then.
 
 ## Blockers requiring board action
 1. ~~Charter sign-off~~ ✅ done (PR #18, 2026-07-09).
-2. Google Search Console verification on both domains + service-account read.
-3. WordPress application-password / API token for donatalk.com.
+2. ~~Google Search Console verification~~ ✅ confirmed both domains + baseline (2026-07-09).
+3. ~~WordPress application-password~~ ✅ obtained, verified (admin), stored in Vercel (2026-07-09). **Rotate — rode through chat.**
 4. Always-on scheduler host (Windows Task Scheduler box or VM).
 5. Approved posting accounts/platforms.

@@ -53,8 +53,16 @@ booked/committed**, plus the **awareness** inputs that feed the top, plus the
 F3 booking → F4 committed donation (revenue)`
 Each cycle: find the weakest step-conversion and attack it.
 
-## Baseline (to fill once GSC lands)
-| Metric | 2026-07-08 baseline |
-|--------|---------------------|
-| A1–A7 | _pending GSC + analytics access_ |
-| F1–F4 | _pending Firestore read pull_ |
+## Baseline — captured 2026-07-09 (GSC + GA4 confirmed)
+Source: GSC `donatalk.com` domain property (covers app.donatalk.com), 28-day; GA4 `donatalk` 90-day.
+| Metric | Value | Note |
+|--------|-------|------|
+| A1 GA4 active users (90d) | 364 | 379 new; 2.7K events |
+| A3 indexed pages | 10 | +15 not indexed |
+| A4 impressions (28d) | 37 | |
+| A5 clicks (28d) | 4 | |
+| A6 avg position | 12.2 | |
+| A7 backlinks | 0 | ledger empty |
+| Queries | all branded | donatk/dontalk/downtalk — **zero non-branded** = Obj-2 gap |
+| F1–F4 | _pending Firebase Admin read_ | |
+| Sitemaps | WP `sitemap_index.xml` ✅ (12 pp); **app: none** → KR2-2a | |
