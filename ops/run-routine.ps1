@@ -53,8 +53,12 @@ try {
 # --- run the routine via claude -p ---
 $Prompt = Get-Content $PromptFile -Raw
 Write-Host "[$Stamp] Running routine '$Routine'..."
-$Output = & claude -p $Prompt --permission-mode acceptEdits 2>&1 | Tee-Object -FilePath $LogFile
-$Code = $LASTEXITCODE
+# Run claude from the repo root so it reads the company OS / repo as its cwd.
+Push-Location $RepoRoot
+try {
+  $Output = & claude -p $Prompt --permission-mode acceptEdits 2>&1 | Tee-Object -FilePath $LogFile
+  $Code = $LASTEXITCODE
+} finally { Pop-Location }
 
 if ($Code -ne 0) {
   $class = Get-RootCause ($Output -join "`n")
