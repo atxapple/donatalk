@@ -1,6 +1,7 @@
 // pages/listener/[uid].tsx
 
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import { doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth, firestore } from '../../firebase/clientApp';
@@ -85,7 +86,76 @@ function firstNameOf(full: string): string {
   return (full || '').trim().split(/\s+/)[0] || full || 'them';
 }
 
+const BASE = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://app.donatalk.com';
+
+// Per-profile SEO head. Rendered outside the `hydrated` gate so the tags are
+// present in the SSR HTML. Unavailable profiles (stub / soft-deleted / missing)
+// are marked noindex.
+function ListenerHead({ listener, uid }: { listener: Listener | null; uid: string }) {
+  const url = `${BASE}/listener/${uid}`;
+  const available = !!listener && listener.isSetUp !== false && !listener.deletedAt;
+
+  if (!available) {
+    return (
+      <Head>
+        <meta name="robots" content="noindex, follow" />
+        <link rel="canonical" href={url} />
+      </Head>
+    );
+  }
+
+  const name = listener.fullName || 'A DonaTalk listener';
+  const intro = (listener.intro || '').trim();
+  const description = (
+    intro
+      ? `${name} on DonaTalk — ${intro}`
+      : `Pitch to ${name} on DonaTalk. Your donation books time with them and supports their chosen non-profit.`
+  ).slice(0, 155);
+  const title = `${name} — pitch & donate to their cause`;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    url,
+    mainEntity: {
+      '@type': 'Person',
+      name,
+      ...(intro ? { description: intro } : {}),
+      url,
+    },
+  };
+
+  return (
+    <Head>
+      <title>{`${title} | DonaTalk`}</title>
+      <meta name="description" content={description} />
+      <link rel="canonical" href={url} />
+      <meta property="og:type" content="profile" />
+      <meta property="og:site_name" content="DonaTalk" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={url} />
+      <meta property="og:image" content={`${BASE}/DonaTalk_icon_88x77.png`} />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+    </Head>
+  );
+}
+
 export default function ListenerPage({ listener, uid }: { listener: Listener | null; uid: string }) {
+  return (
+    <>
+      <ListenerHead listener={listener} uid={uid} />
+      <ListenerPageBody listener={listener} uid={uid} />
+    </>
+  );
+}
+
+function ListenerPageBody({ listener, uid }: { listener: Listener | null; uid: string }) {
   const [hydrated, setHydrated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [authResolved, setAuthResolved] = useState(false);

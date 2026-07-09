@@ -1,6 +1,7 @@
 // pages/pitcher/[uid].tsx
 
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import { doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth, firestore } from '../../firebase/clientApp';
@@ -82,7 +83,76 @@ function firstNameOf(full: string): string {
   return (full || '').trim().split(/\s+/)[0] || full || 'them';
 }
 
+const BASE = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://app.donatalk.com';
+
+// Per-profile SEO head. Rendered outside the `hydrated` gate so the tags are
+// present in the SSR HTML. Unavailable profiles (stub / soft-deleted / missing)
+// are marked noindex.
+function PitcherHead({ pitcher, uid }: { pitcher: Pitcher | null; uid: string }) {
+  const url = `${BASE}/pitcher/${uid}`;
+  const available = !!pitcher && pitcher.isSetUp !== false && !pitcher.deletedAt;
+
+  if (!available) {
+    return (
+      <Head>
+        <meta name="robots" content="noindex, follow" />
+        <link rel="canonical" href={url} />
+      </Head>
+    );
+  }
+
+  const name = pitcher.fullName || 'A DonaTalk pitcher';
+  const pitch = (pitcher.pitch || '').trim();
+  const description = (
+    pitch
+      ? `${name} on DonaTalk — ${pitch}`
+      : `Hear ${name}'s pitch on DonaTalk. They donate to your chosen non-profit for a meeting.`
+  ).slice(0, 155);
+  const title = `${name} — hear their pitch, fund your cause`;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    url,
+    mainEntity: {
+      '@type': 'Person',
+      name,
+      ...(pitch ? { description: pitch } : {}),
+      url,
+    },
+  };
+
+  return (
+    <Head>
+      <title>{`${title} | DonaTalk`}</title>
+      <meta name="description" content={description} />
+      <link rel="canonical" href={url} />
+      <meta property="og:type" content="profile" />
+      <meta property="og:site_name" content="DonaTalk" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={url} />
+      <meta property="og:image" content={`${BASE}/DonaTalk_icon_88x77.png`} />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+    </Head>
+  );
+}
+
 export default function PitcherPage({ pitcher, uid }: { pitcher: Pitcher | null; uid: string }) {
+  return (
+    <>
+      <PitcherHead pitcher={pitcher} uid={uid} />
+      <PitcherPageBody pitcher={pitcher} uid={uid} />
+    </>
+  );
+}
+
+function PitcherPageBody({ pitcher, uid }: { pitcher: Pitcher | null; uid: string }) {
   const [hydrated, setHydrated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [authResolved, setAuthResolved] = useState(false);
