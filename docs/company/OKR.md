@@ -10,7 +10,7 @@
 | **1-1** | ≥16 consecutive scheduled runs (3h + daily) over 48h complete with success exit, **zero unhandled failures**; every failure auto-classified to an `ALERT-*` file. | `ops/logs/` run history | ⬜ not started |
 | **1-2** | `METRICS.md` catalog exists; **100%** of runs append a timestamped row to awareness / funnel / ops-health logs. | metric CSVs | ⬜ not started |
 | **1-3** | Governance Charter in force with machine-enforced escalation gates; verified by a dry-run that trips a gate. | `CHARTER.md` + dry-run log | 🟡 ratified 2026-07-09 (PR #18); dry-run pending |
-| **1-4** | Synthetic health probe on app.donatalk.com critical paths every 6h, self-cleaning, auto-rollback wired. | `ops/check-site.ps1` + probe log | ⬜ not started |
+| **1-4** | Synthetic health probe on app.donatalk.com critical paths every 6h, self-cleaning, auto-rollback wired. | `ops/check-site.ps1` + probe log | 🟡 probe live + green each run (3 paths, 200+marker); auto-rollback wrapper `ops/deploy-web.ps1` built 2026-07-09 (PR open) — 6h cadence needs scheduler host (item 6); live rollback untested (no failing deploy yet) |
 
 ## Obj 2 — Increase DonaTalk's search visibility
 

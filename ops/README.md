@@ -9,6 +9,7 @@ Each run has zero memory; `docs/company/` is the memory.
 ops/
 ├── run-routine.ps1      # generic runner: invokes claude -p, pre-flight, failure classify, alert
 ├── check-site.ps1       # 6-hourly synthetic probe of app.donatalk.com critical paths
+├── deploy-web.ps1       # gated deploy + post-deploy probe + auto-rollback (Charter §4)
 ├── get-metrics.ps1      # collect + append rows to docs/company/metrics/*.csv
 ├── routines/
 │   ├── daily-ops.md     # every 3h — read OS, health, advance backlog, write brief
@@ -24,6 +25,7 @@ ops/
 | Growth research | daily 05:00 | `run-routine.ps1 -Routine growth-research` |
 | Weekly report | Mon 08:00 | `run-routine.ps1 -Routine weekly-report` |
 | Health probe | every 6h | `check-site.ps1` |
+| Gated deploy | on shippable change | `deploy-web.ps1` (gates → deploy → probe → auto-rollback) |
 
 ## Guardrails
 The runner runs `claude -p` with `--permission-mode acceptEdits`. Escalation

@@ -1,3 +1,6 @@
 ts_utc,run_type,H1,H2,H3,H4,note
 2026-07-08T00:00:00Z,bootstrap,success,none,not-run,not-run,company OS scaffolded
 20260709T043248Z,probe,success,none,pass,not-run,critical-path probe
+20260709T131900Z,probe,success,none,pass,not-run,critical-path probe
+20260709T132224Z,probe,success,none,pass,not-run,critical-path probe (daily-ops run; node headless helper)
+20260709T132237Z,probe,success,none,pass,not-run,critical-path probe
