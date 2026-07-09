@@ -16,9 +16,9 @@
 
 | KR | Target | Measure | Status |
 |----|--------|---------|--------|
-| **2-1** | Keyword-strategy doc: **3 validated non-branded clusters** (volume + difficulty), each mapped to a target page. | `plans/seo-keyword-strategy.md` | ⬜ not started |
+| **2-1** | Keyword-strategy doc: **3 validated non-branded clusters** (volume + difficulty), each mapped to a target page. | `plans/seo-keyword-strategy.md` | ✅ done 2026-07-09 (clusters A/B/C; volumes SERP-inferred, confirm w/ tool) |
 | **2-2** | GSC verified on **both** `donatalk.com` and `app.donatalk.com`; sitemaps submitted; baseline captured (indexed pages, impressions, avg position, top-10 queries); metric funnel defined. | `metrics/` + GSC | 🟡 GSC+GA4 confirmed, baseline captured 2026-07-09; app sitemap still to submit (→2-2a) |
-| **2-2a** | App SEO foundation shipped: `app/robots.ts`, `app/sitemap.ts`, OG/Twitter tags, per-profile metadata, JSON-LD. | app source + deploy | ⬜ not started (no blocker) |
+| **2-2a** | App SEO foundation shipped: `app/robots.ts`, `app/sitemap.ts`, OG/Twitter tags, per-profile metadata, JSON-LD. | app source + deploy | 🟡 built + verified (tsc/tests/build green) 2026-07-09; PR pending deploy |
 | **2-3** | ≥ **[TBD after baseline]** do-follow backlinks from ≥ **[TBD]** distinct domains, tracked in `backlink-ledger.md`. | `metrics/backlink-ledger.md` | ⬜ not started |
 
 ### Open sizing

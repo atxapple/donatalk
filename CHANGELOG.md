@@ -3,6 +3,15 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.12.0] - 2026-07-09
+
+### Added (SEO foundation)
+- `app/robots.ts` — robots.txt allowing public pages, disallowing admin/API/auth-gated routes, pointing to the sitemap.
+- `app/sitemap.ts` — dynamic sitemap covering static routes + all public (non-deleted, set-up) listener & pitcher profiles.
+- Rich root metadata in `app/layout.tsx`: `metadataBase`, title template, Open Graph + Twitter cards, keywords, canonical.
+- Organization + WebSite JSON-LD (schema.org) in the root layout.
+- Per-profile SEO on public listener/pitcher pages: title, description, canonical, OG/Twitter, and ProfilePage/Person JSON-LD, rendered in SSR HTML; unavailable profiles marked `noindex`.
+
 ## [0.11.1] - 2026-05-23
 
 ### Added (admin dashboard — merged from feat/admin-quickwins)
