@@ -1,0 +1,6 @@
+# Ignore verbose per-run logs; keep the audit trail (ALERTs, probe results).
+*.log
+!.gitkeep
+!.gitignore
+!ALERT-*.txt
+!site-check-*.json
