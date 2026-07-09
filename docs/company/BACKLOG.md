@@ -2,7 +2,7 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-09 (run 6)
+> Last updated: 2026-07-09 (run 7)
 
 ## Now (Obj 1 — the machine)
 | # | Item | KR | Status |
@@ -36,7 +36,7 @@
 |---|------|----|--------|
 | 16 | Cluster A listicle — "cold email alternatives" (`donatalk.com/blog/`) | 2-1→2-3 | 🟡 drafted `docs/company/content/cold-email-alternatives.md` (publish-ready, brand-voice, Sec 6-truthful). **Publish blocked:** WP App Password pending rotation + publish pipeline (item 14) unbuilt |
 | 17 | Cluster B pillar + template — "how to get warm introductions" | 2-1→2-3 | ⬜ todo (next content piece) |
-| 18 | Cluster C explainer + app `/vs` page — "donation-based outreach" | 2-1→2-3 | ⬜ todo (app surface = fully autonomous/deployable) |
+| 18 | Cluster C explainer + app `/vs` page — "donation-based outreach" | 2-1→2-3 | 🟡 **app `/vs` page built + shipping (run 7, v0.13.0, PR pending):** static category-defining comparison (cold email vs paid gifting vs donation-based), comparison table + differentiators + how-it-works + FAQ, WebPage/Breadcrumb/**FAQPage** JSON-LD, full metadata, added to sitemap. Deploy gates green (tsc clean, 598 tests pass, no §3b surface). Remaining: thin WP `what-is-donation-based-outreach` explainer (WP-publish-blocked, item 14b) + impact calculator (fast-follow) |
 | 14b | WordPress publish pipeline: markdown draft → WP REST draft post (reads creds from env) | 2-2 | ⬜ todo — **gate on WP App Password rotation first** |
 
 ## Follow-ups (unblocked, this cycle)
@@ -47,6 +47,8 @@
   scheduler invoke the probe + metrics collectors directly (outside `claude -p`) so they run with
   full host PowerShell. Worked around this run via a node helper. *(Writing `.claude/settings.local.json`
   is itself permission-gated for the agent — so this needs the board/host to apply, or the runner to own it.)*
+
+- **Orphaned worktree pollutes `npm run test`.** `.claude/worktrees/company-os-scaffold/` (the dead OneDrive-migration copy, flagged safe-to-delete run 4) ships Playwright `e2e/*.spec.ts` that vitest picks up → **7 "failed" test *files*** every run (`test.beforeAll() not expected` — Playwright specs loaded under vitest), while all **598 real unit tests pass**. It's untracked (`??`), so it isn't in any PR and can't be removed via a normal commit; the runner's `main` reset doesn't clean untracked dirs. Fix: host/board deletes the stray dir (or add `.claude/worktrees/` to vitest's exclude). Degrades the KR1 test-gate signal until removed.
 
 ## Still blocked on board
 - Always-on scheduler host (item 6).
