@@ -43,12 +43,25 @@ function Get-RootCause([string]$Output) {
 
 if (-not (Test-Path $PromptFile)) { Write-Alert 'config-error' "Missing prompt: $PromptFile"; exit 2 }
 
-# --- git-write pre-flight: confirm we can reach origin (read-only check) ---
+# --- git pre-flight: reach origin, then start clean on latest main ---
+# A prior run may leave a feature branch checked out; always reset to origin/main
+# so each run begins from a known, current state.
 Push-Location $RepoRoot
 try {
   git fetch --quiet origin 2>&1 | Out-Null
   if ($LASTEXITCODE -ne 0) { Write-Alert 'git-write-failure' 'git fetch origin failed in pre-flight.'; exit 3 }
+  git checkout main --quiet 2>&1 | Out-Null
+  if ($LASTEXITCODE -ne 0) { Write-Alert 'git-write-failure' 'git checkout main failed (dirty tree?).'; exit 3 }
+  git reset --hard origin/main --quiet 2>&1 | Out-Null
 } finally { Pop-Location }
+
+# --- deterministic health + metrics (KR1-2 / KR1-4), runner-owned so coverage
+#     does not depend on the agent's tool permissions ---
+Push-Location $RepoRoot
+try {
+  & (Join-Path $PSScriptRoot 'check-site.ps1')  2>&1 | Out-Null; Write-Host "[$Stamp] probe collected."
+  & (Join-Path $PSScriptRoot 'get-metrics.ps1') 2>&1 | Out-Null; Write-Host "[$Stamp] metrics collected."
+} catch { Write-Host "[$Stamp] health/metrics collection warning: $($_.Exception.Message)" } finally { Pop-Location }
 
 # --- run the routine via claude -p ---
 $Prompt = Get-Content $PromptFile -Raw
