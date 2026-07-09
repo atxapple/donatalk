@@ -2,7 +2,7 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-09 (run 5)
+> Last updated: 2026-07-09 (run 6)
 
 ## Now (Obj 1 — the machine)
 | # | Item | KR | Status |
@@ -30,6 +30,14 @@
 | 13 | GSC verified (both domains) + baseline pulled | ✅ done; app sitemap still to submit (item 8) |
 | 14 | WordPress credential (App Password, admin) stored in Vercel | ✅ done; build publish pipeline next |
 | 15 | Autonomous posting — supervised ramp (first 5 posts) | 🔴 needs approved accounts |
+
+## Now (Obj 2 — content engine)
+| # | Item | KR | Status |
+|---|------|----|--------|
+| 16 | Cluster A listicle — "cold email alternatives" (`donatalk.com/blog/`) | 2-1→2-3 | 🟡 drafted `docs/company/content/cold-email-alternatives.md` (publish-ready, brand-voice, Sec 6-truthful). **Publish blocked:** WP App Password pending rotation + publish pipeline (item 14) unbuilt |
+| 17 | Cluster B pillar + template — "how to get warm introductions" | 2-1→2-3 | ⬜ todo (next content piece) |
+| 18 | Cluster C explainer + app `/vs` page — "donation-based outreach" | 2-1→2-3 | ⬜ todo (app surface = fully autonomous/deployable) |
+| 14b | WordPress publish pipeline: markdown draft → WP REST draft post (reads creds from env) | 2-2 | ⬜ todo — **gate on WP App Password rotation first** |
 
 ## Follow-ups (unblocked, this cycle)
 - **Allowlist the ops scripts.** `claude -p --permission-mode acceptEdits` still enforces the
