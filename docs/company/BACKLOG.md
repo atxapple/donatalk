@@ -2,7 +2,7 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-09
+> Last updated: 2026-07-09 (run 4)
 
 ## Now (Obj 1 — the machine)
 | # | Item | KR | Status |
@@ -11,9 +11,9 @@
 | 2 | Scaffold `ops/` runner + routines + failure classifier + alerting | 1-1 | ✅ done (runner + 3 routines + classifier + allowlist PR #23) |
 | 3 | `ops/check-site.ps1` synthetic probe (home/`/listeners`/signup) + self-clean | 1-4 | ✅ done (probing green each run) |
 | 4 | `ops/get-metrics.ps1` — append rows to awareness/funnel/ops-health logs | 1-2 | ✅ done (100% coverage; credentialed sources stubbed n/a) |
-| 5 | Deploy gate + auto-rollback wrapper (`ops/deploy-web.ps1`) | 1-4 | 🟡 built 2026-07-09 (PR open); live rollback test pending a real deploy |
+| 5 | Deploy gate + auto-rollback wrapper (`ops/deploy-web.ps1`) | 1-4 | 🟡 built 2026-07-09; **fixed same day — was parse-broken under Windows PowerShell 5.1 (non-ASCII `§`/`—`, no BOM); all `ops/*.ps1` now ASCII + parse-verified.** Gate-3 (§3b) path proven live; live rollback test still pending a real failing deploy |
 | 6 | Register Windows Task Scheduler jobs (3h ops, daily research, weekly report, 6h probe) | 1-1 | 🔴 needs scheduler host |
-| 7 | Charter dry-run: trip a money-gate, confirm PR+ALERT path works | 1-3 | ⬜ |
+| 7 | Charter dry-run: trip a money-gate, confirm PR+ALERT path works | 1-3 | ✅ done 2026-07-09 — dry-run touched `lib/updateFunds.ts`; `deploy-web.ps1` exited 10 + wrote `ALERT-deploy-20260709T134414Z.txt`, no deploy; money edit reverted, never merged |
 
 ## Now (Obj 2 — visibility, no blockers)
 | # | Item | KR | Status |

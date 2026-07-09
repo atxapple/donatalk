@@ -25,10 +25,10 @@ New-Item -ItemType Directory -Force -Path $LogDir | Out-Null
 function Write-Alert([string]$Class, [string]$Detail) {
   $f = Join-Path $LogDir "ALERT-$Class-$Stamp.txt"
   @"
-ALERT ($Class) — routine=$Routine — $Stamp
+ALERT ($Class) - routine=$Routine - $Stamp
 $Detail
 
-Board action may be required. See docs/company/CHARTER.md §8 (escalation).
+Board action may be required. See docs/company/CHARTER.md Sec 8 (escalation).
 "@ | Set-Content -Encoding utf8 $f
   Write-Host "WROTE $f"
 }
