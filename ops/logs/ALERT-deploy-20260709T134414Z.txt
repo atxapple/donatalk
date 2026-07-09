@@ -1,0 +1,6 @@
+﻿ALERT (deploy) - 20260709T134414Z
+Reason: gated-surface-touched
+Diff touches Sec 3b-gated files - must ship via PR, not auto-deploy:
+lib/updateFunds.ts
+
+Charter Sec 4 (Deploy Gates) / Sec 8 (escalation). Board action may be required.
