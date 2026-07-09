@@ -7,6 +7,8 @@
       "Bash(npx *)",
       "Bash(node *)",
       "Bash(curl *)",
+      "Bash(powershell *)",
+      "Bash(pwsh *)",
       "PowerShell(git *)",
       "PowerShell(gh *)",
       "PowerShell(npm *)",
