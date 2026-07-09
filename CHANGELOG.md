@@ -3,6 +3,12 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.13.0] - 2026-07-09
+
+### Added (SEO content — Cluster C)
+- `app/vs/page.tsx` — category-defining comparison page (`/vs`): "Donation-based outreach vs. cold email vs. paid gifting." Static server component with a comparison table, differentiators, how-it-works steps, and an FAQ. Includes WebPage + BreadcrumbList + FAQPage JSON-LD and full metadata (title/description/canonical/OG/Twitter). Compares approaches at the category level (no named competitors) per Charter Sec 6; first-party claims (donation-to-book, listener picks the cause, 4.9% fee, decline = no charge) mirror the live product.
+- `/vs` added to `app/sitemap.ts` static routes (priority 0.7, monthly).
+
 ## [0.12.0] - 2026-07-09
 
 ### Added (SEO foundation)
