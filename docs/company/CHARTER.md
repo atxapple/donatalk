@@ -1,7 +1,7 @@
 # DonaTalk — Company Charter
 
 > The constitution for autonomous operation. Read this **first**, every run, before acting.
-> Last ratified: 2026-07-08 (v1.0 — pending board sign-off) | Owner: Board
+> Ratified: 2026-07-09 (v1.0) by Board via PR #18 | Owner: Board
 
 ## 0. Purpose
 
