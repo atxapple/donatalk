@@ -3,7 +3,7 @@
   Synthetic health probe for app.donatalk.com critical paths (KR1-4).
   Read-only: fetches public routes, asserts 200 + expected markers. Writes a
   JSON result to ops/logs and an ops-health-log row. NO test users created
-  (booking/signup are behind auth + PayPal — probing them live would touch
+  (booking/signup are behind auth + PayPal - probing them live would touch
   money-adjacent flows, which the Charter fences off). Extend with a disposable
   Firebase test user only once a non-prod path exists.
 .EXAMPLE
