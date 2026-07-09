@@ -1,0 +1,3 @@
+# Run logs, probe JSON, and ALERT-*.txt land here.
+# ALERT-* and site-check-*.json are worth committing (board audit trail);
+# verbose *.log files are noise — see .gitignore.
