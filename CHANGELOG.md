@@ -3,6 +3,12 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.14.2] - 2026-07-10
+
+### Changed (SEO — internal linking of Cluster C pages)
+- `components/Footer.tsx` — added site-wide footer links to `/vs` ("Donation-based outreach vs. cold email") and `/calculator` ("Outreach impact calculator"). Both pages were in the sitemap but had **no inbound internal links** from the app's navigation, so they got minimal crawl equity and zero human discovery from the main funnel. The footer renders on every page (via `app/layout.tsx`), giving both SEO pages consistent internal links and a visible entry point.
+- `app/vs/page.tsx` — added a reciprocal CTA link `/vs` → `/calculator` ("Estimate your donation impact →"). `/calculator` already linked to `/vs`; this closes the loop so the two Cluster C pages cross-link both ways. Non-behavioral; links + copy only (Charter Sec 6, no §3b surface).
+
 ## [0.14.1] - 2026-07-10
 
 ### Changed (SEO content — Cluster C truthfulness)
