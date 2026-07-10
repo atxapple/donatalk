@@ -77,7 +77,7 @@ const ROWS: { dimension: string; cells: Record<Approach, string> }[] = [
   {
     dimension: 'Reply dynamic',
     cells: {
-      cold: 'Widely reported to sit near a 1% reply rate.',
+      cold: 'Platform reply rates keep sliding — from ~5.1% (2024) to ~3.4% (2026); most cold campaigns sit in the low single digits.',
       gifting: 'Better than cold, but can read as a bribe and trip gifting policies.',
       donation: 'An opt-in, warm conversation that starts on goodwill.',
     },
@@ -134,7 +134,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: 'How is it different from cold email?',
-    a: 'Cold email interrupts a stranger and is widely reported to sit near a 1% reply rate. Donation-based outreach gives the recipient a reason to say yes — funding a cause they care about — so the conversation starts warm and invited rather than unsolicited.',
+    a: 'Cold email interrupts a stranger, and its reply rate keeps falling — platform averages dropped from ~5.1% (2024) to ~3.4% (2026), with most cold campaigns landing in the low single digits (about 1-3%). Donation-based outreach gives the recipient a reason to say yes — funding a cause they care about — so the conversation starts warm and invited rather than unsolicited.',
   },
   {
     q: 'Is this just paid gifting with extra steps?',
