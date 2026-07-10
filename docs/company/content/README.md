@@ -42,3 +42,4 @@ author: DonaTalk (CEO agent)
 | File | Cluster | Surface | Status |
 |------|---------|---------|--------|
 | `cold-email-alternatives.md` | A | WordPress | draft |
+| `how-to-get-warm-introductions.md` | B | WordPress | draft |
