@@ -1,6 +1,7 @@
 # DonaTalk — SEO Keyword Strategy
 
-> generated 2026-07-09
+> generated 2026-07-09 · **updated 2026-07-10** (growth-research pass folded in sourced benchmarks +
+> a newly-found Cluster C competitor; see `research/2026-07-10-keywords.md` for the full transcript)
 
 ## 0. Context & method
 
@@ -28,6 +29,7 @@ People who feel the pain DonaTalk solves (1% reply rates) and are shopping for a
 
 ### Cluster B — "Warm introductions / warm outreach" (relationship-selling demand)
 The category buyers move *toward* when they abandon cold outreach. DonaTalk = buy a warm intro by donating to a cause — owning this vocabulary is core.
+- **Sourced demand fact (2026-07-10):** warm-intro reply rates run **20–40% vs cold 1–3%** — an order-of-magnitude lift, cited consistently across independent sources ([askscout.ai](https://askscout.ai/blog/what-is-a-warm-introduction), [launchleads.com](https://www.launchleads.com/lead-generation-strategies/warm-intros-referrals/)). Use this cited *range* in the #17 pillar (replaces the earlier qualitative hedge; keep it a range — the true lift varies by relationship). The gap every source assumes away — *you need a mutual connection* — is exactly what DonaTalk manufactures; that's the bridge into Cluster C.
 - **Head:** warm introduction (sales) / how to get warm intros
 - **Long-tails:** what is a warm introduction · how to ask for a warm intro · warm intro email template · warm intro vs cold outreach · how to get warm introductions B2B · book meetings with hard-to-reach executives · get meetings with C-suite
 - **Est. volume (US):** head ~800–2k; template/how-to long-tails 100–600 each; "meetings with executives" sub-cluster ~500–1.5k. *Confirm.*
@@ -39,8 +41,9 @@ Blue-ocean. Almost no competition, almost no *existing* volume — a category Do
 - **Head:** donation-based outreach / book a meeting for charity
 - **Long-tails:** donate to charity for a meeting · pay to pitch charity · charity for a sales meeting · sell your calendar time to charity · what if every sales call helped a non-profit · charitable sales outreach platform · sales pitch donation
 - **Est. volume (US):** very low today (<100/mo per term, several near-zero). Latent/emerging. *Confirm; expect thin data.*
-- **Difficulty:** Low. Only Influence Board (live) + HearMeOut (beta). DonaTalk can rank #1 fast and *define the vocabulary*.
+- **Difficulty:** Low. Live players now identified: **Influence Board** (executive-side network), **Time to Give Network** (finance-native, invite/organic — *new find 2026-07-10*), + HearMeOut (beta). **Crucially, none compete on search** — TGN has ~no web/SEO footprint; Influence Board ranks only for its brand. The category's *content* surface is empty, so low current volume is offset by ~zero content competition. DonaTalk can rank #1 fast and *define the vocabulary*.
 - **Intent:** Commercial-to-transactional — searchers want the *product*.
+- **Positioning (2026-07-10):** both incumbents serve **finance/enterprise executive networks**; neither serves the everyday B2B seller — DonaTalk's stated wedge, uncontested. Frame DonaTalk as the **first *self-serve, seller-side, any-vertical*** donation-for-meeting product (honest — do **not** claim "first/only," they exist). Cultural hook for the explainer: the **"Warren Buffett charity lunch," but self-serve and for any B2B meeting.**
 
 ## 2. Cluster → target page
 
@@ -62,9 +65,9 @@ Rule: informational + listicle → WordPress; commercial/transactional + categor
 - **Gifting to book meetings (Reachdesk)** — adjacent, off-core → only a `/vs` comparison point.
 
 ## 4. Competitor / SERP note
-- **A:** SaaS blogs; format = 10–15 item listicle updated for the year. Compete by matching format + a novel entry (charity-funded warm intros) none of them list.
-- **B:** Vieu/Scout/Commsor/Draftboard/etc.; format = definitional pillar + how-to + templates; thinner backlinks → beatable.
-- **C:** Influence Board + HearMeOut; no dominant format — whoever publishes the clear definition + comparison + calculator owns it.
+- **A:** SaaS blogs; format = 10–15 item listicle updated for the year — but note (2026-07-10) the top results are mostly "best *tools/software/agencies*" lists. **Angle-shift: write a *channels/approaches* listicle**, not a tools list — softer competition and charity-funded warm intros slots in as a native entry none of them list. Also drop "cold email is dead" framing → "the average is collapsing (5.1%→3.43%), here's what earns a reply now" (61% of decision-makers still prefer cold email; clickbait reads as such to this ICP).
+- **B:** Vieu/Scout/Commsor/Draftboard/etc.; format = definitional pillar + how-to + templates; thinner backlinks → beatable. Own the "**no mutual connection → manufacture one**" section none of them cover.
+- **C:** Influence Board (live, exec-side) + **Time to Give Network** (finance-native, no SEO footprint) + HearMeOut (beta); **no dominant content format and ~zero content competition** — whoever publishes the clear definition + `/vs` comparison + calculator owns it. `/vs` + `/calculator` already shipped (v0.13–0.14).
 - **The gap DonaTalk owns:** no one sits at the intersection. Cold-email listicles never mention donation-based outreach; warm-intro guides never mention you can *buy* a warm intro by funding a cause. **Wedge: "donation-based / charitable warm outreach for everyday B2B sellers."**
 
 ## 5. First three pieces of content (prioritized)
@@ -76,3 +79,4 @@ Rule: informational + listicle → WordPress; commercial/transactional + categor
 
 ## Sources
 See research transcript (2026-07-09): Saleshandy, Breakcold, Prospeo, SmartReach, Vida, Abstrakt, Instantly, Cleanlist, Scout (askscout.ai), Vieu, Commsor, Draftboard, Launch Leads, OutboundSystem, BeExecutiveEvents, Influence Board, EA Forum (HearMeOut), Reachdesk, Expandi, Martal, ClearB2B, GivingTuesday.
+Update transcript (2026-07-10) → `research/2026-07-10-keywords.md`: Martal, Prospeo, Belkins, Apollo, Autobound (reply-rate benchmarks); askscout.ai, Launch Leads, Vieu, Commsor, Introhive (warm-intro stats/how-to); OutboundSystem, BeExecutiveEvents, Koncert (C-suite); **familywealthreport.com — Time to Give Network**; Influence Board. Backlink targets → `research/backlink-targets.md`.
