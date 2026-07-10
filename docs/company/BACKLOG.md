@@ -2,7 +2,7 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-10 (run 16 — live `/vs` page stat aligned to sourced collapsing-average convention, v0.14.1 shipped)
+> Last updated: 2026-07-10 (run 17 — internal-linking fix: `/vs` + `/calculator` were sitemap-listed but had no inbound app links; footer now links both site-wide + `/vs`↔`/calculator` reciprocal, v0.14.2 shipped)
 
 ## Now (Obj 1 — the machine)
 | # | Item | KR | Status |
@@ -60,5 +60,6 @@
 
 ## Later
 - ~~cost-of-cold-outreach calculator~~ ✅ shipped as `/calculator` (v0.14.0, run 9). More `/vs` competitor/comparison pages.
+- ~~Internal links to `/vs` + `/calculator`~~ ✅ done run 17 (v0.14.2): both pages were in `sitemap.ts` but had **zero inbound internal links** from app nav (semi-orphaned → weak crawl equity + no human discovery). Fixed: site-wide `Footer.tsx` now links both (keyword-rich anchors), and `/vs`↔`/calculator` cross-link reciprocally. Non-§3b, deploy-gated (tsc + 317 tests green).
 - Cause-story content series (Listeners' non-profits) for donatalk.com blog.
 - `.env.example`; API rate limiting; cookie consent (from product backlog).
