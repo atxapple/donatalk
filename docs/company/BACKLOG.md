@@ -2,7 +2,7 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-10 (run 9)
+> Last updated: 2026-07-10 (run 10)
 
 ## Now (Obj 1 — the machine)
 | # | Item | KR | Status |
@@ -48,7 +48,7 @@
   full host PowerShell. Worked around this run via a node helper. *(Writing `.claude/settings.local.json`
   is itself permission-gated for the agent — so this needs the board/host to apply, or the runner to own it.)*
 
-- **Orphaned worktree pollutes `npm run test`.** `.claude/worktrees/company-os-scaffold/` (the dead OneDrive-migration copy, flagged safe-to-delete run 4) ships Playwright `e2e/*.spec.ts` that vitest picks up → **7 "failed" test *files*** every run (`test.beforeAll() not expected` — Playwright specs loaded under vitest), while all **598 real unit tests pass**. It's untracked (`??`), so it isn't in any PR and can't be removed via a normal commit; the runner's `main` reset doesn't clean untracked dirs. Fix: host/board deletes the stray dir (or add `.claude/worktrees/` to vitest's exclude). Degrades the KR1 test-gate signal until removed.
+- ~~**Orphaned worktree pollutes `npm run test`.**~~ ✅ fixed run 10 (`fix/vitest-exclude-worktree`): the anchored `e2e/**`/`node_modules/**` globs only matched at the repo root, so vitest collected the dead `.claude/worktrees/company-os-scaffold/` copy — both its 7 Playwright `e2e/*.spec.ts` (7 "failed" files, `test.beforeAll() not expected`) **and a full duplicate of every unit test** (which is why the count read 598 = 299×2). Broadened exclude to `["**/node_modules/**","**/e2e/**","**/.claude/**"]`. Now the canonical suite runs clean: **24 files / 299 tests pass** (matches Charter §4's "~299"). Deploy test-gate signal restored. The stray untracked dir can still be deleted by host/board for cleanliness, but it no longer pollutes the gate.
 
 ## Still blocked on board
 - Always-on scheduler host (item 6).
