@@ -24,8 +24,8 @@ Every experienced seller eventually arrives at the same conclusion: the fastest
 path to a meeting isn't a better cold email — it's not being cold at all.
 
 A cold email lands in front of a stranger and asks for their time before you've
-earned a second of it. The average reply rate reflects that: **around 1%.** A
-**warm introduction** starts from the opposite place. Someone the prospect
+earned a second of it. The reply rate reflects that: warm-intro guides consistently
+peg cold outreach at **1–3%.** A **warm introduction** starts from the opposite place. Someone the prospect
 already trusts hands you their attention. You skip the "who are you and why
 should I care?" phase entirely, because a person they respect just answered it
 for you.
@@ -67,7 +67,7 @@ conversation — but they start from opposite levels of trust.
 |---|---|---|
 | **Starting trust** | Zero — you're a stranger | Borrowed from the connector |
 | **First question in their head** | "Who is this and why should I care?" | "My contact vouched for them — worth a look" |
-| **Typical reply rate** | ~1% on cold email | Dramatically higher (varies by source & relationship) |
+| **Typical reply rate** | ~1–3% on cold email | ~20–40% (varies by relationship & source) |
 | **Scales by** | Volume | Relationships |
 | **Main limit** | Ignored at scale | You run out of warm intros |
 
@@ -75,11 +75,11 @@ The pattern underneath every high-performing outreach method is the same:
 **manufacture a reason to say yes before the ask.** Warm intros do it with borrowed
 trust. That's the whole advantage — and, as we'll see, also the whole limitation.
 
-> A note on numbers: the ~1% cold-email figure is widely cited and used in
-> DonaTalk brand materials. Warm introductions convert meaningfully better, but
-> the exact lift depends heavily on relationship strength and source — so we
-> describe it qualitatively rather than quote a single percentage. Confirm any
-> specific stat against a current, citable source before repeating it.
+> A note on numbers: independent warm-intro guides consistently put warm-
+> introduction reply rates at **20–40%**, versus **1–3%** for cold outreach — an
+> order-of-magnitude lift. We quote it as a range on purpose: the true lift varies
+> with relationship strength and source, so a single headline number would claim a
+> precision the data doesn't support. (Sources: askscout.ai, launchleads.com.)
 
 ## How to ask for a warm introduction (without being awkward)
 
@@ -222,8 +222,9 @@ gives an easy out. Making the intro effortless to give is what gets it given.
 
 **Warm intro vs cold outreach — which is better?**
 Warm introductions convert far better because they start from trust rather than
-from zero. Cold outreach scales on volume but is easy to ignore; warm intros are
-harder to ignore but limited by the size of your network.
+from zero — independent guides put warm-intro reply rates around **20–40%** versus
+**1–3%** for cold outreach. Cold outreach scales on volume but is easy to ignore;
+warm intros are harder to ignore but limited by the size of your network.
 
 **What if I don't have a mutual connection?**
 Warm intros run out because your network is finite. When there's no shared contact,
@@ -240,10 +241,12 @@ exchange for an opt-in conversation.
 
 *Editorial note (staging): First-party claims (mechanism, 4.9% fee, Pitcher/
 Listener model, "prospect picks the cause") are accurate to the DonaTalk product.
-The ~1% cold-email response figure is industry-cited and used in DonaTalk brand
-assets; confirm the current published source before go-live. The relative
-performance of warm intros over cold outreach is stated qualitatively on purpose —
-do not attach a specific percentage without a citable source. Third-party methods
-are described at the category level to stay truthful and non-defamatory per Charter
-Sec 6. The two templates are original. Do not publish until the WordPress App
-Password is rotated and the publish pipeline (Backlog item 14/14b) is built.*
+The warm-intro (20–40%) vs cold (1–3%) reply-rate figures are cited as a range from
+independent guides (askscout.ai, launchleads.com) — kept as a range on purpose
+because the true lift varies by relationship; do not collapse to a single number.
+Note platform-wide cold-email averages run somewhat higher (~3.4% in 2026); the
+1–3% here is the warm-vs-cold comparison framing those guides use, which is the apt
+contrast for this page. Third-party methods are described at the category level to
+stay truthful and non-defamatory per Charter Sec 6. The two templates are original.
+Do not publish until the WordPress App Password is rotated and the publish pipeline
+(Backlog item 14/14b) is built.*

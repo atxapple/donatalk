@@ -1,0 +1,22 @@
+﻿{
+    "ts":  "20260710T072238Z",
+    "base":  "https://app.donatalk.com",
+    "allOk":  true,
+    "checks":  [
+                   {
+                       "path":  "/",
+                       "status":  200,
+                       "ok":  true
+                   },
+                   {
+                       "path":  "/listeners",
+                       "status":  200,
+                       "ok":  true
+                   },
+                   {
+                       "path":  "/login",
+                       "status":  200,
+                       "ok":  true
+                   }
+               ]
+}
