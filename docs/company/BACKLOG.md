@@ -2,7 +2,7 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-09 (run 7)
+> Last updated: 2026-07-10 (run 8)
 
 ## Now (Obj 1 — the machine)
 | # | Item | KR | Status |
@@ -35,8 +35,8 @@
 | # | Item | KR | Status |
 |---|------|----|--------|
 | 16 | Cluster A listicle — "cold email alternatives" (`donatalk.com/blog/`) | 2-1→2-3 | 🟡 drafted `docs/company/content/cold-email-alternatives.md` (publish-ready, brand-voice, Sec 6-truthful). **Publish blocked:** WP App Password pending rotation + publish pipeline (item 14) unbuilt |
-| 17 | Cluster B pillar + template — "how to get warm introductions" | 2-1→2-3 | ⬜ todo (next content piece) |
-| 18 | Cluster C explainer + app `/vs` page — "donation-based outreach" | 2-1→2-3 | 🟡 **app `/vs` page built + shipping (run 7, v0.13.0, PR pending):** static category-defining comparison (cold email vs paid gifting vs donation-based), comparison table + differentiators + how-it-works + FAQ, WebPage/Breadcrumb/**FAQPage** JSON-LD, full metadata, added to sitemap. Deploy gates green (tsc clean, 598 tests pass, no §3b surface). Remaining: thin WP `what-is-donation-based-outreach` explainer (WP-publish-blocked, item 14b) + impact calculator (fast-follow) |
+| 17 | Cluster B pillar + template — "how to get warm introductions" | 2-1→2-3 | 🟡 drafted `docs/company/content/how-to-get-warm-introductions.md` (run 8): definitional pillar + how-to (double opt-in ask) + 2 original copy-paste templates (ask-connector + forwardable blurb) + exec sub-cluster + FAQ; bridges to Cluster C via donation-based outreach for the "no mutual connection" case. Brand-voice, Sec-6 truthful (warm-vs-cold stated qualitatively, ~1% flagged to confirm). **Publish blocked:** WP App Password rotation + pipeline (items 14/14b) |
+| 18 | Cluster C explainer + app `/vs` page — "donation-based outreach" | 2-1→2-3 | 🟡 **app `/vs` page shipped + merged (v0.13.0, PR #29, run 7):** static category-defining comparison (cold email vs paid gifting vs donation-based), comparison table + differentiators + how-it-works + FAQ, WebPage/Breadcrumb/**FAQPage** JSON-LD, full metadata, in sitemap. Live (`app/vs/page.tsx` on `main`). Remaining: thin WP `what-is-donation-based-outreach` explainer (WP-publish-blocked, item 14b) + impact calculator (fast-follow) |
 | 14b | WordPress publish pipeline: markdown draft → WP REST draft post (reads creds from env) | 2-2 | ⬜ todo — **gate on WP App Password rotation first** |
 
 ## Follow-ups (unblocked, this cycle)
