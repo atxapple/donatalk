@@ -3,6 +3,11 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.14.1] - 2026-07-10
+
+### Changed (SEO content — Cluster C truthfulness)
+- `app/vs/page.tsx` — replaced the stale "sit near a 1% reply rate" cold-email framing (comparison table + FAQ) with the sourced collapsing-average framing: platform reply rates ~5.1% (2024) → ~3.4% (2026), with ~1-3% kept as the low-single-digit cold range. Aligns the live `/vs` page with the sourced benchmark in `research/2026-07-10-keywords.md` and the run-14 DECISIONS convention already applied to the unpublished Cluster A/B/C drafts (Charter Sec 6, truthful-only). No behavior change; copy only.
+
 ## [0.14.0] - 2026-07-10
 
 ### Added (SEO content — Cluster C)
