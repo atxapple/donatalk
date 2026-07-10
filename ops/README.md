@@ -11,6 +11,8 @@ ops/
 ├── check-site.ps1       # 6-hourly synthetic probe of app.donatalk.com critical paths
 ├── deploy-web.ps1       # gated deploy + post-deploy probe + auto-rollback (Charter §4)
 ├── get-metrics.ps1      # collect + append rows to docs/company/metrics/*.csv
+├── publish-wp.mjs       # publish a content draft -> WordPress REST (env creds, draft by default)
+├── lib/md-to-wp.mjs     # pure markdown+frontmatter -> WP payload converter (tested)
 ├── routines/
 │   ├── daily-ops.md     # every 3h — read OS, health, advance backlog, write brief
 │   ├── growth-research.md  # daily — SEO/competitor/demand research
@@ -26,6 +28,21 @@ ops/
 | Weekly report | Mon 08:00 | `run-routine.ps1 -Routine weekly-report` |
 | Health probe | every 6h | `check-site.ps1` |
 | Gated deploy | on shippable change | `deploy-web.ps1` (gates → deploy → probe → auto-rollback) |
+
+## WordPress publishing (`publish-wp.mjs`)
+Turns a `docs/company/content/*.md` draft (YAML frontmatter + Markdown) into a
+WordPress REST post. **Credentials come only from env** (`WORDPRESS_API_URL`,
+`WORDPRESS_APP_USER`, `WORDPRESS_APP_PASSWORD`) — never hardcoded (Charter §6).
+**Draft by default**; live publishing needs an explicit `--publish`. `--dry-run`
+(or missing creds) prints the resolved endpoint + HTML and makes no network call.
+```
+node ops/publish-wp.mjs docs/company/content/<draft>.md --dry-run   # offline preview
+node ops/publish-wp.mjs docs/company/content/<draft>.md             # create WP draft
+node ops/publish-wp.mjs docs/company/content/<draft>.md --publish   # go live (guarded)
+```
+**Not yet run live** — the board must first rotate the WP App Password (it transited
+chat). The markdown→HTML converter (`lib/md-to-wp.mjs`) is unit-tested
+(`lib/md-to-wp.test.mjs`) and dry-run-verified against the current drafts.
 
 ## Guardrails
 The runner runs `claude -p` with `--permission-mode acceptEdits`. Escalation

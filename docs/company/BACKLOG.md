@@ -2,7 +2,7 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-10 (run 12 — warm-intro pillar sourced-stat edit)
+> Last updated: 2026-07-10 (run 13 — WP publish pipeline built + dry-run-verified)
 
 ## Now (Obj 1 — the machine)
 | # | Item | KR | Status |
@@ -37,7 +37,7 @@
 | 16 | Cluster A listicle — "cold email alternatives" (`donatalk.com/blog/`) | 2-1→2-3 | 🟡 drafted `docs/company/content/cold-email-alternatives.md` (publish-ready, brand-voice, Sec 6-truthful). **Publish blocked:** WP App Password pending rotation + publish pipeline (item 14) unbuilt. **Pre-publish edit pending (from research §5.5):** reframe the flat "~1%" cold hook to the sourced "average is collapsing" framing (Instantly: 5.1%→3.4%, 2026) + confirm the channels-not-tools angle; deferred (touches the article's central hook + the brand's ~1% figure — a positioning call, not a mechanical stat swap). |
 | 17 | Cluster B pillar + template — "how to get warm introductions" | 2-1→2-3 | 🟡 drafted `docs/company/content/how-to-get-warm-introductions.md` (run 8): definitional pillar + how-to (double opt-in ask) + 2 original copy-paste templates (ask-connector + forwardable blurb) + exec sub-cluster + FAQ; bridges to Cluster C via donation-based outreach for the "no mutual connection" case. Brand-voice, Sec-6 truthful. **Pre-publish edit DONE (run 12):** qualitative hedge swapped for the sourced **warm-intro 20–40% vs cold 1–3%** range (intro, vs-table, note-block, FAQ, editorial note) — kept as a range per `research/2026-07-10-keywords.md`; editorial note flags platform-avg cold (~3.4%) vs the 1–3% warm-comparison framing. Draft now stat-final. **Publish still blocked:** WP App Password rotation + pipeline (items 14/14b). |
 | 18 | Cluster C explainer + app `/vs` page — "donation-based outreach" | 2-1→2-3 | 🟡 **`/vs` shipped+merged (v0.13.0, PR #29, run 7)** + **impact calculator shipped (v0.14.0, run 9):** `app/calculator/page.tsx` (server: metadata + WebApplication/Breadcrumb/FAQPage JSON-LD) + `OutreachCalculator.tsx` (client: target meetings × donation × editable ~1% reply rate → monthly donation impact, 4.9% fee cost, all-in cost/meeting, cold-message volume). All outputs = arithmetic on visitor input (no invented metrics, Sec 6); in sitemap; cross-links to `/vs` + `/listeners`. tsc clean, 598 unit tests green, non-§3b. Remaining: thin WP `what-is-donation-based-outreach` explainer (WP-publish-blocked, item 14b) |
-| 14b | WordPress publish pipeline: markdown draft → WP REST draft post (reads creds from env) | 2-2 | ⬜ todo — **gate on WP App Password rotation first** |
+| 14b | WordPress publish pipeline: markdown draft → WP REST draft post (reads creds from env) | 2-2 | 🟡 **built + dry-run-verified 2026-07-10** (run 13): `ops/publish-wp.mjs` + pure converter `ops/lib/md-to-wp.mjs` (frontmatter + Markdown→HTML: headings/bold/italic/links/lists/GFM tables/blockquotes/hr). Creds env-only (never hardcoded, §6); **draft by default**, live needs explicit `--publish`; `--dry-run`/missing-creds = no network. 18 unit tests (suite now 25 files/317). Dry-run-verified against both drafts (tables/quotes/lists render, no leftover markdown). **Live publish still gated on WP App Password rotation** — pipeline is ready the moment the board rotates. |
 
 ## Follow-ups (unblocked, this cycle)
 - **Allowlist the ops scripts.** `claude -p --permission-mode acceptEdits` still enforces the
@@ -53,7 +53,10 @@
 ## Still blocked on board
 - Always-on scheduler host (item 6).
 - Approved posting accounts (item 15).
-- **Rotate** WordPress App Password (transited chat).
+- **Rotate WordPress App Password (transited chat).** ← now the *single* unlock for the
+  entire Obj-2 content chain: 3 drafts are publish-ready and the publish pipeline (#14b)
+  is built + dry-run-verified. The moment a rotated password lands in env, `ops/publish-wp.mjs`
+  ships them as WP drafts. Nothing else blocks first-content-live.
 
 ## Later
 - ~~cost-of-cold-outreach calculator~~ ✅ shipped as `/calculator` (v0.14.0, run 9). More `/vs` competitor/comparison pages.
