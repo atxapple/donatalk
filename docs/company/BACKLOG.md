@@ -2,7 +2,7 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-10 (run 8)
+> Last updated: 2026-07-10 (run 9)
 
 ## Now (Obj 1 — the machine)
 | # | Item | KR | Status |
@@ -36,7 +36,7 @@
 |---|------|----|--------|
 | 16 | Cluster A listicle — "cold email alternatives" (`donatalk.com/blog/`) | 2-1→2-3 | 🟡 drafted `docs/company/content/cold-email-alternatives.md` (publish-ready, brand-voice, Sec 6-truthful). **Publish blocked:** WP App Password pending rotation + publish pipeline (item 14) unbuilt |
 | 17 | Cluster B pillar + template — "how to get warm introductions" | 2-1→2-3 | 🟡 drafted `docs/company/content/how-to-get-warm-introductions.md` (run 8): definitional pillar + how-to (double opt-in ask) + 2 original copy-paste templates (ask-connector + forwardable blurb) + exec sub-cluster + FAQ; bridges to Cluster C via donation-based outreach for the "no mutual connection" case. Brand-voice, Sec-6 truthful (warm-vs-cold stated qualitatively, ~1% flagged to confirm). **Publish blocked:** WP App Password rotation + pipeline (items 14/14b) |
-| 18 | Cluster C explainer + app `/vs` page — "donation-based outreach" | 2-1→2-3 | 🟡 **app `/vs` page shipped + merged (v0.13.0, PR #29, run 7):** static category-defining comparison (cold email vs paid gifting vs donation-based), comparison table + differentiators + how-it-works + FAQ, WebPage/Breadcrumb/**FAQPage** JSON-LD, full metadata, in sitemap. Live (`app/vs/page.tsx` on `main`). Remaining: thin WP `what-is-donation-based-outreach` explainer (WP-publish-blocked, item 14b) + impact calculator (fast-follow) |
+| 18 | Cluster C explainer + app `/vs` page — "donation-based outreach" | 2-1→2-3 | 🟡 **`/vs` shipped+merged (v0.13.0, PR #29, run 7)** + **impact calculator shipped (v0.14.0, run 9):** `app/calculator/page.tsx` (server: metadata + WebApplication/Breadcrumb/FAQPage JSON-LD) + `OutreachCalculator.tsx` (client: target meetings × donation × editable ~1% reply rate → monthly donation impact, 4.9% fee cost, all-in cost/meeting, cold-message volume). All outputs = arithmetic on visitor input (no invented metrics, Sec 6); in sitemap; cross-links to `/vs` + `/listeners`. tsc clean, 598 unit tests green, non-§3b. Remaining: thin WP `what-is-donation-based-outreach` explainer (WP-publish-blocked, item 14b) |
 | 14b | WordPress publish pipeline: markdown draft → WP REST draft post (reads creds from env) | 2-2 | ⬜ todo — **gate on WP App Password rotation first** |
 
 ## Follow-ups (unblocked, this cycle)
@@ -56,6 +56,6 @@
 - **Rotate** WordPress App Password (transited chat).
 
 ## Later
-- `/vs` competitor/comparison pages; cost-of-cold-outreach calculator.
+- ~~cost-of-cold-outreach calculator~~ ✅ shipped as `/calculator` (v0.14.0, run 9). More `/vs` competitor/comparison pages.
 - Cause-story content series (Listeners' non-profits) for donatalk.com blog.
 - `.env.example`; API rate limiting; cookie consent (from product backlog).

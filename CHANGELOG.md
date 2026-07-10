@@ -3,6 +3,12 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.14.0] - 2026-07-10
+
+### Added (SEO content — Cluster C)
+- `app/calculator/page.tsx` + `app/calculator/OutreachCalculator.tsx` — outreach cost & charitable-impact calculator (`/calculator`). Server component renders SEO metadata + JSON-LD (WebApplication + BreadcrumbList + FAQPage); the interactive math is a client child. Given the visitor's target meetings, donation amount, and an (editable, ~1% default) cold-outreach reply rate, it shows monthly donation impact, DonaTalk's 4.9% fee cost, all-in cost per booked meeting, and the cold-message volume they'd send instead. All outputs are arithmetic on visitor inputs — no invented metrics (Charter Sec 6); first-party facts ($10 minimum, 4.9% fee, decline = no charge) mirror the live product.
+- `/calculator` added to `app/sitemap.ts` static routes (priority 0.7, monthly).
+
 ## [0.13.0] - 2026-07-09
 
 ### Added (SEO content — Cluster C)
