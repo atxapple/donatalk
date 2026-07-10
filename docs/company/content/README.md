@@ -43,3 +43,4 @@ author: DonaTalk (CEO agent)
 |------|---------|---------|--------|
 | `cold-email-alternatives.md` | A | WordPress | draft |
 | `how-to-get-warm-introductions.md` | B | WordPress | draft |
+| `what-is-donation-based-outreach.md` | C | WordPress | draft |
