@@ -2,7 +2,7 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-10 (run 14 — #16 cold-email hook reframed to sourced "average is collapsing")
+> Last updated: 2026-07-10 (run 15 — #18 Cluster C WP explainer drafted; all 3 cluster drafts publish-ready)
 
 ## Now (Obj 1 — the machine)
 | # | Item | KR | Status |
@@ -36,7 +36,7 @@
 |---|------|----|--------|
 | 16 | Cluster A listicle — "cold email alternatives" (`donatalk.com/blog/`) | 2-1→2-3 | 🟡 drafted `docs/company/content/cold-email-alternatives.md` (publish-ready, brand-voice, Sec 6-truthful). **Pre-publish edit DONE (run 14):** reframed the flat "~1%" hook to the sourced **"average is collapsing"** framing — platform-avg **~5.1% (2024) → ~3.4% (2026, Instantly)**, with **1–3%** kept as the warm-comparison range; added the honest "cold email isn't dead (elite 10–18%, 61% still prefer it)" nuance per `research/2026-07-10-keywords.md` §1/§5.5. Meta desc, opening hook, closing line, editorial note all updated (4 occurrences). Channels-not-tools angle confirmed already in place. Draft now stat-final (matches #17). **Publish still blocked:** WP App Password rotation + pipeline #14b (built, awaiting creds). |
 | 17 | Cluster B pillar + template — "how to get warm introductions" | 2-1→2-3 | 🟡 drafted `docs/company/content/how-to-get-warm-introductions.md` (run 8): definitional pillar + how-to (double opt-in ask) + 2 original copy-paste templates (ask-connector + forwardable blurb) + exec sub-cluster + FAQ; bridges to Cluster C via donation-based outreach for the "no mutual connection" case. Brand-voice, Sec-6 truthful. **Pre-publish edit DONE (run 12):** qualitative hedge swapped for the sourced **warm-intro 20–40% vs cold 1–3%** range (intro, vs-table, note-block, FAQ, editorial note) — kept as a range per `research/2026-07-10-keywords.md`; editorial note flags platform-avg cold (~3.4%) vs the 1–3% warm-comparison framing. Draft now stat-final. **Publish still blocked:** WP App Password rotation + pipeline (items 14/14b). |
-| 18 | Cluster C explainer + app `/vs` page — "donation-based outreach" | 2-1→2-3 | 🟡 **`/vs` shipped+merged (v0.13.0, PR #29, run 7)** + **impact calculator shipped (v0.14.0, run 9):** `app/calculator/page.tsx` (server: metadata + WebApplication/Breadcrumb/FAQPage JSON-LD) + `OutreachCalculator.tsx` (client: target meetings × donation × editable ~1% reply rate → monthly donation impact, 4.9% fee cost, all-in cost/meeting, cold-message volume). All outputs = arithmetic on visitor input (no invented metrics, Sec 6); in sitemap; cross-links to `/vs` + `/listeners`. tsc clean, 598 unit tests green, non-§3b. Remaining: thin WP `what-is-donation-based-outreach` explainer (WP-publish-blocked, item 14b) |
+| 18 | Cluster C explainer + app `/vs` page — "donation-based outreach" | 2-1→2-3 | 🟡 **`/vs` shipped+merged (v0.13.0, PR #29, run 7)** + **impact calculator shipped (v0.14.0, run 9):** `app/calculator/page.tsx` (server: metadata + WebApplication/Breadcrumb/FAQPage JSON-LD) + `OutreachCalculator.tsx` (client: target meetings × donation × editable ~1% reply rate → monthly donation impact, 4.9% fee cost, all-in cost/meeting, cold-message volume). All outputs = arithmetic on visitor input (no invented metrics, Sec 6); in sitemap; cross-links to `/vs` + `/listeners`. tsc clean, 299 unit tests green, non-§3b. **WP explainer DRAFTED (run 15):** `docs/company/content/what-is-donation-based-outreach.md` — definitional/featured-snippet-first explainer (definition → Warren Buffett cultural hook → how it works → reply-rate math → gift-card contrast → category context → DonaTalk differentiators → fit → FAQ), brand-voice, Sec-6 truthful. Stats match the run-14 convention (cold ~5.1%→~3.4%, 1–3% warm-vs-cold range, warm-intro 20–40%); competitors described at category level (non-defamatory), DonaTalk framed by concrete differentiators (self-serve/any-vertical/Listener-chosen cause/4.9% fee), NOT "first/only"; cross-links to `/vs` + `/calculator` + the #17 draft. **All 3 cluster drafts now publish-ready.** Publish still blocked: WP App Password rotation + pipeline #14b. |
 | 14b | WordPress publish pipeline: markdown draft → WP REST draft post (reads creds from env) | 2-2 | 🟡 **built + dry-run-verified 2026-07-10** (run 13): `ops/publish-wp.mjs` + pure converter `ops/lib/md-to-wp.mjs` (frontmatter + Markdown→HTML: headings/bold/italic/links/lists/GFM tables/blockquotes/hr). Creds env-only (never hardcoded, §6); **draft by default**, live needs explicit `--publish`; `--dry-run`/missing-creds = no network. 18 unit tests (suite now 25 files/317). Dry-run-verified against both drafts (tables/quotes/lists render, no leftover markdown). **Live publish still gated on WP App Password rotation** — pipeline is ready the moment the board rotates. |
 
 ## Follow-ups (unblocked, this cycle)
@@ -54,9 +54,9 @@
 - Always-on scheduler host (item 6).
 - Approved posting accounts (item 15).
 - **Rotate WordPress App Password (transited chat).** ← now the *single* unlock for the
-  entire Obj-2 content chain: 3 drafts are publish-ready and the publish pipeline (#14b)
-  is built + dry-run-verified. The moment a rotated password lands in env, `ops/publish-wp.mjs`
-  ships them as WP drafts. Nothing else blocks first-content-live.
+  entire Obj-2 content chain: **all 3 cluster drafts (A/B/C) are publish-ready** and the publish
+  pipeline (#14b) is built + dry-run-verified. The moment a rotated password lands in env,
+  `ops/publish-wp.mjs` ships them as WP drafts. Nothing else blocks first-content-live.
 
 ## Later
 - ~~cost-of-cold-outreach calculator~~ ✅ shipped as `/calculator` (v0.14.0, run 9). More `/vs` competitor/comparison pages.
