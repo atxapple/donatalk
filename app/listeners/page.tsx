@@ -18,10 +18,90 @@ import { Listener } from '@/types/listener';
 // (anonymous read), so opt out of static prerendering.
 export const dynamic = 'force-dynamic';
 
+const BASE = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://app.donatalk.com';
+
+const META_DESCRIPTION =
+  'Browse real people on DonaTalk and the causes they support, then book 15 minutes with a donation instead of a cold pitch. Donation-based outreach: they say yes, their charity gets funded, and if they decline you pay nothing.';
+
+// /listeners is the app's primary Cluster C ("donation-based outreach") landing
+// + conversion surface, so it carries full metadata + JSON-LD parity with /vs
+// and /calculator. Claims are first-party and mirror the live product ($10
+// minimum, 4.9% fee, decline = no charge) per Charter Sec 6 (truthful only).
 export const metadata: Metadata = {
-  title: 'Browse listeners | DonaTalk',
-  description:
-    'Find a person worth pitching. Browse real people on DonaTalk and the causes they support — your donation books 15 minutes of their time.',
+  title: 'Browse People to Pitch — Donation-Based Outreach | DonaTalk',
+  description: META_DESCRIPTION,
+  keywords: [
+    'donation-based outreach',
+    'book a meeting for charity',
+    'pitch someone for a cause',
+    'warm introduction alternative',
+    'charitable sales outreach',
+    'donate to book a meeting',
+  ],
+  alternates: { canonical: '/listeners' },
+  openGraph: {
+    type: 'website',
+    url: `${BASE}/listeners`,
+    title: 'Browse People to Pitch — Donation-Based Outreach | DonaTalk',
+    description: META_DESCRIPTION,
+    images: [{ url: '/logo%20horizontal%20with%20text.png', alt: 'DonaTalk' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Browse People to Pitch — Donation-Based Outreach | DonaTalk',
+    description: META_DESCRIPTION,
+    images: ['/logo%20horizontal%20with%20text.png'],
+  },
+  robots: { index: true, follow: true },
+};
+
+/* ------------------------------------------------------------------- content */
+
+const FAQ: { q: string; a: string }[] = [
+  {
+    q: 'What is donation-based outreach?',
+    a: 'Donation-based outreach is a way to earn a business conversation by committing a charitable donation instead of sending a cold pitch. On DonaTalk you pick a person and a cause they support, commit a donation to request 15 minutes of their time, and the conversation starts warm and invited rather than unsolicited.',
+  },
+  {
+    q: 'How does pitching someone on DonaTalk work?',
+    a: 'Find a person worth pitching and a cause they care about, commit a donation (from $10) to request 15 minutes, and send your ask. If they accept, their chosen non-profit gets funded and you get the meeting; if they decline, nothing is charged.',
+  },
+  {
+    q: 'What does it cost, and what if they decline?',
+    a: 'You set the donation you offer (from $10). DonaTalk charges a 4.9% fee on donations that are committed when a meeting is accepted. If the recipient declines, nothing is charged — you only pay for a real yes.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': `${BASE}/listeners#webpage`,
+      url: `${BASE}/listeners`,
+      name: 'Browse people to pitch on DonaTalk',
+      description: META_DESCRIPTION,
+      isPartOf: { '@id': `${BASE}/#website` },
+      breadcrumb: { '@id': `${BASE}/listeners#breadcrumb` },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${BASE}/listeners#breadcrumb`,
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'DonaTalk', item: BASE },
+        { '@type': 'ListItem', position: 2, name: 'Browse people to pitch', item: `${BASE}/listeners` },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${BASE}/listeners#faq`,
+      mainEntity: FAQ.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
 };
 
 type BrowseListener = Listener & { uid: string };
@@ -165,11 +245,34 @@ const EmptyState = styled('div', {
   lineHeight: 1.55,
 });
 
+const SectionHeading = styled('h2', {
+  width: '100%',
+  maxWidth: '680px',
+  margin: '$lg 0 $sm',
+  fontSize: '$xl',
+  fontWeight: 700,
+  color: '$dark',
+  textAlign: 'center',
+});
+
+const FaqList = styled('div', { width: '100%', maxWidth: '680px', marginTop: '$sm' });
+const FaqItem = styled('div', {
+  padding: '14px 0',
+  borderBottom: '1px solid #f0f1f3',
+  '&:last-child': { borderBottom: 'none' },
+});
+const FaqQ = styled('h3', { margin: '0 0 4px', fontSize: '$md', fontWeight: 700, color: '$dark' });
+const FaqA = styled('p', { margin: 0, fontSize: '$base', lineHeight: 1.6, color: '$darkgray' });
+
 export default async function BrowseListenersPage() {
   const listeners = await getLiveListeners();
 
   return (
     <PageWrapper>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <BrowseContainer>
         <PageHeading>Find someone worth pitching</PageHeading>
         <PageSubheading>
@@ -205,10 +308,22 @@ export default async function BrowseListenersPage() {
           </Grid>
         )}
 
+        <SectionHeading>How donation-based outreach works</SectionHeading>
+        <FaqList>
+          {FAQ.map((f) => (
+            <FaqItem key={f.q}>
+              <FaqQ>{f.q}</FaqQ>
+              <FaqA>{f.a}</FaqA>
+            </FaqItem>
+          ))}
+        </FaqList>
+
         <CtaRow>
           <SecondaryHint>Want in?</SecondaryHint>
           <PrimaryCTA href="/listener/signup">Get pitched — list yourself →</PrimaryCTA>
           <SecondaryCTA href="/pitcher/signup">Pitch someone — join as a pitcher</SecondaryCTA>
+          <SecondaryCTA href="/vs">See how donation-based outreach compares →</SecondaryCTA>
+          <SecondaryCTA href="/calculator">Estimate your donation impact →</SecondaryCTA>
         </CtaRow>
       </BrowseContainer>
     </PageWrapper>

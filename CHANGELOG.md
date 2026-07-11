@@ -3,6 +3,11 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.15.0] - 2026-07-10
+
+### Added (SEO — Cluster C on the primary funnel page)
+- `app/listeners/page.tsx` — brought the app's primary "donation-based outreach" landing/conversion surface to SEO parity with `/vs` and `/calculator`. Previously it carried only a bare `title` + `description`; now it emits full metadata (Cluster C `keywords`, `alternates.canonical`, OpenGraph + Twitter cards, `robots`) plus JSON-LD (`CollectionPage` + `BreadcrumbList` + `FAQPage`). Added a short, visible "How donation-based outreach works" FAQ (3 Q&As) so the page has crawlable Cluster-C body text (the listing itself is dynamic) that matches the `FAQPage` structured data, and added contextual cross-links to `/vs` and `/calculator` from the CTA row. All claims first-party and mirror the live product ($10 minimum, 4.9% fee, decline = no charge) per Charter Sec 6 (truthful only); no data-flow or behavior change.
+
 ## [0.14.2] - 2026-07-10
 
 ### Changed (SEO — internal linking of Cluster C pages)
