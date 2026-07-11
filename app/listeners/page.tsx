@@ -12,6 +12,7 @@ import {
   PrimaryCTA,
   SecondaryHint,
 } from '@/components/ui/profileCards';
+import FurtherReading, { ARTICLES } from '@/components/FurtherReading';
 import { Listener } from '@/types/listener';
 
 // The client Firestore SDK reads the live `listeners` collection per request
@@ -317,6 +318,10 @@ export default async function BrowseListenersPage() {
             </FaqItem>
           ))}
         </FaqList>
+
+        <FurtherReading
+          links={[ARTICLES.donationBasedOutreach, ARTICLES.warmIntroductions]}
+        />
 
         <CtaRow>
           <SecondaryHint>Want in?</SecondaryHint>
