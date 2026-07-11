@@ -13,6 +13,7 @@ ops/
 ├── get-metrics.ps1      # collect + append rows to docs/company/metrics/*.csv
 ├── publish-wp.mjs       # publish a content draft -> WordPress REST (env creds, draft by default)
 ├── lib/md-to-wp.mjs     # pure markdown+frontmatter -> WP payload converter (tested)
+├── gsc-pull.mjs         # pull GSC metrics via service-account (read-only); --log appends to awareness CSV
 ├── routines/
 │   ├── daily-ops.md     # every 3h — read OS, health, advance backlog, write brief
 │   ├── growth-research.md  # daily — SEO/competitor/demand research
@@ -43,6 +44,18 @@ node ops/publish-wp.mjs docs/company/content/<draft>.md --publish   # go live (g
 **Not yet run live** — the board must first rotate the WP App Password (it transited
 chat). The markdown→HTML converter (`lib/md-to-wp.mjs`) is unit-tested
 (`lib/md-to-wp.test.mjs`) and dry-run-verified against the current drafts.
+
+## Search Console metrics (`gsc-pull.mjs`)
+Pulls the donatalk.com GSC Performance data (clicks / impressions / CTR / position +
+branded-vs-non-branded query split) via a **read-only service account** — no browser,
+so it works unattended. Key path comes from `.env.local` (`GSC_SA_KEY_FILE`, gitignored);
+the SA must be added as a Restricted user on the GSC property.
+```
+node ops/gsc-pull.mjs                # 28d summary to stdout
+node ops/gsc-pull.mjs --days 90 --json
+node ops/gsc-pull.mjs --log          # append a real row to metrics/awareness-log.csv (A4/A5/A6)
+```
+Dependency-free (signs the OAuth JWT with node `crypto`). Never commit the key.
 
 ## Guardrails
 The runner runs `claude -p` with `--permission-mode acceptEdits`. Escalation

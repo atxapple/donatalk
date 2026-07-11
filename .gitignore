@@ -46,3 +46,7 @@ yarn-error.log*
 next-env.d.ts
 
 .env*.local
+
+# GSC service-account key (never commit)
+gsc-sa.json
+*.iam.gserviceaccount.com.json
