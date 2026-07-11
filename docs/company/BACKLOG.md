@@ -2,7 +2,7 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-11 (run 18 — SEO parity for `/listeners`: the primary Cluster C funnel page had only bare title+description; added full metadata (keywords/canonical/OG/Twitter/robots) + JSON-LD (CollectionPage/Breadcrumb/FAQPage) + a visible 3-Q FAQ + cross-links to `/vs`+`/calculator`. v0.15.0 shipped via PR #40, merged)
+> Last updated: 2026-07-11 (run 19 — signup-pages metadata: `/pitcher/signup` + `/listener/signup` are Client Components whose `next/head` `<Head>` title/description were App-Router no-ops, so both served the generic root `<title>` with no canonical/OG despite being in `sitemap.ts`. Added sibling server `layout.tsx` metadata carriers (title/desc/keywords/canonical/OG/Twitter/robots) + removed the dead `<Head>`. v0.16.0 shipped via PR #44, merged. Content chain still WP-blocked.)
 
 ## Now (Obj 1 — the machine)
 | # | Item | KR | Status |
@@ -61,6 +61,7 @@
 ## Later
 - ~~cost-of-cold-outreach calculator~~ ✅ shipped as `/calculator` (v0.14.0, run 9). More `/vs` competitor/comparison pages.
 - ~~Internal links to `/vs` + `/calculator`~~ ✅ done run 17 (v0.14.2): both pages were in `sitemap.ts` but had **zero inbound internal links** from app nav (semi-orphaned → weak crawl equity + no human discovery). Fixed: site-wide `Footer.tsx` now links both (keyword-rich anchors), and `/vs`↔`/calculator` cross-link reciprocally. Non-§3b, deploy-gated (tsc + 317 tests green).
-- ~~`/listeners` SEO parity~~ ✅ done run 18 (v0.15.0): full metadata + JSON-LD + FAQ on the primary funnel page (see item 18). Remaining app-SEO follow-up: `/pitcher/signup` + `/listener/signup` still carry thin/default metadata — lower priority (form pages, weaker landing intent) but a candidate for the next SEO pass if content work stays WP-blocked.
+- ~~`/listeners` SEO parity~~ ✅ done run 18 (v0.15.0): full metadata + JSON-LD + FAQ on the primary funnel page (see item 18).
+- ~~`/pitcher/signup` + `/listener/signup` metadata~~ ✅ done run 19 (v0.16.0, PR #44 merged): both pages are Client Components, so their `next/head` `<Head>` title/description were **App-Router no-ops** — they served the generic root `<title>` with no canonical/OG/Twitter despite being in `sitemap.ts` (priority 0.6). Added sibling server-component `layout.tsx` metadata carriers (distinct title via root `%s | DonaTalk` template + description + keywords + canonical + OG/Twitter + robots), matching the `/vs`/`/listeners`/`/calculator` convention; deleted the dead `<Head>` blocks + unused imports. Metadata-only, signup/auth logic untouched (non-§3b), first-party truthful (§6), tsc clean + 317 tests. **Verified live post-deploy:** pre-deploy both served the root title; post-deploy render the distinct titles (see run-19 brief). Remaining app-SEO candidates: `/login` (thin), profile/detail templates already covered by v0.12.0 per-profile metadata.
 - Cause-story content series (Listeners' non-profits) for donatalk.com blog.
 - `.env.example`; API rate limiting; cookie consent (from product backlog).
