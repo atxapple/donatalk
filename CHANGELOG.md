@@ -3,6 +3,16 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.19.0] - 2026-07-11
+
+### Added (SEO — internal links from the app to the live WordPress content)
+- `components/FurtherReading.tsx` (new) — a shared, server-rendered "Further reading" block that links the app's Cluster C surfaces to the three donation-based-outreach articles published live on the WordPress SEO home (donatalk.com) on 2026-07-11. Those posts (`/cold-email-alternatives/`, `/how-to-get-warm-introductions/`, `/what-is-donation-based-outreach/`, all 200 + in the WP sitemap) had **zero inbound links from the app** — this closes the BACKLOG "Next for these" follow-up, giving the new content crawl paths, do-follow link equity between our own properties, and a human discovery route. The article set (href/label/blurb) is centralized in an exported `ARTICLES` constant so anchor text stays consistent; anchors are keyword-rich but describe each article honestly (Charter Sec 6). Static content only, no interactivity/data-flow change (non-§3b).
+
+### Changed
+- `app/vs/page.tsx` — added the `FurtherReading` block (all three articles; this is the Cluster C category hub) above the CTA row.
+- `app/calculator/page.tsx` — added `FurtherReading` (cold-email alternatives + donation-based-outreach explainer, matching the calculator's cost-of-cold-outreach framing).
+- `app/listeners/page.tsx` — added `FurtherReading` (donation-based-outreach explainer + warm-introductions how-to, matching the funnel page's intent).
+
 ## [0.18.0] - 2026-07-11
 
 ### Added (SEO content — seller-side `/pitchers` landing page)
