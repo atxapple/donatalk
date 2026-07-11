@@ -1,7 +1,15 @@
 # DonaTalk — SEO Keyword Strategy
 
-> generated 2026-07-09 · **updated 2026-07-10** (growth-research pass folded in sourced benchmarks +
-> a newly-found Cluster C competitor; see `research/2026-07-10-keywords.md` for the full transcript)
+> generated 2026-07-09 · **updated 2026-07-10** (sourced benchmarks + Cluster C competitor) ·
+> **updated 2026-07-11** (AI-authenticity-collapse wedge + Commsor *Warm Intro Gap Report 2026* data;
+> see `research/2026-07-11-keywords.md` for the transcript)
+
+**2026-07-11 headline shift — the wedge got sharper.** The 2026 discourse has moved past "reply rates are
+falling" to **"AI made personalized-looking outreach infinite, so it stopped being a signal at all."** When
+any seller can auto-generate a 'personal' email, receiving one tells the buyer nothing; trust migrates to
+signals that are *costly to fake.* **DonaTalk's committed donation is exactly such a signal** — an AI SDR
+can mint a thousand emails a minute but cannot put $50 on the line for the Listener's cause. This is the
+strongest, most defensible framing to date. Anchor Cluster A + C copy here.
 
 ## 0. Context & method
 
@@ -30,6 +38,8 @@ People who feel the pain DonaTalk solves (1% reply rates) and are shopping for a
 ### Cluster B — "Warm introductions / warm outreach" (relationship-selling demand)
 The category buyers move *toward* when they abandon cold outreach. DonaTalk = buy a warm intro by donating to a cause — owning this vocabulary is core.
 - **Sourced demand fact (2026-07-10):** warm-intro reply rates run **20–40% vs cold 1–3%** — an order-of-magnitude lift, cited consistently across independent sources ([askscout.ai](https://askscout.ai/blog/what-is-a-warm-introduction), [launchleads.com](https://www.launchleads.com/lead-generation-strategies/warm-intros-referrals/)). Use this cited *range* in the #17 pillar (replaces the earlier qualitative hedge; keep it a range — the true lift varies by relationship). The gap every source assumes away — *you need a mutual connection* — is exactly what DonaTalk manufactures; that's the bridge into Cluster C.
+- **Sourced demand fact (2026-07-11) — the gap is now quantified.** The **Commsor _Warm Intro Gap Report 2026_** (n=1,305 GTM leaders, [commsor.com](https://www.commsor.com/guide/warm-intro-gap-report)) finds **77.8% of leaders would be ready if cold outbound disappeared, but only 18% have a reliable warm-intro system** — a ~60-pt gap that is *exactly* the demand DonaTalk fills (it manufactures the intro for the no-mutual-connection case). Same report: **~1,400 outbound touches per meeting, 5× in 5 years.** Complementary tactic ranking: **warm referrals = 65% effectiveness, #1 by 21 pts** (vs inbound 44 / email 28 / phone 26 — Norwest 2025, via [getboomerang.ai](https://getboomerang.ai/post/cold-outbound-is-dying)). Cite Commsor in the #17 pillar as third-party proof of the gap. **Commsor is a thesis-aligned _non-competitor_** (warm-intro infra, no donation mechanic) — a citation/PR/co-marketing target, not a rival.
+- **New on-wedge long-tails (2026-07-11, confirm w/ tool):** warm intro gap · how to get warm intros at scale · warm intro when you have no mutual connection · warm introduction system · how to get referrals without asking your network.
 - **Head:** warm introduction (sales) / how to get warm intros
 - **Long-tails:** what is a warm introduction · how to ask for a warm intro · warm intro email template · warm intro vs cold outreach · how to get warm introductions B2B · book meetings with hard-to-reach executives · get meetings with C-suite
 - **Est. volume (US):** head ~800–2k; template/how-to long-tails 100–600 each; "meetings with executives" sub-cluster ~500–1.5k. *Confirm.*
@@ -65,9 +75,9 @@ Rule: informational + listicle → WordPress; commercial/transactional + categor
 - **Gifting to book meetings (Reachdesk)** — adjacent, off-core → only a `/vs` comparison point.
 
 ## 4. Competitor / SERP note
-- **A:** SaaS blogs; format = 10–15 item listicle updated for the year — but note (2026-07-10) the top results are mostly "best *tools/software/agencies*" lists. **Angle-shift: write a *channels/approaches* listicle**, not a tools list — softer competition and charity-funded warm intros slots in as a native entry none of them list. Also drop "cold email is dead" framing → "the average is collapsing (5.1%→3.43%), here's what earns a reply now" (61% of decision-makers still prefer cold email; clickbait reads as such to this ICP).
+- **A:** SaaS blogs; format = 10–15 item listicle updated for the year — but note (2026-07-10) the top results are mostly "best *tools/software/agencies*" lists. **Angle-shift: write a *channels/approaches* listicle**, not a tools list — softer competition and charity-funded warm intros slots in as a native entry none of them list. Drop "cold email is dead" → "the average is collapsing (5.1%→3.43%), here's what earns a reply now" (61% of decision-makers still prefer cold email; clickbait reads as such to this ICP). **2026-07-11 sharpen:** lead the thesis on the *authenticity collapse* — AI made personalized-looking outreach infinite, so it stopped being a signal ("a signal everyone has access to cannot be an advantage"; Gartner: **75% of buyers will prefer human-led sales over AI by 2030**). Position DonaTalk's committed donation as the **costly, un-fakeable signal** that survives the AI glut. New long-tails: "outbound is dead alternatives" · "authentic sales outreach" · "how to book meetings without cold email."
 - **B:** Vieu/Scout/Commsor/Draftboard/etc.; format = definitional pillar + how-to + templates; thinner backlinks → beatable. Own the "**no mutual connection → manufacture one**" section none of them cover.
-- **C:** Influence Board (live, exec-side) + **Time to Give Network** (finance-native, no SEO footprint) + HearMeOut (beta); **no dominant content format and ~zero content competition** — whoever publishes the clear definition + `/vs` comparison + calculator owns it. `/vs` + `/calculator` already shipped (v0.13–0.14).
+- **C:** Influence Board (live, exec-side) + **Time to Give Network** (finance-native, no SEO footprint) + HearMeOut (beta); **no dominant content format and ~zero content competition** — whoever publishes the clear definition + `/vs` comparison + calculator owns it. `/vs` + `/calculator` already shipped (v0.13–0.14). **2026-07-11 re-confirm:** a direct search for the donation-**for-access** model returned only nonprofit *fundraising* platforms (CauseVox/GalaBid/Kindful) — not the peer-access model → category search surface still empty, blue-ocean holds. **Commsor** (Warm Intro Gap Report) is thesis-aligned but non-competing (no donation mechanic) — cite/partner, don't fear.
 - **The gap DonaTalk owns:** no one sits at the intersection. Cold-email listicles never mention donation-based outreach; warm-intro guides never mention you can *buy* a warm intro by funding a cause. **Wedge: "donation-based / charitable warm outreach for everyday B2B sellers."**
 
 ## 5. First three pieces of content (prioritized)
@@ -80,3 +90,4 @@ Rule: informational + listicle → WordPress; commercial/transactional + categor
 ## Sources
 See research transcript (2026-07-09): Saleshandy, Breakcold, Prospeo, SmartReach, Vida, Abstrakt, Instantly, Cleanlist, Scout (askscout.ai), Vieu, Commsor, Draftboard, Launch Leads, OutboundSystem, BeExecutiveEvents, Influence Board, EA Forum (HearMeOut), Reachdesk, Expandi, Martal, ClearB2B, GivingTuesday.
 Update transcript (2026-07-10) → `research/2026-07-10-keywords.md`: Martal, Prospeo, Belkins, Apollo, Autobound (reply-rate benchmarks); askscout.ai, Launch Leads, Vieu, Commsor, Introhive (warm-intro stats/how-to); OutboundSystem, BeExecutiveEvents, Koncert (C-suite); **familywealthreport.com — Time to Give Network**; Influence Board. Backlink targets → `research/backlink-targets.md`.
+Update transcript (2026-07-11) → `research/2026-07-11-keywords.md`: **commsor.com (Warm Intro Gap Report 2026 — primary)**, getboomerang.ai (Norwest 65% / Gartner 75% / compromised-playbook), cirrusinsight.com (Gong 344, Cognism 2.7%, RAIN 82%), marketbetter.ai (SoPro 18%v9%); cause/CSR + podcast/newsletter backlink outlets → appended to `research/backlink-targets.md` (2026-07-11 additions).
