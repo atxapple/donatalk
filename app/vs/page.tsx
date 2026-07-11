@@ -29,6 +29,9 @@ export const metadata: Metadata = {
     'book a meeting for charity',
     'charitable sales outreach',
     'paid gifting alternative',
+    'authentic sales outreach',
+    'AI outreach alternative',
+    'outbound is dead alternatives',
   ],
   alternates: { canonical: '/vs' },
   openGraph: {
@@ -98,6 +101,14 @@ const ROWS: { dimension: string; cells: Record<Approach, string> }[] = [
       donation: 'Aligns your outreach with generosity — authenticity is the point.',
     },
   },
+  {
+    dimension: 'In the age of AI outreach',
+    cells: {
+      cold: 'AI can generate a "personalized" cold email in seconds, so a polished message no longer signals real effort or genuine intent.',
+      gifting: 'A gift can be automated too, and still reads as buying attention.',
+      donation: "A committed donation can't be faked by volume — putting real money behind a cause the recipient chose is a costly, genuine signal.",
+    },
+  },
 ];
 
 const DIFFERENTIATORS: { icon: string; title: string; body: string }[] = [
@@ -118,6 +129,12 @@ const DIFFERENTIATORS: { icon: string; title: string; body: string }[] = [
     title: 'You only pay for a real yes',
     body:
       'The donation is committed when a listener accepts. If they decline, nothing is charged — so budget follows outcomes, not sent volume.',
+  },
+  {
+    icon: '🛡️',
+    title: "A signal AI can't fake",
+    body:
+      'When any seller can auto-generate a personal-looking email, the email stops being a signal. A donation you actually commit is costly to fake — and that is what makes authentic sales outreach land in a world of infinite AI messages.',
   },
 ];
 
@@ -143,6 +160,10 @@ const FAQ: { q: string; a: string }[] = [
   {
     q: 'What does it cost, and what if the meeting is declined?',
     a: 'You set the donation amount (from $10). DonaTalk charges a 4.9% fee on committed donations. If the recipient declines, nothing is charged — you only pay when a meeting is accepted.',
+  },
+  {
+    q: 'Does donation-based outreach still work now that AI writes cold emails?',
+    a: "That is exactly why it works. AI can generate an unlimited number of personalized-looking cold messages, so a polished email no longer proves genuine interest or effort. A committed donation is costly to fake — you are putting real money behind a cause the recipient chose — so it stands out as an authentic signal in a way an AI-written email cannot.",
   },
 ];
 
