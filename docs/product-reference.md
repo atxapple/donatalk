@@ -1,6 +1,6 @@
 # DonaTalk - Product Reference
 
-> Last updated: 2026-07-11 | Version: 0.17.0
+> Last updated: 2026-07-11 | Version: 0.18.0
 
 ## Product Vision
 
