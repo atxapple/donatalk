@@ -3,6 +3,11 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.15.1] - 2026-07-11
+
+### Fixed (SEO — title tag)
+- `app/listeners/page.tsx` — removed the redundant `| DonaTalk` suffix from the page `title` (and the OpenGraph/Twitter titles). The root layout already applies `title.template: '%s | DonaTalk'`, so the explicit suffix produced a doubled brand in the rendered `<title>` (`… | DonaTalk | DonaTalk`). Now renders once via the template, matching `/vs` and `/calculator`. (This doubled-suffix predated v0.15.0 — the old `'Browse listeners | DonaTalk'` title had the same issue — and is corrected here.) Metadata-only, non-§3b.
+
 ## [0.15.0] - 2026-07-10
 
 ### Added (SEO — Cluster C on the primary funnel page)
