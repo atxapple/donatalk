@@ -13,7 +13,6 @@ function readReturnPath(): string | null {
   const params = new URLSearchParams(window.location.search);
   return getSafeReturnPath(params.get('return'));
 }
-import Head from 'next/head';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/firebase/clientApp';
 import { signInWithGoogle, checkProfilesExist } from '@/lib/googleAuth';
@@ -190,11 +189,6 @@ export default function LoginPage() {
 
   return (
     <>
-      <Head>
-        <title>Login | DonaTalk</title>
-        <meta name="description" content="Log in to your DonaTalk profile to support or pitch meaningful causes." />
-      </Head>
-
       <PageWrapper>
         <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />
