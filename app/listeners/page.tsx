@@ -28,7 +28,7 @@ const META_DESCRIPTION =
 // and /calculator. Claims are first-party and mirror the live product ($10
 // minimum, 4.9% fee, decline = no charge) per Charter Sec 6 (truthful only).
 export const metadata: Metadata = {
-  title: 'Browse People to Pitch — Donation-Based Outreach | DonaTalk',
+  title: 'Browse People to Pitch — Donation-Based Outreach',
   description: META_DESCRIPTION,
   keywords: [
     'donation-based outreach',
@@ -42,13 +42,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: `${BASE}/listeners`,
-    title: 'Browse People to Pitch — Donation-Based Outreach | DonaTalk',
+    title: 'Browse People to Pitch — Donation-Based Outreach',
     description: META_DESCRIPTION,
     images: [{ url: '/logo%20horizontal%20with%20text.png', alt: 'DonaTalk' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Browse People to Pitch — Donation-Based Outreach | DonaTalk',
+    title: 'Browse People to Pitch — Donation-Based Outreach',
     description: META_DESCRIPTION,
     images: ['/logo%20horizontal%20with%20text.png'],
   },
