@@ -17,6 +17,7 @@ import type { Metadata } from 'next';
 import { styled } from '@/styles/stitches.config';
 import PageWrapper from '@/components/layout/PageWrapper';
 import { PageHeading, PageSubheading, PrimaryCTA, SecondaryHint } from '@/components/ui/profileCards';
+import FurtherReading, { ARTICLES } from '@/components/FurtherReading';
 
 const BASE = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://app.donatalk.com';
 
@@ -328,6 +329,14 @@ export default function PitchersPage() {
             </FaqItem>
           ))}
         </FaqList>
+
+        <FurtherReading
+          links={[
+            ARTICLES.coldEmailAlternatives,
+            ARTICLES.warmIntroductions,
+            ARTICLES.donationBasedOutreach,
+          ]}
+        />
 
         <CtaRow>
           <SecondaryHint>Ready to turn a donation into a warm meeting?</SecondaryHint>

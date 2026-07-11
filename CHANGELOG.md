@@ -3,6 +3,11 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.19.1] - 2026-07-11
+
+### Changed (SEO — complete internal-linking of Cluster C app surfaces)
+- `app/pitchers/page.tsx` — added the `FurtherReading` block (cold-email alternatives + warm introductions + donation-based-outreach explainer) above the CTA row. v0.19.0 placed `FurtherReading` on `/vs`, `/calculator`, and `/listeners` but skipped `/pitchers` — the highest-priority (sitemap 0.8) Cluster C page and the most topically matched to the seller-audience articles ("cold email alternatives", "how to get warm introductions"). This closes that gap so every Cluster C app surface now passes do-follow link equity and a crawl path to the three live WordPress articles. Static content only, no data-flow or behavior change (non-§3b).
+
 ## [0.19.0] - 2026-07-11
 
 ### Added (SEO — internal links from the app to the live WordPress content)
