@@ -3,6 +3,11 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.17.0] - 2026-07-11
+
+### Added (SEO content — AI-authenticity wedge on /vs)
+- `app/vs/page.tsx` — landed the sharpened 2026-07-11 positioning (the "AI-authenticity collapse" wedge from `research/2026-07-11-keywords.md` / `plans/seo-keyword-strategy.md`) onto the live category page, where it was previously absent. AI now makes personalized-looking cold outreach infinite, so a polished email no longer signals genuine effort or intent; a *committed donation* is costly to fake and therefore reads as an authentic signal. Added: a new comparison-table row ("In the age of AI outreach"), a fourth differentiator card ("A signal AI can't fake"), a new FAQ entry ("Does donation-based outreach still work now that AI writes cold emails?"), and new keyword targets (`authentic sales outreach`, `AI outreach alternative`, `outbound is dead alternatives`). Argument-based framing only — no unverified third-party statistics (Charter Sec 6, truthful); category-level, non-defamatory; first-party product claims unchanged. Metadata/content only, no data-flow or behavior change (non-§3b).
+
 ## [0.16.1] - 2026-07-11
 
 ### Added (SEO — /login metadata)
