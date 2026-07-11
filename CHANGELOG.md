@@ -3,6 +3,14 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.16.1] - 2026-07-11
+
+### Added (SEO — /login metadata)
+- `app/login/layout.tsx` (new) — server-component metadata carrier for the `/login` route. `page.tsx` is a Client Component (`'use client'`), so it cannot export `metadata`, and the `next/head` `<Head>` it rendered (`title`/`description`) is a **no-op in the App Router** — `/login` was served with the generic root `<title>` and no canonical/OG/Twitter despite being listed in `sitemap.ts` (priority 0.3). The new layout emits full metadata (distinct title via the root `%s | DonaTalk` template — no doubled suffix, per the v0.15.1 fix — plus description, keywords, `alternates.canonical`, OpenGraph + Twitter cards, `robots`), matching the `/vs`, `/listeners`, `/calculator` and `/*/signup` convention. This closes out the last known App-Router `<Head>` no-op among the sitemap'd static routes. First-party, truthful claims only per Charter Sec 6.
+
+### Removed
+- `app/login/page.tsx` — deleted the dead `next/head` `<Head>` block (and the unused `import Head`) that rendered nothing under the App Router. Metadata now lives in the sibling `layout.tsx`. No auth/data/behavior change — the login form and Firebase auth logic are untouched (non-§3b).
+
 ## [0.16.0] - 2026-07-11
 
 ### Added (SEO — signup pages metadata)

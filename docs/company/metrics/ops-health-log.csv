@@ -25,3 +25,5 @@ ts_utc,run_type,H1,H2,H3,H4,note
 20260711T012039Z,probe,success,none,pass,not-run,critical-path probe
 20260711T012237Z,probe,success,none,pass,not-run,critical-path probe
 20260711T042039Z,probe,success,none,pass,not-run,critical-path probe
+20260711T072041Z,probe,success,none,pass,not-run,critical-path probe
+20260711T072238Z,probe,success,none,pass,not-run,critical-path probe
