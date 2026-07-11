@@ -436,6 +436,7 @@ export default function VsPage() {
         <CtaRow>
           <SecondaryHint>Ready to try warm, charitable outreach?</SecondaryHint>
           <PrimaryCTA href="/listeners">Browse people to pitch →</PrimaryCTA>
+          <SecondaryCTA href="/pitchers">How donation-based outreach works for sellers →</SecondaryCTA>
           <SecondaryCTA href="/calculator">Estimate your donation impact →</SecondaryCTA>
           <SecondaryCTA href="/pitcher/signup">Start pitching — join as a pitcher</SecondaryCTA>
         </CtaRow>

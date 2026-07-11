@@ -1,6 +1,6 @@
 # DonaTalk - Developer Reference
 
-> Last updated: 2026-07-11 | Version: 0.17.0
+> Last updated: 2026-07-11 | Version: 0.18.0
 
 ## Project Overview
 
@@ -106,6 +106,7 @@ donatalk/
 |-------|------|---------|
 | `/` | `app/page.tsx` | Redirects to `/listeners` (browse-before-signup acquisition surface) |
 | `/listeners` | `app/listeners/page.tsx` | Public browse of live listeners + their causes (SSR, SEO) |
+| `/pitchers` | `app/pitchers/page.tsx` | SEO seller-side landing page: donation-based outreach for B2B sellers (static, FAQ JSON-LD) |
 | `/vs` | `app/vs/page.tsx` | SEO comparison page: donation-based outreach vs. cold email vs. paid gifting (static, FAQ JSON-LD) |
 | `/admin` | `app/admin/page.tsx` | Admin dashboard (email whitelist protected) |
 | `/login` | `app/login/page.tsx` | Email/password + Google login |

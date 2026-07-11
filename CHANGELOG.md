@@ -3,6 +3,16 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.18.0] - 2026-07-11
+
+### Added (SEO content — seller-side `/pitchers` landing page)
+- `app/pitchers/page.tsx` (new) — the Pitcher-side counterpart to `/listeners`. The strategy (`plans/seo-keyword-strategy.md` Sec 2 + Sec 5.3) names `app/pitchers` as a Cluster C ("donation-based outreach") target surface for exact-match transactional intent, alongside `/listeners`, but no such page existed: `/listeners` is the Listener-side browse + conversion page, leaving the *paying B2B-seller ICP* with no dedicated entry surface. New static server component mirroring the `/vs` convention — hero + positioning line, a 3-step "how pitching works" (seller POV), four "why sellers use it" cards (warm not cold · only pay for a real yes · a signal AI can't fake · works in any vertical), a 5-question FAQ, and full metadata (title via `%s | DonaTalk` template + description + Cluster-C keywords + `alternates.canonical` + OpenGraph/Twitter + `robots`) with WebPage/BreadcrumbList/FAQPage JSON-LD. First-party claims only (from $10, 4.9% fee on committed donations, listener picks the cause, decline = no charge) per Charter Sec 6; cold-outreach framing uses the sourced collapsing-average (~5.1% 2024 → ~3.4% 2026; 1–3% as the warm-vs-cold range) per the 2026-07-10 DECISIONS convention; the AI-authenticity wedge is argument-based (no unverified third-party statistics). Static content only, no data-flow or behavior change (non-§3b).
+
+### Changed
+- `app/sitemap.ts` — added `/pitchers` to the static routes (priority 0.8, `monthly`), between `/listeners` (0.9) and `/vs` (0.7).
+- `components/Footer.tsx` — added a site-wide keyword-rich footer link to `/pitchers` ("Donation-based outreach for sellers"), matching the existing `/vs` + `/calculator` footer links so the new page has inbound internal links from every page.
+- `app/vs/page.tsx` — added a reciprocal cross-link to `/pitchers` in the CTA row (peer Cluster C pages now interlink).
+
 ## [0.17.0] - 2026-07-11
 
 ### Added (SEO content — AI-authenticity wedge on /vs)
