@@ -5,7 +5,6 @@
 import slugify from 'slugify';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'; // ✅ Updated for App Router
-import Head from 'next/head';
 import { getSafeReturnPath } from '@/lib/safeReturn';
 
 function readReturnPath(): string | null {
@@ -254,11 +253,6 @@ export default function SignupPitcher() {
 
   return (
     <>
-      <Head>
-        <title>Sign Up as Pitcher | DonaTalk</title>
-        <meta name="description" content="Sign up as a pitcher to share your cause on DonaTalk." />
-      </Head>
-
       <PageWrapper>
         <CardContainer>
           <Logo src="/DonaTalk_icon_88x77.png" alt="DonaTalk Logo" />

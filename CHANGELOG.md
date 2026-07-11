@@ -3,6 +3,14 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.16.0] - 2026-07-11
+
+### Added (SEO — signup pages metadata)
+- `app/pitcher/signup/layout.tsx` and `app/listener/signup/layout.tsx` (new) — server-component metadata carriers for the two signup routes. Both `page.tsx` files are Client Components (`'use client'`), so they cannot export `metadata`, and the `next/head` `<Head>` blocks they used to render titles/descriptions are **no-ops in the App Router** — the pages were served with the generic root `<title>` and no canonical/OG/Twitter despite being listed in `sitemap.ts` (priority 0.6). The new layouts emit full metadata (distinct title via the root `%s | DonaTalk` template, description, Cluster-C-adjacent keywords, `alternates.canonical`, OpenGraph + Twitter cards, `robots`), matching the `/vs`, `/listeners` and `/calculator` convention. First-party, truthful claims only ($10 minimum flow, decline = no charge) per Charter Sec 6.
+
+### Removed
+- `app/pitcher/signup/page.tsx`, `app/listener/signup/page.tsx` — deleted the dead `next/head` `<Head>` blocks (and the unused `import Head`) that rendered nothing under the App Router. Metadata now lives in the sibling `layout.tsx`. No auth/data/behavior change — the signup form logic is untouched (non-§3b).
+
 ## [0.15.1] - 2026-07-11
 
 ### Fixed (SEO — title tag)
