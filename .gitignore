@@ -46,3 +46,9 @@ yarn-error.log*
 next-env.d.ts
 
 .env*.local
+
+# GSC / Google service-account credentials (secrets — never commit)
+gsc-sa.json
+gsc-*.json
+*-sa.json
+*service-account*.json
