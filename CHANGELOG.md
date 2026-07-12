@@ -3,6 +3,11 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.19.3] - 2026-07-12 (board-gated PR — merges only on Board approval, Charter §3b.2)
+
+### Security (email surface — nodemailer major bump)
+- `nodemailer` 8.0.11 → **9.0.3** (semver-major) — clears the last high Dependabot alert, GHSA-p6gq-j5cr-w38f (message-level `raw` option bypasses `disableFileAccess`/`disableUrlAccess` → arbitrary file read + SSRF in delivered messages). Our mailer (`lib/mailer.ts`) uses a single SMTP transport + standard `sendMail` fields and never passes `raw`/`jsonTransport`/user-supplied attachment paths, so exposure was low, but the patch only exists in 9.x. `@types/nodemailer` ^7.0.11 → ^8.0.1 (latest published). No email logic changed; tsc clean; 360/360 tests. Board-gated because nodemailer is the library behind every donor-/user-facing outbound email (§3b.2). Post-merge recommendation: one manual transactional-email smoke test (unit tests mock the transport).
+
 ## [0.19.2] - 2026-07-12
 
 ### Security (dependency updates — Dependabot triage, no code changes)
