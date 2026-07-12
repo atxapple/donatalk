@@ -1,0 +1,12 @@
+ALERT (deploy) - 20260712T123502Z
+Reason: gated-surface-touched
+Diff touches Sec 3b-gated files - must ship via PR, not auto-deploy:
+lib/updateFunds.ts
+
+Charter Sec 4 (Deploy Gates) / Sec 8 (escalation). Board action may be required.
+
+NOTE: This is a deliberate PORT-VERIFICATION dry-run (run 27), not a real gated
+change. It re-proves the Sec 3b scanner on the new Linux wrapper ops/deploy-web.mjs
+(parity with the 2026-07-09 PowerShell gate-trip, KR1-3). The lib/updateFunds.ts
+edit was a one-line comment, reverted immediately; nothing shipped. No board
+action required.

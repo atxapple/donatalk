@@ -1,0 +1,7 @@
+SELF-TEST (rollback branch) - 20260712T123421Z
+Simulated post-deploy probe: FAIL (forced)
+Rollback target resolved: https://donatalk-known-good-SELFTEST.vercel.app
+Rollback command (dry-run) exit: 0
+Post-rollback re-probe exit: 0  (0 = current prod healthy)
+Result: rollback branch exercised end-to-end without touching production.
+Remaining: true live-fire on a real failing deploy (controlled window).
