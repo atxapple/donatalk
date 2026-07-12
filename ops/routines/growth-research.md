@@ -17,8 +17,8 @@ artifacts, not throwaway notes.
 3. **Backlink target discovery** (KR2-3): find communities/publications where
    sales pros gather (respecting Charter §7 — no posting here, just a target
    list). Add candidates to `docs/company/research/backlink-targets.md`.
-4. Append an awareness snapshot row via `ops/get-metrics.ps1` if data is
-   available.
+4. Append an awareness snapshot row via `node ops/get-metrics.mjs --run-type research`
+   if data is available.
 
 ## Rules
 - Truthful, sourced research only — cite URLs. No fabricated volumes.
