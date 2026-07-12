@@ -6,6 +6,11 @@ import {
   versionAndChangelogTouched,
   parseProdDeployment,
   rollbackArgs,
+  spawnOutcome,
+  isRedundantCliDeploy,
+  DEPLOY_TIMEOUT_MS,
+  VERCEL_LS_TIMEOUT_MS,
+  ROLLBACK_TIMEOUT_MS,
 } from './deploy-gates.mjs';
 
 describe('GATED_PATTERN / findGatedHits (Charter Sec 3b scanner)', () => {
@@ -109,5 +114,52 @@ describe('rollbackArgs', () => {
   });
   it('falls back to previous-deployment rollback when unresolved', () => {
     expect(rollbackArgs(null)).toEqual(['vercel', 'rollback', '--yes']);
+  });
+});
+
+describe('spawnOutcome (timeout-kill interpretation, backlog #27)', () => {
+  it('flags a timeout via error.code ETIMEDOUT', () => {
+    const err = Object.assign(new Error('spawnSync npx ETIMEDOUT'), { code: 'ETIMEDOUT' });
+    expect(spawnOutcome({ status: null, signal: 'SIGKILL', error: err })).toEqual({
+      exit: 124,
+      timedOut: true,
+    });
+  });
+  it('flags a timeout via null status + kill signal (no error object)', () => {
+    expect(spawnOutcome({ status: null, signal: 'SIGKILL' })).toEqual({
+      exit: 124,
+      timedOut: true,
+    });
+  });
+  it('passes through a clean exit', () => {
+    expect(spawnOutcome({ status: 0, signal: null })).toEqual({ exit: 0, timedOut: false });
+  });
+  it('passes through a nonzero exit', () => {
+    expect(spawnOutcome({ status: 13, signal: null })).toEqual({ exit: 13, timedOut: false });
+  });
+  it('defaults a signal-less null status to exit 1, not a timeout', () => {
+    expect(spawnOutcome({ status: null, signal: null })).toEqual({ exit: 1, timedOut: false });
+  });
+  it('treats a missing result as a plain failure', () => {
+    expect(spawnOutcome(undefined)).toEqual({ exit: 1, timedOut: false });
+  });
+});
+
+describe('isRedundantCliDeploy (deploy-flow rule, DECISIONS 2026-07-12)', () => {
+  it('true when the tree is identical to origin/main (nothing to ship)', () => {
+    expect(isRedundantCliDeploy([])).toBe(true);
+  });
+  it('false when working-tree/unpushed changes exist (pre-merge CLI deploy)', () => {
+    expect(isRedundantCliDeploy(['app/vs/page.tsx'])).toBe(false);
+  });
+});
+
+describe('Vercel CLI timeouts', () => {
+  it('deploy timeout is the longest and all are positive', () => {
+    for (const t of [DEPLOY_TIMEOUT_MS, VERCEL_LS_TIMEOUT_MS, ROLLBACK_TIMEOUT_MS]) {
+      expect(t).toBeGreaterThan(0);
+    }
+    expect(DEPLOY_TIMEOUT_MS).toBeGreaterThan(ROLLBACK_TIMEOUT_MS);
+    expect(ROLLBACK_TIMEOUT_MS).toBeGreaterThan(VERCEL_LS_TIMEOUT_MS);
   });
 });
