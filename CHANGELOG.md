@@ -3,6 +3,18 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.19.2] - 2026-07-12
+
+### Security (dependency updates — Dependabot triage, no code changes)
+- `package-lock.json` — in-semver-range security bumps via `npm audit fix` (no `--force`), clearing 13 of 17 open Dependabot alerts including the only critical:
+  - `vitest` 4.0.18 → 4.1.10 (dev) — **critical** GHSA-5xrq-8626-4rwp (Vitest UI server arbitrary file read/execute) + pulls patched `vite` 7.3.5+ (high GHSA-fx2h-pf6j-xcff `server.fs.deny` bypass, medium launch-editor NTLM disclosure) and `esbuild` 0.28.1+ (low).
+  - `@grpc/grpc-js` → 1.9.16 (runtime, transitive of `firebase-admin`) — 4 high crash-on-malformed-message advisories.
+  - `protobufjs` → 7.6.5 (runtime, transitive) — high DoS via unbounded Any expansion + medium property shadowing.
+  - `form-data` → 2.5.6 (runtime, transitive) — high CRLF injection in multipart field names.
+  - `nodemailer` 8.0.1 → 8.0.11 (runtime, in-range patch) — 3 medium advisories (List-* header CRLF injection, jsonTransport file/URL-access bypass, OAuth2 TLS validation). No email logic touched; in-range patch of the library only.
+  - `js-yaml` → 4.3.0 (dev, transitive) — medium quadratic-complexity DoS.
+- Not fixed here (escalated/deferred): `nodemailer` high GHSA-p6gq-j5cr-w38f needs a **major** bump to 9.0.1+ — §3b email surface, routed to a board-gated PR; `uuid` medium GHSA-w5hq-g745-h8pq needs `firebase-admin` 14 (major on the auth surface) — deferred with the same gating.
+
 ## [0.19.1] - 2026-07-11
 
 ### Changed (SEO — complete internal-linking of Cluster C app surfaces)
