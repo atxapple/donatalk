@@ -8,8 +8,8 @@ memory; `docs/company/` is the memory.
 > **Host note (2026-07-11):** ops moved from Windows to an always-on Linux host.
 > PowerShell is NOT available — the `.ps1` scripts below are legacy until ported.
 > Node `.mjs` scripts run unchanged. Ported so far: `get-metrics.ps1` →
-> `get-metrics.mjs`. Still to port: `deploy-web.ps1` (**deploys blocked until
-> then** — backlog item 19), full-marker site probe (item 21; the shared
+> `get-metrics.mjs`, `deploy-web.ps1` → `deploy-web.mjs` (deploys unblocked
+> 2026-07-12). Still to port: full-marker site probe (item 21; the shared
 > `ops-shared/check-site.sh` does HTTP-200 checks + writes the probe JSON).
 
 ## Layout
@@ -19,12 +19,14 @@ ops/
 │                        #   F1-F4/R1 via Firebase Admin (read-only), A4-A6 via gsc-pull,
 │                        #   A7 from ledger, ops-health row from newest site-check JSON
 ├── lib/funnel-metrics.mjs  # pure funnel computation + metric definitions (tested)
+├── deploy-web.mjs       # ACTIVE: gated deploy + auto-rollback (Linux port of deploy-web.ps1)
+├── lib/deploy-gates.mjs # pure gate logic: Sec 3b scanner, Gate-4 heuristic, rollback cmd (tested)
 ├── publish-wp.mjs       # publish a content draft -> WordPress REST (env creds, draft by default)
 ├── lib/md-to-wp.mjs     # pure markdown+frontmatter -> WP payload converter (tested)
 ├── gsc-pull.mjs         # pull GSC metrics via service-account (read-only); --log appends to awareness CSV
 ├── run-routine.ps1      # LEGACY (Windows) — superseded by ../ops-shared/run-routine.sh
 ├── check-site.ps1       # LEGACY (Windows) — superseded by ../ops-shared/check-site.sh (markers pending port)
-├── deploy-web.ps1       # LEGACY (Windows) — gated deploy + auto-rollback; PORT PENDING (item 19)
+├── deploy-web.ps1       # LEGACY (Windows) — superseded by deploy-web.mjs
 ├── get-metrics.ps1      # LEGACY (Windows) — superseded by get-metrics.mjs
 ├── routines/
 │   ├── daily-ops.md     # every 3h — read OS, health, advance backlog, write brief
@@ -50,6 +52,18 @@ degrades that field to `n/a - <reason>` — a row is always appended (KR1-2).
 | Weekly report | Mon 08:00 | `run-routine.ps1 -Routine weekly-report` |
 | Health probe | every 6h | `check-site.ps1` |
 | Gated deploy | on shippable change | `deploy-web.ps1` (gates → deploy → probe → auto-rollback) |
+
+## Gated deploy + auto-rollback (`deploy-web.mjs`)
+```
+node ops/deploy-web.mjs                       # gates -> vercel --prod -> probe -> (auto-rollback)
+node ops/deploy-web.mjs --skip-deploy         # gates + probe only, no deploy (CI-style check)
+node ops/deploy-web.mjs --self-test-rollback  # exercise the rollback branch in dry-run
+```
+Same gates and exit codes as the ps1 original: Sec 3b scan (10) → tsc (11) →
+tests (12) → Gate-4 warning → deploy (13) → probe → rollback+ALERT (14). Probe
+is `../ops-shared/check-site.sh donatalk` (inline HTTP fallback). Pure gate
+logic in `lib/deploy-gates.mjs` (unit-tested). Verified 2026-07-12: rollback
+self-test green + live Sec 3b gate-trip (exit 10, ALERT, no deploy).
 
 ## WordPress publishing (`publish-wp.mjs`)
 Turns a `docs/company/content/*.md` draft (YAML frontmatter + Markdown) into a
