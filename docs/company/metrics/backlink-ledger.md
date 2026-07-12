@@ -5,9 +5,9 @@
 
 | # | Date (UTC) | Platform | Post URL | Target URL | Do-follow? | Domain | Status | Notes |
 |---|-----------|----------|----------|-----------|-----------|--------|--------|-------|
-| — | — | — | — | — | — | — | — | _no posts yet — awaiting approved accounts_ |
+| 1 | 2026-07-12 | X (@MichaelLeetj) | https://x.com/MichaelLeetj/status/2076329992749777091 | https://donatalk.com/what-is-donation-based-outreach/ | no (X = nofollow) | x.com | live | Ramp post 1/5 (§7); log: ops/logs/POST-x-20260712T213758Z.txt |
 
 ## Rollup
-- Total backlinks: 0
-- Distinct referring domains: 0
-- Do-follow: 0
+- Total backlinks: 1 (0 do-follow — X links are nofollow; awareness value only)
+- Distinct referring domains: 1
+- Do-follow: 0 (A7 counts do-follow only → A7 stays 0)

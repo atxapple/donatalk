@@ -1,0 +1,21 @@
+Supervised-ramp public post 1/5 (Charter §7) — flagged for Board spot-check.
+
+Platform:  X / Twitter (@MichaelLeetj, shared ops account)
+Path:      browser poster (ops-shared/browser/x-post-browser.mjs, logged-in ops profile;
+           API posting unavailable — 402 CreditsDepleted, buying credits is money-gated)
+Posted:    2026-07-12T21:37Z (run 31, daily-ops)
+Live URL:  https://x.com/MichaelLeetj/status/2076329992749777091
+Target:    https://donatalk.com/what-is-donation-based-outreach/ (Cluster C explainer)
+
+Text (269 chars):
+Cold email reply rates keep sliding (~3.4% avg now, down from ~5.1% in 2024). What I'm
+building instead: skip the sequence, donate to a charity the person cares about, and ask
+for the meeting directly. How it works: https://donatalk.com/what-is-donation-based-outreach/
+
+Compliance notes:
+- §6 truthful: stats follow the pinned convention (platform avg ~5.1% 2024 → ~3.4% 2026,
+  per research/2026-07-10-keywords.md); "what I'm building" = honest affiliation disclosure.
+- §7: unique non-templated content; first-person human voice (2026-07-05 rule); one post
+  this run (rate-limit safe). Ledger row added (nofollow — X links don't count toward A7).
+- Authorization: Board-approved X account (DECISIONS 2026-07-11); first Board-gated post
+  done 2026-07-12 (host note) — routine posts in-policy; DonaTalk ramp logging starts here.

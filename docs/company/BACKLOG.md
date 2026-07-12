@@ -2,13 +2,14 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-12 (run 30 — daily-ops: **deploy-web.mjs hardening (item 27) ✅** — PR #60 merged: timeouts on all Vercel CLI children (deploy 15m, SIGKILL; hang → kill + probe + classify + ALERT, rollback if prod red) + the DECISIONS 2026-07-12 deploy-flow rule is now code (tree identical to origin/main → probe-only, no redundant CLI deploy; **guard verified live post-merge**). 9 new unit tests, suite 27 files/369; timeout-kill smoke-tested; rollback self-test re-run green. **Runner gap recurred** at 18:30Z (no probe/metrics from the runner — header still names `.ps1` collectors); ran `get-metrics.mjs` in-session, rows pushed; 16:15Z probe green (all 200). Item 20 remainder unchanged: PR #59 (nodemailer 9) awaits Board. Prior run-29 note follows.)
+> Last updated: 2026-07-12 (run 31 — daily-ops: **two advances.** (1) **Runner collector gap ROOT-CAUSED + FIXED** (recurred runs 29/30/31): Linux `run-routine.sh` never ported the Windows runner's collector step, while `daily-ops.md` claimed collectors were "runner-guaranteed" — fixed both layers (runner now runs `check-site.sh` + `node ops/get-metrics.mjs` pre-flight, non-fatal; routine headers name the real Linux collectors + verify-then-self-collect fallback; stale `deploy-web.ps1` ref → `.mjs` + post-merge probe-only rule) — PR #61 merged; TierUp likely needs the same header fix. This run still self-collected: probe 21:31Z all-200 (curl fallback — `check-site.sh` is permission-gated inside the agent session), KR1-2 rows appended. (2) **Item 15 UNBLOCKED + supervised ramp STARTED (1/5):** `.env-social` creds verified present (names only); first DonaTalk X post live via browser poster → https://x.com/MichaelLeetj/status/2076329992749777091 (Cluster C explainer link; §6-truthful stats; §7 log `ops/logs/POST-x-20260712T213758Z.txt`; ledger row 1 — nofollow, A7 stays 0). Prior run-30 note follows.)
+>
+> _Run 30 note (daily-ops: **deploy-web.mjs hardening (item 27) ✅** — PR #60 merged: timeouts on all Vercel CLI children (deploy 15m, SIGKILL; hang → kill + probe + classify + ALERT, rollback if prod red) + the DECISIONS 2026-07-12 deploy-flow rule is now code (tree identical to origin/main → probe-only, no redundant CLI deploy; **guard verified live post-merge**). 9 new unit tests, suite 27 files/369; timeout-kill smoke-tested; rollback self-test re-run green. **Runner gap recurred** at 18:30Z (no probe/metrics from the runner — header still names `.ps1` collectors); ran `get-metrics.mjs` in-session, rows pushed; 16:15Z probe green (all 200). Item 20 remainder unchanged: PR #59 (nodemailer 9) awaits Board. Prior run-29 note follows.)
 >
 > _Run 29 note (daily-ops: **Dependabot triage (item 20): default-branch alerts 17 → 2.** v0.19.2 (PR #58, merged + live) = lockfile-only `npm audit fix`, cleared 15 alerts incl. the only critical (vitest-UI file read/exec; plus grpc-js/protobufjs/form-data highs, nodemailer 8.0.11 in-range mediums); tsc + 360 tests green. The last high needs nodemailer 9 — a **major on the §3b.2 email surface** → escalated as **PR #59 (board-gated, not self-merged)** + `ALERT-security-nodemailer-20260712T160757Z.txt`; uuid moderate deferred (needs firebase-admin 14, auth-surface major — bundle with next planned upgrade). **Incident, no prod impact:** deploy-web.mjs hung ~30 min in `vercel --prod` (Vercel-side UNKNOWN deployment, zero builds) — killed; the PR #58 merge had already deployed identical code via **git integration** (Ready 58s, holds app.donatalk.com), so the CLI deploy was redundant; probe green post-incident; `ALERT-deploy-20260712T160757Z.txt`; → new item 27. **Runner gap:** 15:30Z runner collected no probe/metrics (routine header still names `.ps1` collectors) — ran `get-metrics.mjs` in-session, rows pushed. Prior run-28 note follows.)
 >
-> _Run 28 note (daily-ops: **ported `deploy-web.ps1` → `ops/deploy-web.mjs` (item 19) — production deploys are UNBLOCKED on the Linux host.** Same gates/exit codes/artifacts as the ps1: §3b scan first (exit 10) → tsc (11) → tests (12) → Gate-4 heuristic warning → `vercel --prod` (13) → post-deploy probe (shared `check-site.sh`, inline HTTP fallback) → auto-rollback + re-probe + ALERT (14); `--skip-deploy` and `--self-test-rollback` preserved. Pure gate logic in tested `ops/lib/deploy-gates.mjs` (35 tests; suite 27 files/360) — port caught that PS `-match` is case-insensitive, so the JS §3b pattern carries the `i` flag for parity. **Verified live on this host:** rollback self-test end-to-end (dry-run cmd + re-probe exit 0, `SELFTEST-rollback-20260712T123421Z.txt`) + a real §3b gate-trip (one-line `lib/updateFunds.ts` edit → exit 10 + ALERT, no deploy, edit reverted — annotated DRY-RUN in `ALERT-deploy-20260712T123502Z.txt`, no board action). Non-§3b (ops tooling; enforces the gates, touches no money/auth/email logic). PR #57. Health green this run (probe 10:15Z all-200), KR1-2 rows already on main. **Item 20 (Dependabot) is now fully unblocked** — fixes can ride `deploy-web.mjs`. Prior run-26 note follows.)
->
-<!-- Run 21-26 notes trimmed (runs 21-23 on 2026-07-11 by run 26; runs 24-26 on 2026-07-12 by run 30) per Charter §11 — narrative lives in reports/2026-07-11-daily.md -->
+<!-- Run 21-28 notes trimmed (runs 21-23 on 2026-07-11 by run 26; runs 24-26 by run 30; run 28 by run 31) per Charter §11 — narrative lives in reports/; run-28 outcome captured in items 19/27 -->
+
 ## Now (Obj 1 — the machine)
 | # | Item | KR | Status |
 |---|------|----|--------|
@@ -38,7 +39,7 @@
 |---|------|--------|
 | 13 | GSC verified (both domains) + baseline pulled | ✅ done; app sitemap still to submit (item 8) |
 | 14 | WordPress credential (App Password, admin) stored in Vercel | ✅ done; build publish pipeline next |
-| 15 | Autonomous posting — supervised ramp (first 5 posts) | 🟡 accounts **approved** 2026-07-11 (Reddit/LinkedIn/X, board ruling); waiting on credentials landing in `ops-shared/.env-social` (run 26 could not verify — path outside the session's allowed dirs) |
+| 15 | Autonomous posting — supervised ramp (first 5 posts) | 🟡 **UNBLOCKED + ramp started run 31 (2026-07-12):** `.env-social` creds verified present; **post 1/5 live on X** → https://x.com/MichaelLeetj/status/2076329992749777091 (browser poster; API posting is 402/credits-gated). §7 log: `ops/logs/POST-x-20260712T213758Z.txt`, flagged for Board spot-check. Remaining: posts 2–5 (vary platform/content; Reddit = draft-and-human-post; LinkedIn helper not built) |
 
 ## Now (Obj 2 — content engine)
 | # | Item | KR | Status |
@@ -63,8 +64,9 @@
 
 ## Still blocked on board
 - ~~Always-on scheduler host (item 6)~~ ✅ resolved 2026-07-11: Linux host + cron + dedicated repo copy.
-- Posting credentials (item 15) — accounts approved (Reddit/LinkedIn/X); waiting on
-  `ops-shared/.env-social` to be populated. Sole remaining unlock for KR2-3 (external backlinks).
+- ~~Posting credentials (item 15)~~ ✅ resolved: creds verified in `ops-shared/.env-social`
+  run 31 (2026-07-12); supervised ramp started (post 1/5 on X). KR2-3 execution is unblocked —
+  note X links are nofollow, so do-follow backlinks (A7) still need the content/PR/community tier.
 - **SECURITY — board action:** the WP **account login** password AND the Application Password
   both transited chat (2026-07-10, see `ALERT-secret-*`). **Change the WP account password** and
   **re-rotate the Application Password** now that content is live. Next creds → `.env.local`, not chat.
