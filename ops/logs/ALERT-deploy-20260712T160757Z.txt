@@ -1,0 +1,29 @@
+ALERT (deploy) - 20260712T160757Z
+Reason: tooling-hang (vercel CLI) - NO production impact, NO board action required
+
+WHAT: node ops/deploy-web.mjs (run 29, deploying v0.19.2 Dependabot fixes,
+PR #58 already merged to main) passed all gates (Sec 3b scan, tsc, 360 tests)
+and reached `vercel --prod` at 10:37:35 CDT, then hung ~30 min. The CLI-created
+deployment dpl_7U6T7Fp1nQPMv5JunC6Bz3iLtGU6 (donatalk-kujml608q) sits in
+status UNKNOWN with zero builds - the upload/build never started on Vercel's
+side. Wrapper process was killed at ~11:07 CDT; no rollback fired (none needed).
+
+ROOT CAUSE CLASS: external-service (Vercel CLI/platform stuck deployment),
+not a wrapper-logic defect. Compounded by a REDUNDANT-DEPLOY flow issue:
+merging PR #58 to main had ALREADY production-deployed the same commit via
+Vercel git integration (dpl_GydWjxRaCkgv9Fb9GKQkp5WmM8jG, Ready in 58s,
+holds the app.donatalk.com alias). The wrapper's CLI deploy was a second,
+unnecessary deployment of identical code.
+
+PRODUCTION STATE: healthy. v0.19.2 live via the git-integration deploy;
+post-incident probe green (/, /listeners, /login all 200 + brand marker).
+
+FOLLOW-UPS (backlog item 27 added):
+1. deploy-web.mjs needs a timeout on the `vercel --prod` child (e.g. 15 min ->
+   kill + classify + ALERT) so a stuck CLI cannot wedge an unattended run.
+2. Document/encode the flow rule: EITHER merge-to-main (git integration
+   deploys) + probe-only, OR deploy-web.mjs from the working tree WITHOUT a
+   prior merge - not both. Today's double-path was harmless but wasteful and
+   is what exposed the hang.
+3. Operator (optional cleanup): stale UNKNOWN deployment dpl_7U6T7Fp1... can
+   be removed in the Vercel dashboard; it holds no public alias.

@@ -1,0 +1,36 @@
+ALERT (security/email-surface) - 20260712T160757Z
+Reason: Sec 3b.2 escalation - dependency MAJOR bump on the outbound-email surface
+BOARD ACTION REQUESTED: review + merge PR #59
+
+WHAT: Dependabot HIGH GHSA-p6gq-j5cr-w38f: nodemailer <= 9.0.0 lets a
+message-level `raw` option bypass disableFileAccess/disableUrlAccess,
+enabling arbitrary file read + SSRF in the delivered message. The fix
+requires a SEMVER-MAJOR bump: nodemailer 8.0.11 -> 9.0.3.
+PR: https://github.com/atxapple/donatalk/pull/59 (branch ops/nodemailer-9-gated)
+
+WHY GATED: nodemailer is the library behind lib/mailer.ts and every
+send-*-email route - Charter Sec 3b.2 (donor-/user-facing outbound email).
+A major-version change on this surface does not self-merge. In-range patches
+(8.0.1 -> 8.0.11, three MEDIUM advisories) already shipped autonomously in
+v0.19.2 (PR #58, merged + live) via normal deploy gates.
+
+RISK ASSESSMENT (CEO): LOW in practice. Our usage is one SMTP transport
+(host/port/secure/auth) + sendMail with standard fields; grep confirms no
+use of `raw`, jsonTransport, or user-supplied attachment paths. tsc + full
+test suite (360) pass on the branch. But "should be fine" on the email
+surface is exactly what Sec 3b exists to double-check.
+
+AFTER MERGE: main auto-deploys via Vercel git integration; probe follows on
+the next run. Recommended: one manual transactional-email smoke test (unit
+tests mock the transport).
+
+ALSO DEFERRED (same gating, lower urgency): Dependabot MEDIUM uuid < 11.1.1
+(GHSA-w5hq-g745-h8pq) is only fixable via firebase-admin 14 - a MAJOR on the
+AUTH surface (Sec 3b.3). The vulnerable code path (v3/v5/v6 with a
+caller-provided buf) is not used by our stack (google libs use v4).
+Recommendation: bundle with the next planned firebase-admin upgrade rather
+than a standalone risky major now.
+
+CONTEXT: run 29 Dependabot triage (backlog #20). Default-branch alert count
+went 17 -> 2 today (v0.19.2 cleared 15; this PR clears the high, leaving
+only the uuid moderate). Production healthy; probe green.

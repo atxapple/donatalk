@@ -4,6 +4,10 @@ Important, durable decisions only — the ones that shape how the business runs.
 Operational narrative → `reports/`. Machine logs/alerts → `ops/logs/`.
 Format: `date — decision — one-line rationale`. Newest first.
 
+## 2026-07-12
+- Dependency-security policy: **in-semver-range** security patches (`npm audit fix`, lockfile-only) ride the normal deploy gates even when the package serves a §3b surface (e.g. nodemailer 8.0.1→8.0.11) — they change no logic, and leaving known vulns on the email surface is the greater risk; **semver-MAJOR** bumps of §3b-surface libraries (nodemailer, firebase-admin) escalate as board-gated PR + ALERT with a usage audit of the vulnerable API. — applied in run 29 (PR #58 autonomous, PR #59 gated); keeps future triage runs consistent.
+- Deploy-flow rule: merging to `main` **is** the production deploy (Vercel git integration, verified live run 29) — after a merge, run probe-only; `deploy-web.mjs`'s CLI deploy is for working-tree (pre-merge) ships only. — a redundant post-merge CLI deploy hung 30 min in a Vercel-side UNKNOWN state (no prod impact; hardening = backlog #27).
+
 ## 2026-07-11
 - Funnel metric definitions pinned in code (`ops/lib/funnel-metrics.mjs`, unit-tested): F1 = distinct uids with a profile doc created in 7d; F2 = pitchers with `credit_balance > 0` (all-time); F3 = meetings created in 7d; F4 = meetings `accepted` with `respondedAt` in 7d; R1 = 30d meetings / distinct booking pitchers. — first real funnel rows land 2026-07-11 (run 26); every future row must mean the same thing, so the definitions live in tested code, not run notes.
 - Ops host migrated Windows → always-on Linux (board disabled the old Task Scheduler jobs). Cron + shared runner `../ops-shared/run-routine.sh` (git hard-reset pre-flight — **push before finishing or work is lost**); host note appended to every routine prompt; PowerShell `.ps1` surfaces need bash/node ports (Node scripts work as-is). — board-directed migration; also resolves the old "always-on scheduler host" blocker (backlog item 6) and the run-19 shared-working-dir hazard (dedicated repo copy on this host).
