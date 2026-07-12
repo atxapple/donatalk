@@ -136,9 +136,78 @@ real relationship on the exact thesis. (Details in `research/2026-07-11-keywords
 
 ---
 
+## 2026-07-12 additions (growth-research pass — sourced; transcript in `research/2026-07-12-keywords.md`)
+
+### Tier 3 additions — GTM contributor programs with explicit paths
+| Venue | Path | Note |
+|---|---|---|
+| **Go-to-Market Alliance** | [Create and contribute](https://www.gotomarketalliance.com/create-and-contribute/) — community@gotomarketalliance.com | Articles accepted, no product promotion — lead with warm-intro-gap/trust angle |
+| **Sales Enablement Collective** | [Contributor guide](https://www.salesenablementcollective.com/contributor-guide/) | Formal path (articles + research participation) |
+| **GTMnow / The GTM Newsletter** | No formal page — pitch directly ([gtmnow.com](https://gtmnow.com/)) | Already Tier-7-listed; direct-pitch path confirmed |
+
+### Tier 7 additions — individual sales Substacks (roundup mentions / collabs, not link farms)
+**Practical Prospecting** (Jed Mahrle, self-reported 10k+ readers) · **Prospecting From The Trenches**
+(Florin Tatulea) · **SDR Game** (Elric) — via
+[productmarketingdigest roundup](https://productmarketingdigest.substack.com/p/10-sales-newsletters-to-follow-on).
+Meta-roundups to get DonaTalk *mentioned in*: [mailshake top sales newsletters](https://mailshake.com/blog/top-sales-newsletters/) ·
+[dock.us enablement newsletters](https://www.dock.us/library/sales-enablement-newsletters).
+
+### Tier 8 — Social-impact / philanthropy podcasts (NEW category — the charity side; only sales podcasts were covered before)
+The founder story ("B2B sales budget → nonprofit donations") is a native guest topic here, and these venues
+are closed to generic sales tools — same defensible edge as Tier 5a.
+| Show | Why it fits | Source |
+|---|---|---|
+| **Giving with Impact** (DAFgiving360 × SSIR) | Philanthropy mechanics audience | [dafgiving360.org](https://www.dafgiving360.org/giving-with-impact-podcasts) |
+| **SSIR podcast family** | Pairs with the Tier-5a SSIR editorial target | [ssir.org/podcasts](https://ssir.org/podcasts) |
+| **Impact Boom** | Social-enterprise business models | [rephonic](https://rephonic.com/podcasts/impact-boom-podcast-social-enterprise-design) |
+| **Social Impact Pioneers** (Business Fights Poverty) | Business-driven impact interviews | [feedspot social-impact list](https://podcast.feedspot.com/social_impact_podcasts/) |
+| **The Beyond Capital Podcast** | C-suite + social values | same list |
+| **Corporate Social Responsibility Podcast** (iHeart) | Explicit "be a guest" invite | [millionpodcasts](https://www.millionpodcasts.com/corporate-social-responsibility-podcasts/) |
+| **Philanthropy in Phocus** / **Real Leaders Podcast** | Founder/ED interviews; "businesses that matter" | [feedspot philanthropy list](https://podcast.feedspot.com/philanthropy_podcasts/) |
+| **The Generosity Freakshow** (NextAfter) | Philanthropy-sector innovators | [contentallies](https://contentallies.com/learn/best-nonprofit-podcasts) |
+Prospecting lists to mine further: Feedspot Social Impact (30) / Philanthropy (70) / CSR (25) — links above.
+
+### Tier 9 — Existing roundup listicles to get DonaTalk INTO (edit requests, not new posts)
+- **Breakcold "10 Cold Email Alternatives To Use For 2026"** ([breakcold.com](https://www.breakcold.com/blog/cold-email-alternatives),
+  pub. 2026-01-02) — ranks #1-true-match for our Cluster A head term; pitch the author to add donation-based
+  outreach as entry #11. Highest-leverage single placement on this list.
+- **Corporate-gifting roundups** (DonaTalk fits as the "donation-instead-of-gift" entry; Loop & Tie's
+  donate-the-gift option proves editors accept the angle): [teamsunday](https://teamsunday.com/blog/top-corporate-gifting-platforms-2026) ·
+  [ongoody](https://www.ongoody.com/blog/best-sendoso-alternatives) · [improvado](https://improvado.io/blog/sendoso-competitors) ·
+  [imprintengine](https://imprintengine.com/blog/best-corporate-gifting-platforms-for-2026-complete-comparison-guide/)
+- **"Best cold email software 2026" annual lists** (alternatives/adjacent sections): [saleshandy](https://www.saleshandy.com/blog/cold-email-software/) ·
+  [hypergen](https://www.hypergen.io/blog/best-cold-email-software) · [salesforge](https://www.salesforge.ai/blog/cold-email-software)
+- **Stats pages that cite external data** (earn links by publishing a citable stat, e.g. real funnel/reply
+  data once volume exists): [spotio](https://spotio.com/blog/sales-statistics/) · [martal](https://martal.ca/b2b-cold-email-statistics-lb/) ·
+  [cirrusinsight](https://www.cirrusinsight.com/blog/sales-prospecting-statistics)
+
+### Tier 10 — HARO successors (founder quotes → high-DA do-follow links; landscape per [hey.press](https://hey.press/best-journalist-request-platforms), Feb 2026 + [prezly](https://www.prezly.com/academy/the-best-haro-alternatives))
+| Service | Model / cost | Note |
+|---|---|---|
+| **Source of Sources (SOS)** | Free email list (HARO founder Peter Shankman) | hey.press reports 36.26% dofollow rate *(their analysis)* |
+| **Qwoted** ([qwoted.com](https://www.qwoted.com)) | Free tier + $99/mo, verification model | hey.press: 70.3% of requests from DR-80+ pubs *(self-published)* |
+| **Featured.com** | Free tier + $19–100/mo; **acquired HARO Apr 2025**, relaunched the digest | Fortune/Fast Company/Yahoo placements |
+| **MentionMatch** (ex-Help a B2B Writer) | Free | **Best ICP match** — B2B/SaaS writers |
+| **#JournoRequest on X** / JournoFinder | Free | Fastest window; UK-heavy |
+| Dot Star Media · ResponseSource · SourceBottle · PressPlugs · ProfNet | Paid, mostly UK/AU/enterprise | Lower priority |
+> Charter fit: responding to a journalist request with a truthful founder quote is outreach the Board approved
+> in spirit, but it is **public posting → rides the §7 supervised ramp + posting gates** like everything else.
+
+### Anti-target (do NOT pitch)
+- **MeetMagic** ([meetmagic.org](https://www.meetmagic.org/)) — direct donation-for-meeting competitor
+  discovered this pass (see `2026-07-12-keywords.md` §2a). Not a citation/partner play; a competitor to
+  differentiate against (self-serve vs curated).
+
+---
+
 ## Sources
 salesassembly.com · redditagency.com · unboundb2b.com · seeresponse.com · nethunt.com · growthsalad.com ·
 huntmeleads.com · peppercloud.com · datadab.com · getintel.ai · bigideasdb.com · indiehackers.com ·
 familywealthreport.com · triplepundit.com · ssir.org · nonprofitquarterly.org · ggsc.berkeley.edu ·
 causeartist.com · mag.csrtimes.org · yfsmagazine.com · cognism.com · grouglobal.com · croclub.com ·
 demandbase.com · revopscareers.com · gtmnorth.ca · commsor.com. (URLs inline above.)
+2026-07-12: gotomarketalliance.com · salesenablementcollective.com · gtmnow.com ·
+productmarketingdigest.substack.com · mailshake.com · dock.us · dafgiving360.org · ssir.org · rephonic.com ·
+podcast.feedspot.com · millionpodcasts.com · contentallies.com · breakcold.com · teamsunday.com · ongoody.com ·
+improvado.io · imprintengine.com · saleshandy.com · hypergen.io · salesforge.ai · spotio.com · martal.ca ·
+cirrusinsight.com · hey.press · prezly.com · qwoted.com · meetmagic.org. (URLs inline above.)

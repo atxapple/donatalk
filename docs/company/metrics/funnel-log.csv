@@ -26,3 +26,4 @@ date_utc,F1,F2,F3,F4,R1,note
 2026-07-11,n/a,n/a,n/a,n/a,n/a,F1-F4/R1 pending Firebase Admin service account
 2026-07-11,n/a,n/a,n/a,n/a,n/a,F1-F4/R1 pending Firebase Admin service account
 2026-07-12,1,5,0,0,0,"Firebase Admin live read: 33 pitcher / 24 listener docs, 60 meetings total; defs per ops/lib/funnel-metrics.mjs"
+2026-07-12,1,5,0,0,0,"Firebase Admin live read: 33 pitcher / 24 listener docs, 60 meetings total; defs per ops/lib/funnel-metrics.mjs"

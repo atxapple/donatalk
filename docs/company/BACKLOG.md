@@ -80,6 +80,15 @@ run 25 (v0.19.1)** — all four Cluster C app pages now carry do-follow "Further
 topically-matched articles; cross-link between the posts (WP-side, needs creds — blocked); watch
 impressions in the awareness log.
 
+## New from growth-research 2026-07-12 (see `research/2026-07-12-keywords.md`)
+| # | Item | KR | Status |
+|---|------|----|--------|
+| 22 | **GSC index requests** for the 3 live posts + homepage re-crawl (Google's index shows a stale "Backup1" homepage title; live title verified clean). UI-only — the service account is read-only → **human/board 5-min step** | 2-2 | 🔴 BLOCKED: awaiting board (GSC UI access) |
+| 23 | Fix WP **site title** — currently "Donatalk - DonaTalk creates…" (brand duplicated, description used as title). WP settings REST change; needs WP creds (post-rotation) | 2-2 | ⬜ (creds-gated with the rotation) |
+| 24 | **MeetMagic-aware content refresh**: add curated-vs-self-serve comparison context to `/vs` (+ keep explainer category-honest). MeetMagic = live donation-for-meeting competitor found 07-12; never claim "first/only" (live content already complies — verified) | 2-1 | ⬜ |
+| 25 | Draft Cluster A tail piece: **"How to book B2B meetings without cold email"** — weakest SERP of our five targets, no direct answer exists; best next-content ROI | 2-1 | ⬜ |
+| 26 | Harvest verbatim pain quotes from Bravado War Room threads + r/sales top-month via the logged-in ops browser profile (reading only — NOT posting; automation-blocked sites) | 2-1 | ⬜ (5-min, needs browser session) |
+
 ## Later
 - ~~cost-of-cold-outreach calculator~~ ✅ shipped as `/calculator` (v0.14.0, run 9). More `/vs` competitor/comparison pages. **Run 22: `/vs` enhanced with the AI-authenticity wedge** (v0.17.0) — new table row + differentiator + FAQ + keywords landing the run-21 costly-signal framing on the live category page. **Run 23: built the missing `/pitchers` seller-side landing page** (v0.18.0, `app/pitchers/page.tsx`) — the Cluster C target surface the strategy names alongside `/listeners` (§2/§5.3) but that never existed; static server component (hero + 3-step how-it-works + 4 seller-value cards + 5-Q FAQ + WebPage/BreadcrumbList/FAQPage JSON-LD), added to sitemap (0.8) + site-wide footer link + reciprocal `/vs` cross-link. First-party/§6-truthful, non-§3b, tsc + 317 tests green.
 - ~~Internal links to `/vs` + `/calculator`~~ ✅ done run 17 (v0.14.2): both pages were in `sitemap.ts` but had **zero inbound internal links** from app nav (semi-orphaned → weak crawl equity + no human discovery). Fixed: site-wide `Footer.tsx` now links both (keyword-rich anchors), and `/vs`↔`/calculator` cross-link reciprocally. Non-§3b, deploy-gated (tsc + 317 tests green).

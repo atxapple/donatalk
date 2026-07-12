@@ -2,7 +2,21 @@
 
 > generated 2026-07-09 · **updated 2026-07-10** (sourced benchmarks + Cluster C competitor) ·
 > **updated 2026-07-11** (AI-authenticity-collapse wedge + Commsor *Warm Intro Gap Report 2026* data;
-> see `research/2026-07-11-keywords.md` for the transcript)
+> see `research/2026-07-11-keywords.md` for the transcript) ·
+> **updated 2026-07-12** (post-publish SERP check; **MeetMagic competitor correction**; Gated risk note;
+> "book meetings without cold email" target; trust-recession hook; see `research/2026-07-12-keywords.md`)
+
+**2026-07-12 competitor correction (Cluster C).** The first scan of the adjacent **pay-for-access marketplace**
+category found **MeetMagic** ([meetmagic.org](https://www.meetmagic.org/)) — a live, 2026-active
+donation-for-meeting B2B platform (vendor pays ~US$700/meeting with a C-level exec, ~70% to the exec's chosen
+charity; self-reported 3,500+ members / US$1.4M donated; APAC/UK-weighted, curated, enterprise, "pitch-free").
+All prior passes missed it. **The blue ocean is the *search surface*, not the category**: MeetMagic ranks only
+on brand, and the "donation for a meeting" keyword family remains product-unowned. Surviving differentiators to
+anchor all copy: **self-serve · any-vertical · everyday-seller · Listener-chosen cause · 4.9% fee** (vs curated
+exec network, fixed price). Never claim "first/only" (live explainer already complies). Also logged: **Gated**
+(donation-to-reach-inbox) shut down Sept 2024 citing market size ([goldpenguin](https://goldpenguin.org/blog/gated-bids-farewell/))
+— a risk-register data point confirming Cluster C demand must be *manufactured* (unit-economics differ: they
+sold inbox filtering at $2/email; we sell booked meetings).
 
 **2026-07-11 headline shift — the wedge got sharper.** The 2026 discourse has moved past "reply rates are
 falling" to **"AI made personalized-looking outreach infinite, so it stopped being a signal at all."** When
@@ -74,10 +88,36 @@ Rule: informational + listicle → WordPress; commercial/transactional + categor
 - **Cause marketing / GivingTuesday** — wrong audience (nonprofit marketers) → skip for lead-gen.
 - **Gifting to book meetings (Reachdesk)** — adjacent, off-core → only a `/vs` comparison point.
 
+### New long-tail candidates (2026-07-12, confirm w/ tool)
+- **Cluster A:** "book meetings without cold email" (**weakest SERP of our five targets — no page answers the
+  literal query; best next-content ROI**) · "signal-based selling vs cold email" · "why is nobody replying to
+  my cold emails" · "inbox fatigue B2B" · "cold email reply rate 2026 benchmark"
+- **Cluster B:** "how to close the warm intro gap" — a *response piece citing Commsor's report*, not a
+  displacement attempt (Commsor holds 5 of 9 results on the quoted phrase)
+- **Cluster C / NEW Listener-side family (first listener-acquisition keywords):** "get paid to take sales
+  meetings" · "get paid in donations to take sales meetings" · "your time funds your cause" — near-zero
+  product-owned SERPs, nobody owns the prospect-side vocabulary. **Avoid** "pay per meeting/appointment"
+  (saturated by lead-gen agencies with the opposite payment direction — mis-categorization risk) and
+  "charity auction" family (consumer/celebrity-framed, Charitybuzz-owned).
+- **New content hook (Cluster A/C):** the **"trust recession"** (Forrester 2026 "trust gets tested"; "B2B
+  credibility crisis") — ladders directly onto the 07-11 costly-signal wedge. Also: Gmail/Microsoft
+  deliverability *hard enforcement* (permanent 5xx since Nov 2025) = cold email is getting technically
+  harder, not just ineffective.
+
 ## 4. Competitor / SERP note
 - **A:** SaaS blogs; format = 10–15 item listicle updated for the year — but note (2026-07-10) the top results are mostly "best *tools/software/agencies*" lists. **Angle-shift: write a *channels/approaches* listicle**, not a tools list — softer competition and charity-funded warm intros slots in as a native entry none of them list. Drop "cold email is dead" → "the average is collapsing (5.1%→3.43%), here's what earns a reply now" (61% of decision-makers still prefer cold email; clickbait reads as such to this ICP). **2026-07-11 sharpen:** lead the thesis on the *authenticity collapse* — AI made personalized-looking outreach infinite, so it stopped being a signal ("a signal everyone has access to cannot be an advantage"; Gartner: **75% of buyers will prefer human-led sales over AI by 2030**). Position DonaTalk's committed donation as the **costly, un-fakeable signal** that survives the AI glut. New long-tails: "outbound is dead alternatives" · "authentic sales outreach" · "how to book meetings without cold email."
 - **B:** Vieu/Scout/Commsor/Draftboard/etc.; format = definitional pillar + how-to + templates; thinner backlinks → beatable. Own the "**no mutual connection → manufacture one**" section none of them cover.
 - **C:** Influence Board (live, exec-side) + **Time to Give Network** (finance-native, no SEO footprint) + HearMeOut (beta); **no dominant content format and ~zero content competition** — whoever publishes the clear definition + `/vs` comparison + calculator owns it. `/vs` + `/calculator` already shipped (v0.13–0.14). **2026-07-11 re-confirm:** a direct search for the donation-**for-access** model returned only nonprofit *fundraising* platforms (CauseVox/GalaBid/Kindful) — not the peer-access model → category search surface still empty, blue-ocean holds. **Commsor** (Warm Intro Gap Report) is thesis-aligned but non-competing (no donation mechanic) — cite/partner, don't fear.
+- **Post-publish SERP reality check (2026-07-12, day 1 — see research §1):** our 3 posts not yet indexed; no
+  donatalk URL in any target SERP; Google's index holds a **stale "Backup1" homepage title** (live title is
+  fixed — needs a GSC re-crawl + index requests, UI-only = human 5-min step). SERP states: Cluster A head is
+  *intent-polluted* with tool listicles (our channels-first angle confirmed right — only Breakcold truly
+  matches, zero donation mention); Cluster B how-tos all assume an existing mutual connection (our
+  differentiator section is the gap); **"what is donation based outreach" SERP is 100% nonprofit-fundraising
+  content — no one defines the B2B concept; we can own the definition + snippet once indexed.** C incumbents
+  updated: + **MeetMagic** (direct, brand-only SEO footprint — watch for category content). GLG/AlphaSights
+  compliance *forbids* selling on expert calls → positioning line: sellers have no sanctioned paid path to
+  prospects, except one that funds the prospect's cause.
 - **The gap DonaTalk owns:** no one sits at the intersection. Cold-email listicles never mention donation-based outreach; warm-intro guides never mention you can *buy* a warm intro by funding a cause. **Wedge: "donation-based / charitable warm outreach for everyday B2B sellers."**
 
 ## 5. First three pieces of content (prioritized)
@@ -90,4 +130,8 @@ Rule: informational + listicle → WordPress; commercial/transactional + categor
 ## Sources
 See research transcript (2026-07-09): Saleshandy, Breakcold, Prospeo, SmartReach, Vida, Abstrakt, Instantly, Cleanlist, Scout (askscout.ai), Vieu, Commsor, Draftboard, Launch Leads, OutboundSystem, BeExecutiveEvents, Influence Board, EA Forum (HearMeOut), Reachdesk, Expandi, Martal, ClearB2B, GivingTuesday.
 Update transcript (2026-07-10) → `research/2026-07-10-keywords.md`: Martal, Prospeo, Belkins, Apollo, Autobound (reply-rate benchmarks); askscout.ai, Launch Leads, Vieu, Commsor, Introhive (warm-intro stats/how-to); OutboundSystem, BeExecutiveEvents, Koncert (C-suite); **familywealthreport.com — Time to Give Network**; Influence Board. Backlink targets → `research/backlink-targets.md`.
+Update transcript (2026-07-12) → `research/2026-07-12-keywords.md`: **meetmagic.org (direct competitor — primary)**,
+goldpenguin.org (Gated shutdown), post-publish SERP checks (breakcold, commsor, introhive, gravyty et al.),
+instantly.ai 2026 benchmark, forrester (trust recession), talkspresso (expert-call category), charitybuzz/glide
+(charity-auction category); new backlink outlets → `research/backlink-targets.md` (2026-07-12 additions).
 Update transcript (2026-07-11) → `research/2026-07-11-keywords.md`: **commsor.com (Warm Intro Gap Report 2026 — primary)**, getboomerang.ai (Norwest 65% / Gartner 75% / compromised-playbook), cirrusinsight.com (Gong 344, Cognism 2.7%, RAIN 82%), marketbetter.ai (SoPro 18%v9%); cause/CSR + podcast/newsletter backlink outlets → appended to `research/backlink-targets.md` (2026-07-11 additions).
