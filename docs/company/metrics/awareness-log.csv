@@ -27,3 +27,4 @@ date_utc,A1,A2,A3,A4,A5,A6,A7,note
 2026-07-11,n/a,n/a,n/a,n/a,n/a,n/a,0,A1-A6 pending GSC/GA4 creds; A7 from ledger
 2026-07-11,n/a,n/a,10,44,6,11.9,0,"GSC 28d live-pulled (donatalk.com domain prop): impressions 44 clicks 6 CTR 13.6% pos 11.9; indexed 10 (GSC upd 6/29, pre-content); ALL 5 queries branded (dons talk/donatk/downtalk/dontalk) = 0 non-branded; 3 posts published 7/11 too fresh for GSC lag"
 2026-07-11,n/a,n/a,n/a,36,6,13.9,n/a,"GSC API auto-pull 28d (2026-06-14..2026-07-11); 0 non-branded of 5 queries; CTR 16.7%"
+2026-07-12,n/a,n/a,n/a,35,6,14.3,0,"GSC 2026-06-15..2026-07-12: 0 non-branded of 5 queries, CTR 17.1%; A1/A2 n/a (GA4/WP analytics unwired); A3 n/a (GSC UI only); A7 from ledger"
