@@ -43,3 +43,29 @@ export function parseProdDeployment(lsOutput) {
 export function rollbackArgs(prev) {
   return prev ? ['vercel', 'rollback', prev, '--yes'] : ['vercel', 'rollback', '--yes'];
 }
+
+// Timeouts for the Vercel CLI children (backlog #27, from the run-29 incident:
+// `vercel --prod` hung ~30 min on a Vercel-side UNKNOWN deployment with zero
+// builds). A healthy prod deploy completes in single-digit minutes; a stuck
+// one never recovers, so kill it and classify instead of waiting forever.
+export const DEPLOY_TIMEOUT_MS = 15 * 60 * 1000; // vercel --prod
+export const VERCEL_LS_TIMEOUT_MS = 2 * 60 * 1000; // vercel ls (read-only)
+export const ROLLBACK_TIMEOUT_MS = 5 * 60 * 1000; // vercel rollback
+
+// Interpret a spawnSync result including the timeout-kill case: on timeout
+// Node kills the child (status null, signal set, error.code ETIMEDOUT).
+// Returns { exit, timedOut } where exit is a number (never null).
+export function spawnOutcome(r) {
+  const timedOut =
+    r?.error?.code === 'ETIMEDOUT' || (r != null && r.status == null && r.signal != null);
+  return { exit: timedOut ? 124 : r?.status ?? 1, timedOut };
+}
+
+// Deploy-flow rule (DECISIONS 2026-07-12): merging to `main` IS the production
+// deploy (Vercel git integration), so with no committed, staged, or unstaged
+// changes vs origin/main there is nothing for the CLI to ship - a second CLI
+// deploy of the identical tree is redundant (the run-29 hang was exactly
+// this). The wrapper's CLI deploy is for working-tree (pre-merge) ships only.
+export function isRedundantCliDeploy(changedFiles) {
+  return changedFiles.length === 0;
+}

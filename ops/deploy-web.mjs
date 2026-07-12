@@ -9,10 +9,17 @@
 //   Gate 1: npx tsc --noEmit clean            (else ALERT, exit 11)
 //   Gate 2: npm run test all green            (else ALERT, exit 12)
 //   Gate 4: version bump + CHANGELOG present  (heuristic warning only)
-//   Deploy: npx vercel --prod --yes           (nonzero -> ALERT, exit 13)
+//   Deploy: npx vercel --prod --yes           (nonzero -> ALERT, exit 13;
+//     hang beyond DEPLOY_TIMEOUT_MS -> child killed, prod probed, ALERT,
+//     exit 13 if prod green / rollback + exit 14 if not - backlog #27)
 //   Post-deploy: synthetic probe; on failure auto-rollback to the last
 //     known-good production deployment, re-probe, ALERT, exit 14. A broken
 //     prod state is never left standing.
+//
+// Deploy-flow rule (DECISIONS 2026-07-12): merge-to-main already deploys via
+// the Vercel git integration, so when the tree is identical to origin/main
+// this wrapper runs probe-only instead of a redundant CLI deploy. The CLI
+// deploy path is for working-tree (pre-merge) ships.
 //
 // The probe is the shared Linux probe ../ops-shared/check-site.sh (writes
 // ops/logs/site-check-*.json + ALERT on failure); if that script is absent
@@ -33,6 +40,11 @@ import {
   versionAndChangelogTouched,
   parseProdDeployment,
   rollbackArgs,
+  spawnOutcome,
+  isRedundantCliDeploy,
+  DEPLOY_TIMEOUT_MS,
+  VERCEL_LS_TIMEOUT_MS,
+  ROLLBACK_TIMEOUT_MS,
 } from './lib/deploy-gates.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -72,6 +84,18 @@ function run(cmd, argv, opts = {}) {
   return r.status ?? 1;
 }
 
+// Like run(), but kills the child if it exceeds timeoutMs (SIGKILL - a wedged
+// Vercel CLI ignored the run-29 wait entirely). Returns { exit, timedOut }.
+function runTimed(cmd, argv, timeoutMs) {
+  const r = spawnSync(cmd, argv, {
+    cwd: ROOT,
+    stdio: 'inherit',
+    timeout: timeoutMs,
+    killSignal: 'SIGKILL',
+  });
+  return spawnOutcome(r);
+}
+
 function gitFiles(...diffArgs) {
   const r = spawnSync('git', ['diff', '--name-only', ...diffArgs], { cwd: ROOT, encoding: 'utf8' });
   return (r.stdout || '').split('\n').map((s) => s.trim());
@@ -108,7 +132,9 @@ function invokeRollback(prev, dryRun) {
     console.log(`[dry-run] would run: npx ${argv.join(' ')}`);
     return 0;
   }
-  return run('npx', argv);
+  const rb = runTimed('npx', argv, ROLLBACK_TIMEOUT_MS);
+  if (rb.timedOut) console.log('WARN: vercel rollback timed out and was killed (exit 124).');
+  return rb.exit;
 }
 
 // ---- Self-test: exercise the auto-rollback branch WITHOUT a live failure ----
@@ -153,6 +179,18 @@ if (hits.length) {
   process.exit(10);
 }
 
+// ---- Deploy-flow rule (DECISIONS 2026-07-12, backlog #27) ----
+// Merging to main IS the production deploy (Vercel git integration). If this
+// tree is identical to origin/main there is nothing for the CLI to ship - it
+// already deployed on merge and gated before merging - so probe-only instead
+// of a redundant CLI deploy (the run-29 30-min hang was exactly this case).
+if (!skipDeploy && isRedundantCliDeploy(changed)) {
+  console.log(
+    'No changes vs origin/main - this tree already shipped via the Vercel git integration on merge. Probe-only (deploy-flow rule, DECISIONS 2026-07-12).'
+  );
+  process.exit(await probeProduction());
+}
+
 // ---- Gate 1: tsc clean ----
 console.log('Gate 1/4: npx tsc --noEmit ...');
 if (run('npx', ['tsc', '--noEmit']) !== 0) {
@@ -183,15 +221,44 @@ if (skipDeploy) {
 // ---- Capture last known-good production deployment (rollback target) ----
 let prev = null;
 try {
-  const ls = spawnSync('npx', ['vercel', 'ls', '--prod', '--yes'], { cwd: ROOT, encoding: 'utf8' });
+  const ls = spawnSync('npx', ['vercel', 'ls', '--prod', '--yes'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    timeout: VERCEL_LS_TIMEOUT_MS,
+    killSignal: 'SIGKILL',
+  });
   prev = parseProdDeployment(`${ls.stdout || ''}\n${ls.stderr || ''}`);
 } catch {}
 if (prev) console.log(`Known-good production deployment (rollback target): ${prev}`);
 else console.log("WARN: could not resolve current prod deployment; rollback will fall back to 'vercel rollback' (previous).");
 
 // ---- Deploy to production ----
-console.log('Deploying to production: npx vercel --prod ...');
-if (run('npx', ['vercel', '--prod', '--yes']) !== 0) {
+console.log(`Deploying to production: npx vercel --prod (timeout ${DEPLOY_TIMEOUT_MS / 60000} min) ...`);
+const dep = runTimed('npx', ['vercel', '--prod', '--yes'], DEPLOY_TIMEOUT_MS);
+if (dep.timedOut) {
+  // Run-29 class: Vercel-side hung/UNKNOWN deployment. The child is killed;
+  // prod state is unknown, so probe - and roll back if prod is actually broken.
+  console.log(`DEPLOY TIMED OUT after ${DEPLOY_TIMEOUT_MS / 60000} min - child killed. Probing production...`);
+  const hangProbe = await probeProduction();
+  if (hangProbe !== 0) {
+    console.log('Production probe FAILED after deploy hang - auto-rolling-back.');
+    const rb = invokeRollback(prev, false);
+    const reprobe = await probeProduction();
+    writeDeployAlert(
+      'deploy-timeout-rolled-back',
+      `vercel --prod exceeded ${DEPLOY_TIMEOUT_MS / 60000} min (killed) AND the production probe failed; rolled back to '${prev}' (rollback exit=${rb}, re-probe exit=${reprobe}).`
+    );
+    addDeployHealthRow('fail', 'rolled-back', `deploy hang killed; probe failed; rollback exit=${rb} re-probe=${reprobe}`);
+    process.exit(14);
+  }
+  writeDeployAlert(
+    'deploy-timeout',
+    `vercel --prod exceeded ${DEPLOY_TIMEOUT_MS / 60000} min and was killed. Production probe is GREEN (the hung deployment never promoted). Likely a Vercel-side stuck/UNKNOWN deployment - check the dashboard for a stale entry to cancel.`
+  );
+  addDeployHealthRow('fail', 'deploy-timeout', 'vercel --prod hang killed; prod probe green');
+  process.exit(13);
+}
+if (dep.exit !== 0) {
   writeDeployAlert('deploy-failed', 'npx vercel --prod returned non-zero.');
   addDeployHealthRow('fail', 'deploy-error', 'vercel --prod nonzero');
   process.exit(13);
