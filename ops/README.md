@@ -1,25 +1,46 @@
 # DonaTalk — Autonomous Operations (`ops/`)
 
 The machinery that lets this repo be operated unattended by scheduled Claude
-agents. Pattern: **Windows Task Scheduler → `run-routine.ps1` → `claude -p <prompt>`**.
-Each run has zero memory; `docs/company/` is the memory.
+agents. Pattern (since the 2026-07-11 Linux migration): **cron →
+`../ops-shared/run-routine.sh` → `claude -p <prompt>`**. Each run has zero
+memory; `docs/company/` is the memory.
+
+> **Host note (2026-07-11):** ops moved from Windows to an always-on Linux host.
+> PowerShell is NOT available — the `.ps1` scripts below are legacy until ported.
+> Node `.mjs` scripts run unchanged. Ported so far: `get-metrics.ps1` →
+> `get-metrics.mjs`. Still to port: `deploy-web.ps1` (**deploys blocked until
+> then** — backlog item 19), full-marker site probe (item 21; the shared
+> `ops-shared/check-site.sh` does HTTP-200 checks + writes the probe JSON).
 
 ## Layout
 ```
 ops/
-├── run-routine.ps1      # generic runner: invokes claude -p, pre-flight, failure classify, alert
-├── check-site.ps1       # 6-hourly synthetic probe of app.donatalk.com critical paths
-├── deploy-web.ps1       # gated deploy + post-deploy probe + auto-rollback (Charter §4)
-├── get-metrics.ps1      # collect + append rows to docs/company/metrics/*.csv
+├── get-metrics.mjs      # ACTIVE: collect + append rows to docs/company/metrics/*.csv
+│                        #   F1-F4/R1 via Firebase Admin (read-only), A4-A6 via gsc-pull,
+│                        #   A7 from ledger, ops-health row from newest site-check JSON
+├── lib/funnel-metrics.mjs  # pure funnel computation + metric definitions (tested)
 ├── publish-wp.mjs       # publish a content draft -> WordPress REST (env creds, draft by default)
 ├── lib/md-to-wp.mjs     # pure markdown+frontmatter -> WP payload converter (tested)
 ├── gsc-pull.mjs         # pull GSC metrics via service-account (read-only); --log appends to awareness CSV
+├── run-routine.ps1      # LEGACY (Windows) — superseded by ../ops-shared/run-routine.sh
+├── check-site.ps1       # LEGACY (Windows) — superseded by ../ops-shared/check-site.sh (markers pending port)
+├── deploy-web.ps1       # LEGACY (Windows) — gated deploy + auto-rollback; PORT PENDING (item 19)
+├── get-metrics.ps1      # LEGACY (Windows) — superseded by get-metrics.mjs
 ├── routines/
 │   ├── daily-ops.md     # every 3h — read OS, health, advance backlog, write brief
 │   ├── growth-research.md  # daily — SEO/competitor/demand research
 │   └── weekly-report.md    # Mon — board report
 └── logs/                # run logs, probe JSON, ALERT-*.txt (gitignored except .gitkeep)
 ```
+
+## Metrics collection (`get-metrics.mjs`)
+```
+node ops/get-metrics.mjs             # collect + append awareness/funnel/ops-health rows
+node ops/get-metrics.mjs --dry-run   # print rows, append nothing
+```
+Reads `.env.local` (never committed). Firestore access is **read-only counts**
+(`select()` projections; no doc contents printed, no writes). Any source failure
+degrades that field to `n/a - <reason>` — a row is always appended (KR1-2).
 
 ## Scheduled jobs (to register on the always-on host — BLOCKED on board §6)
 | Job | Cadence (America/Chicago) | Command |
