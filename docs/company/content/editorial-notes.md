@@ -32,6 +32,25 @@ stay truthful and non-defamatory per Charter Sec 6. The two templates are origin
 Do not publish until the WordPress App Password is rotated and the publish pipeline
 (Backlog item 14/14b) is built.*
 
+## book-meetings-without-cold-email.md
+
+*Editorial note (2026-07-13, run 36): drafted per the winning outline in
+`docs/company/research/2026-07-13-keywords.md` §4 (intent-match hub piece; the
+current SERP's top results answer the opposite intent). First-party claims
+(mechanism, Pitcher/Listener model, prospect-picked cause, flat 4.9% fee,
+"donation never charged if the meeting isn't accepted" = the reserve/commit
+flow) are accurate to the product. Stats follow the pinned convention: cold
+platform-average ~5.1% (2024) → ~3.4% (2026, Instantly); 1–3% used ONLY as the
+warm-vs-cold comparison range; warm-intro 20–40% (askscout.ai/launchleads.com
+range); elite cold teams 10–18%; Commsor 82.4% leaders-agree stat from
+`research/2026-07-12-keywords.md` §4. The comparison table is deliberately
+qualitative except where sourced ranges exist — do not add numeric rates for
+community/event/inbound channels (no reliable benchmark; §6). Competitors at
+category level only (curated vs self-serve; no names, no "first/only"). This
+piece is the Cluster A hub: it links down to all three live posts + /vs +
+/calculator; the reciprocal links UP from the three live posts are a separate
+WP edit (creds-gated, queue with #23 post-rotation).*
+
 ## what-is-donation-based-outreach.md
 
 *Editorial note (staging): first-party claims (mechanism, Pitcher/Listener model,
