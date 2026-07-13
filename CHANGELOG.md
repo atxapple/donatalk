@@ -3,6 +3,11 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.20.0] - 2026-07-13
+
+### Added (SEO — `/vs` made aware of the curated donation-for-meeting category)
+- `app/vs/page.tsx` — new "Within the category: curated vs. self-serve" section (two cards) + matching FAQ entry (auto-included in the FAQPage JSON-LD) + two category keywords (`donation for a meeting`, `executive meetings for charity`). The 2026-07-12 competitor scan found that donation-for-meeting platforms also exist in curated/enterprise form (vetted executive panels, fixed-price meetings, share-to-charity), so the category page now describes that model honestly at category level — no competitor named, no "first/only" claims (Charter Sec 6) — and positions DonaTalk by its real differentiators: self-serve, any vertical, donation set by the pitcher (from $10) to a listener-chosen cause, decline = no charge, 4.9% fee. Static content only, non-§3b.
+
 ## [0.19.2] - 2026-07-12
 
 ### Security (dependency updates — Dependabot triage, no code changes)
