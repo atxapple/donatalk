@@ -1,0 +1,22 @@
+GSC indexing requests — backlog #29 (run 38, 2026-07-13 ~21:35-21:44Z)
+Property: sc-domain:donatalk.com
+Driver: ops-shared/browser/gsc-index-request.mjs (logged-in ops profile,
+atxapplellc@gmail.com, Playwright/Chrome on DISPLAY :3.0) — agent-driven,
+first time this step ran without a human (item #22 precedent was operator-run).
+
+Outcomes (all 5/5 REQUESTED — "added to a priority crawl queue"):
+  https://donatalk.com/book-meetings-without-cold-email/   -> REQUESTED  (new hub, run 37; was unknown to Google)
+  https://donatalk.com/                                    -> REQUESTED  (recrawl for stale "Backup1" cached title)
+  https://donatalk.com/cold-email-alternatives/            -> REQUESTED  (content changed: #28 leak fix + hub uplink)
+  https://donatalk.com/how-to-get-warm-introductions/      -> REQUESTED  (content changed: #28 leak fix + hub uplink)
+  https://donatalk.com/what-is-donation-based-outreach/    -> REQUESTED  (content changed: #28 leak fix + hub uplink + canonical link fix)
+
+Quota: 5 of GSC's ~10-12/day used. Screenshots (host-local): /tmp/gsc-idx29*-*.png
+Homepage inspection also showed: "URL is on Google / Page is indexed", HTTPS ok,
+1 valid breadcrumb item.
+
+Tooling note (for reuse): the URL-Inspection page accumulates stale hidden
+dialogs across inspections, so a text-match .first() can select a HIDDEN
+"Request indexing" node and miss the visible button (pass 1 hit this on the 4
+already-indexed URLs). Fix = click the first VISIBLE match; folded into the
+shared helper, now parameterized: node gsc-index-request.mjs <property> <url...>
