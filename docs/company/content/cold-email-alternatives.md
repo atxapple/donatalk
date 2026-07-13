@@ -188,7 +188,9 @@ reason. You don't wait months for a personal brand or hope for a mutual
 connection; you offer the prospect something they value up front.
 
 If cold email's shrinking average is wearing you down, the fix isn't a better
-template. It's a better offer.
+template. It's a better offer. And if you'd rather step away from cold email
+entirely instead of supplementing it, we mapped that path channel by channel in
+[how to book B2B meetings without cold email](https://donatalk.com/book-meetings-without-cold-email/).
 
 **What if every sales call you made also helped a non-profit?**
 [See how DonaTalk works →](https://donatalk.com)

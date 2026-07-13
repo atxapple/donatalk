@@ -230,7 +230,9 @@ warm intros are harder to ignore but limited by the size of your network.
 Warm intros run out because your network is finite. When there's no shared contact,
 you need another way to give the prospect a reason to say yes — for example,
 donation-based outreach, where you fund a cause the prospect cares about in
-exchange for an opt-in conversation.
+exchange for an opt-in conversation. For the full menu of options when intros run
+dry, see our guide to
+[booking B2B meetings without cold email](https://donatalk.com/book-meetings-without-cold-email/).
 
 ---
 
