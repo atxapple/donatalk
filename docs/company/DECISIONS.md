@@ -4,6 +4,9 @@ Important, durable decisions only — the ones that shape how the business runs.
 Operational narrative → `reports/`. Machine logs/alerts → `ops/logs/`.
 Format: `date — decision — one-line rationale`. Newest first.
 
+## 2026-07-13
+- §7 ramp pacing: during the supervised ramp, machine posts cap at **one per platform per day**, fired in daytime/early-evening America/Chicago, varying platform/content across posts 2–5 — the Board gets a real spot-check window between posts. — run 32 (00:30Z Sat night, 3h after post 1, post 1 un-spot-checked) would otherwise have posted again; back-to-back late-night posts on the shared account read bot-like and outrun the ramp's calibration purpose.
+
 ## 2026-07-12
 - DonaTalk public posting is live under the §7 supervised ramp (post 1/5, X, run 31) via the **browser poster** — X API posting stays read/verify-only until the Board funds credits (402 CreditsDepleted; spending is Board-gated §5). Every ramp post gets an `ops/logs/POST-*` file for spot-check. — Board approved accounts 07-11 + authorized the account's first post 07-12; routine truthful posts are §3a-autonomous.
 - KR1-2 collection is **runner-owned, agent-verified**: the shared Linux runner (`ops-shared/run-routine.sh`, host-side/untracked) now runs probe + metrics pre-flight before invoking the agent (Windows parity), and routines instruct verify-then-self-collect. — the collector gap recurred 3 runs because the Linux runner never ported that step while the routine claimed it had; agent-side collection alone is fragile to permission gating.
