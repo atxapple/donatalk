@@ -4,7 +4,18 @@
 > **updated 2026-07-11** (AI-authenticity-collapse wedge + Commsor *Warm Intro Gap Report 2026* data;
 > see `research/2026-07-11-keywords.md` for the transcript) ·
 > **updated 2026-07-12** (post-publish SERP check; **MeetMagic competitor correction**; Gated risk note;
-> "book meetings without cold email" target; trust-recession hook; see `research/2026-07-12-keywords.md`)
+> "book meetings without cold email" target; trust-recession hook; see `research/2026-07-12-keywords.md`) ·
+> **updated 2026-07-13** (**NEW Cluster D — Listener-side**, first deep pass; leaked-editorial-note fix on
+> the 3 live posts; day-2 indexation delta; see `research/2026-07-13-keywords.md`)
+
+**2026-07-13 — Cluster D (Listener-side) added + publish-hygiene fix.** First deep pass on the
+listener-acquisition family flagged 07-12: **8/8 SERP checks on "get paid to take sales meetings"-family
+queries have no page answering the listener-side intent**, and autocomplete shows zero suggestions for the
+head phrases → category-creation, not capture (details/cluster in §1a below). Also found + fixed same-run:
+all 3 live posts had published their internal *"Editorial note (staging)… Do not publish until the
+WordPress App Password is rotated"* blocks — a draft-quality signal likely suppressing indexation AND a
+public leak of an internal security item. Notes moved to `content/editorial-notes.md`, live posts updated
+via new `ops/update-wp-post.mjs`, verified clean; **GSC re-index request needed post-change** (human step).
 
 **2026-07-12 competitor correction (Cluster C).** The first scan of the adjacent **pay-for-access marketplace**
 category found **MeetMagic** ([meetmagic.org](https://www.meetmagic.org/)) — a live, 2026-active
@@ -69,6 +80,29 @@ Blue-ocean. Almost no competition, almost no *existing* volume — a category Do
 - **Intent:** Commercial-to-transactional — searchers want the *product*.
 - **Positioning (2026-07-10):** both incumbents serve **finance/enterprise executive networks**; neither serves the everyday B2B seller — DonaTalk's stated wedge, uncontested. Frame DonaTalk as the **first *self-serve, seller-side, any-vertical*** donation-for-meeting product (honest — do **not** claim "first/only," they exist). Cultural hook for the explainer: the **"Warren Buffett charity lunch," but self-serve and for any B2B meeting.**
 
+### Cluster D — Listener-side: "get paid (in donations) to take sales meetings" (NEW 2026-07-13 — category creation)
+The acquisition side no prior cluster addressed: the prospect/executive who *takes* the meetings. Evidence
+(first deep pass, `research/2026-07-13-keywords.md` §3): every literal query misdirects (pay-per-appointment
+= seller-pays-agency; call-QA gig work; employment law), autocomplete is null on the head phrases, and the
+adjacent "monetize your time" vocabulary is owned by expert networks (GLG "paid consulting opportunities",
+Minnect/Clarity/Office Hours) with **zero charity variants anywhere**. MeetMagic uses our exact exec-side
+framing ("Turn Your Expertise Into Impact") but ranks for nothing generic in the US.
+- **Tier A (real demand today, funnels in):** vendor fatigue / vendor meeting fatigue (weak-medium SERP;
+  term ambiguous — half the corpus = vendors' DD fatigue) · expert network side hustle / get paid for
+  advice calls (medium-strong; enter as "the charity-powered alternative") · vendor spam / stop vendor
+  cold calls (weak-medium, verbatim exec language, no canonical answer).
+- **Tier B (null SERPs — own for free; converts via PR/referral + LLM-answer citation, not organic yet):**
+  get paid to take sales meetings · get paid to take vendor meetings · turn sales meetings into charity
+  donations · your time funds your cause.
+- **Tier C (defensive/brand):** meetmagic alternative (real brand demand AU/UK → /vs candidate) · "is it a
+  bribe / ethical to accept donations for meetings" (the #1 exec objection per MeetMagic's own FAQ — the
+  objection content IS the conversion content) · expert calls for charity.
+- **Positioning gold:** expert-network compliance anxiety (execs who can't accept personal payment;
+  GLG/AlphaSights forbid selling on calls) → "GLG pays *you* — DonaTalk pays *your cause*." Volunteer time
+  is never tax-deductible, but a third-party donation the exec directs costs them nothing.
+- **Difficulty:** near-zero content competition; near-zero typed volume today. Strategic value: listener
+  supply is the marketplace's other leg, and first mover becomes *the* LLM citation for the concept.
+
 ## 2. Cluster → target page
 
 | Cluster | Target page | Surface | Why |
@@ -76,6 +110,7 @@ Blue-ocean. Almost no competition, almost no *existing* volume — a category Do
 | A — Cold email alternatives | blog listicle `donatalk.com/blog/cold-email-alternatives` | **WordPress** | Winning format is an editorial listicle; DonaTalk is the differentiated entry, funnels to app. |
 | B — Warm introductions | pillar + template `donatalk.com/blog/how-to-get-warm-introductions` (+ `/warm-intro-email-template`) | **WordPress** | Informational = blog pillar + cluster; internal-link to app `/listeners`, `/pitchers`. |
 | C — Donation-based outreach | `app.donatalk.com/listeners`, `/pitchers`, future `/vs` + impact calculator | **App** (+ thin WP explainer) | Transactional intent belongs on the product; own exact-match terms, convert directly. |
+| D — Listener-side (NEW 07-13) | **listener-side landing surface** (backlog candidate — `/listeners` as fetched today shows a seller-facing "Browse People to Pitch" CTA to a listener arriving from these queries) + one Tier-A blog post ("vendor meeting fatigue") funneling to it | **App** (+ WP support post) | H1 on the null-SERP head phrase ("Get paid in donations to take sales meetings"); pain section in verbatim exec vocabulary; "Is this a bribe?" objection/FAQ block; contrast vs expert networks + curated platforms. |
 
 Rule: informational + listicle → WordPress; commercial/transactional + category-defining → app.
 
@@ -118,6 +153,12 @@ Rule: informational + listicle → WordPress; commercial/transactional + categor
   updated: + **MeetMagic** (direct, brand-only SEO footprint — watch for category content). GLG/AlphaSights
   compliance *forbids* selling on expert calls → positioning line: sellers have no sanctioned paid path to
   prospects, except one that funds the prospect's cause.
+- **Day-2 delta (2026-07-13, research §1–2):** posts still unindexed (leaked staging notes found+fixed —
+  re-request indexing); "Backup1" cached title persists; Cluster A gains a second true channel-match
+  ([Tomba](https://tomba.io/blog/cold-email-outreach-alternative)) and SERP snippets now surface warm-intro/
+  community framing (intent drifting our way); "book meetings without cold email" confirmed weakest —
+  top results answer the *opposite* intent; winning H2 outline recorded in research §4. MeetMagic still
+  publishes zero category content — window open.
 - **The gap DonaTalk owns:** no one sits at the intersection. Cold-email listicles never mention donation-based outreach; warm-intro guides never mention you can *buy* a warm intro by funding a cause. **Wedge: "donation-based / charitable warm outreach for everyday B2B sellers."**
 
 ## 5. First three pieces of content (prioritized)

@@ -163,19 +163,3 @@ the person on the other end?*
 
 **What if every sales call you made also helped a non-profit?**
 [See how DonaTalk works →](https://donatalk.com)
-
----
-
-*Editorial note (staging): first-party claims (mechanism, Pitcher/Listener model,
-"the Listener picks the cause," self-serve sign-up, flat 4.9% fee) are accurate to
-the DonaTalk product. Reply-rate figures are sourced from the 2026 benchmark pass
-(`docs/company/research/2026-07-10-keywords.md`): cold platform-average ~5.1%
-(2024) → ~3.4% (2026, Instantly), with 1–3% the range warm-outreach guides cite
-for cold, and warm-intro reply rates of 20–40% — all kept as ranges per source.
-The Warren Buffett charity-lunch reference is used as a widely-known cultural
-analogy, not a DonaTalk claim. Competing donation-for-access models are described
-at the category level (no named product specifics) to stay truthful and non-
-defamatory per Charter Sec 6; DonaTalk is framed by its concrete differentiators
-(self-serve, any-vertical, Listener-chosen cause, 4.9% fee), NOT as "first" or
-"only." Do not publish until the WordPress App Password is rotated (Backlog
-blocker).*

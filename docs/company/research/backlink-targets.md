@@ -200,6 +200,78 @@ Prospecting lists to mine further: Feedspot Social Impact (30) / Philanthropy (7
 
 ---
 
+## 2026-07-13 additions (growth-research pass — sourced; every path fetch/search-verified this pass)
+
+**Headline picks:** (1) **America's Charities blog** — best dual-audience match found to date (readers =
+CSR/employee-giving execs + nonprofit fundraisers, i.e. *both* sides of the marketplace); free, explicit
+guidelines, bio allows 2 links, ~3-month lead. (2) **Chronicle of Philanthropy op-ed** — flagship
+nonprofit-sector outlet with an explicit free op-ed path; the novel-opinion angle ("a new stream of
+unsolicited B2B donations — should nonprofits teach supporters to take pitch meetings?") is genuinely
+editorial, not product PR. (3) **SalesPOP! contributor program** — lowest-friction real seller-side
+byline found (300–1,200 words, contributor bio + links).
+
+### Tier 5b — Tech-for-good directories & awards (NEW family)
+| Venue | Path (verified) | Note |
+|---|---|---|
+| **Global Good** ([directory](https://globalgood.tech/directory/) · [write-for-us](https://globalgood.tech/write-for-us/)) | Free directory tier (published ≤180d) + 1,000+ word articles | Use FREE tier only — £49–99 fast-track = sponsored-tier flag |
+| **Anthem Awards** ([eligibility](https://www.anthemawards.com/eligibility/)) | Entries close **Jul 24, 2026** | Paid entry (money-gated → Board); "Fundraising & Resource Development — Tech" is near-exact fit; winners-gallery link + PR hook |
+| **Fast Company World Changing Ideas** ([apply](https://www.fastcompany.com/apply/world-changing-ideas)) | 2026 closed; reopens ~Nov 2026 | $295–395 entry (money-gated); calendar item Q4 |
+| Tech For Good Institute ([write-for-us](https://techforgoodinstitute.org/write-for-us/)) | ≤1,200-word evidence pieces | Weak geo-fit (SEA focus) — low priority |
+| Tech Jobs for Good ([pricing](https://techjobsforgood.com/pricing/)) | Free employer profile | Only relevant if/when hiring |
+
+### Tier 5c — Nonprofit-fundraising trade media (NEW family — charity-side angle: "a new stream of unsolicited B2B donations")
+| Venue | Path (verified) | Note |
+|---|---|---|
+| **Chronicle of Philanthropy** | [Op-ed submissions](https://www.philanthropy.com/how-to-submit-an-opinion-piece/) — 800–1,200 w, exclusive, ~1-wk response | Highest authority in family; idea-led only, no org promo; no AI-written pieces |
+| **America's Charities** | [Blog guidelines](https://www.charities.org/blog-guidelines/) — marcom@charities.org, outline first | Best dual-audience fit; free; ≤2 bio links; 3+ month lead |
+| **NonProfit PRO** | Email acole@napco.com (path confirmed in [their own posts](https://www.nonprofitpro.com/article/top-20-nonprofit-pro-articles-of-2025/)) | Free contributed thought-leadership |
+| **Candid insights** | Inquiry email in [launch post](https://blog.candid.org/post/announcing-candid-insights-nonprofit-sector-articles-data-stories/) | Pitch required; data-angle piece |
+| **philanthropy.org Giving Magazine** | [Guest policy](https://philanthropy.org/guest-posting-policy/) — 600–750 w, **1 org link** | Free; explicitly rejects link-building schemes — must be genuinely editorial |
+| **Bloomerang blog** | [Guidelines](https://bloomerang.com/blog/guest-blogging-guidelines/) — kristen.hay@bloomerang.com | Free; big fundraiser readership |
+| Donorbox nonprofit blog | [Guidelines page exists](https://donorbox.org/nonprofit-blog/guest-blogging-guidelines) | Terms not fetched — verify before pitching |
+| **NTEN** ([write-for-nten](https://www.nten.org/learn/write-for-nten)) + **Nonprofit Tech for Good** ([write-for-us](https://www.nptechforgood.com/write-for-nonprofit-tech-for-good/)) | Members-only / nonprofit-staff-only authors | **Pattern worth exploiting:** a beneficiary nonprofit co-authoring "how we receive DonaTalk donations" converts both into reachable venues |
+| The NonProfit Times | No contributor page found | PR-pitch target only, not guest-post |
+
+### Tier 6 additions — video/podcast sales shows with real paths
+| Show | Path (verified) | Note |
+|---|---|---|
+| **Salesman.com Podcast** (Will Barron) | [Public guest application form](https://salesman.com/salesman-podcast-guest-application/) | 700k dl/mo *(self-reported)*; an actual form, not gatekept outreach |
+| **Daily Sales Tips** (Scott Ingram) | scott@top1.fm — ["everyone is welcome to contribute"](https://top1.fm/DailySalesTips/about/) | Each accepted tip = its own indexed page + contributor link; small but exact audience |
+| **Selling Power** | [Submissions](https://www.sellingpower.com/submissions/) — editorial@sellingpower.com | 500-w pieces for Sales Management Digest |
+| Sell Better Daily Sales Show | No public form | Relationship play via LinkedIn |
+| LinkedIn newsletters (family) | — | **Negative finding:** none with public guest paths — author-owned; treat as relationship targets |
+
+### Tier 11 — Founder-story press with live pitch paths (NEW family)
+| Venue | Path (verified) | Note |
+|---|---|---|
+| **Fast Company Impact** | [Submission guide](https://www.fastcompany.com/90870734/how-to-submit-contributed-stories-to-fast-companys-impact-section-and-tips-on-getting-published) — full 600–900-w draft to submissions@fastcompany.com | Free, unpaid, op-ed style, no self-promotion |
+| **HackerNoon** | [Publish](https://hackernoon.com/p/publish-with-us) — free, ~4-day review | Founder/build story; startups vertical |
+| **Business Insider contributors** | Editor emails on their [how-to-write page](https://nickwolny.com/how-to-write-for-business-insider/) | First-person founder essay |
+| TechCrunch | [tips@techcrunch.com](https://techcrunch.com/got-a-tip/) | News-only — save for a launch/traction milestone |
+| EU-Startups | 2026 pitch comp closed Feb 10 | Skip unless EU narrative emerges |
+
+### Tier 3 additions — sales/marketing contributor programs
+| Venue | Path (verified) | Note |
+|---|---|---|
+| **SalesPOP!** | [Contributor guidelines](https://salespop.net/contributors-guideline/) — 300–1,200 w, ≥30% unique | Lowest-friction seller-side byline found; contributor profile w/ links |
+| **Sales & Marketing Management** | Discuss-first process ([editorial overview](https://partners.salesandmarketing.com/editorial-overview/)) | Their incentive/gift-card coverage heritage = exact hook for the donation angle |
+| **MarketingProfs** | [Write-for-us](https://www.marketingprofs.com/write-for-us) — 800–1,200 w how-to | Adjacent (B2B marketing) audience |
+| GrowMeOrganic | [write-for-us](https://growmeorganic.com/write-for-us/), min 1,500 w | Same tier as NetHunt/PepperCloud family — low priority |
+| RAIN Group / JB Sales / Sandler | — | **Negative finding:** no guest paths on any of the three; podcast-guest outreach only |
+
+### Anti-targets (2026-07-13)
+- **FindLight Sales Academy** — $375 "editorial fee" = pay-to-post.
+- **Nonprofit Hub** — $200/article bundled w/ membership; borderline pay-to-post, deprioritize.
+- **"Guaranteed placement" PR agencies** (9figuremedia, Instant Press, Baden Bower, Spynn — recur in
+  "get featured in TechCrunch" SERPs) — paid-placement schemes, sponsored/nofollow, reputational risk.
+- Global Good **paid fast-track** (free tier is fine).
+
+> Link-attribute note: philanthropy.org (1 org link), America's Charities (2 bio links), and SalesPOP
+> (bio + social) are the only venues this pass that quantify allowed links; none state dofollow/nofollow
+> explicitly. Timely: **Anthem Awards close Jul 24** (paid → Board call); **FC WCI reopens ~Nov 2026**.
+
+---
+
 ## Sources
 salesassembly.com · redditagency.com · unboundb2b.com · seeresponse.com · nethunt.com · growthsalad.com ·
 huntmeleads.com · peppercloud.com · datadab.com · getintel.ai · bigideasdb.com · indiehackers.com ·
@@ -211,3 +283,9 @@ productmarketingdigest.substack.com · mailshake.com · dock.us · dafgiving360.
 podcast.feedspot.com · millionpodcasts.com · contentallies.com · breakcold.com · teamsunday.com · ongoody.com ·
 improvado.io · imprintengine.com · saleshandy.com · hypergen.io · salesforge.ai · spotio.com · martal.ca ·
 cirrusinsight.com · hey.press · prezly.com · qwoted.com · meetmagic.org. (URLs inline above.)
+2026-07-13: globalgood.tech · anthemawards.com · fastcompany.com · techforgoodinstitute.org ·
+techjobsforgood.com · philanthropy.com · charities.org · nonprofitpro.com · blog.candid.org ·
+philanthropy.org · bloomerang.com · donorbox.org · nten.org · nptechforgood.com · salesman.com ·
+top1.fm · sellingpower.com · sellbetter.xyz · hackernoon.com · techcrunch.com · nickwolny.com ·
+eu-startups.com · salespop.net · partners.salesandmarketing.com · marketingsherpa.com ·
+marketingprofs.com · growmeorganic.com · findlight.net · nonprofithub.org. (URLs inline above.)

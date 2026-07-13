@@ -40,3 +40,5 @@ ts_utc,run_type,H1,H2,H3,H4,note
 20260712T213138Z,probe,success,none,pass,not-run,"critical-path probe (site-check-20260712T213127Z.json)"
 20260713T003004Z,probe,success,none,pass,not-run,"critical-path probe (site-check-20260713T003001Z.json)"
 20260713T033005Z,probe,success,none,pass,not-run,"critical-path probe (site-check-20260713T033002Z.json)"
+20260713T103004Z,probe,success,none,pass,not-run,"critical-path probe (site-check-20260713T103002Z.json)"
+20260713T103141Z,research,success,none,pass,not-run,"critical-path probe (site-check-20260713T103002Z.json)"

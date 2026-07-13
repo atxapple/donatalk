@@ -5,6 +5,7 @@ Operational narrative → `reports/`. Machine logs/alerts → `ops/logs/`.
 Format: `date — decision — one-line rationale`. Newest first.
 
 ## 2026-07-13
+- Publishable content drafts (`docs/company/content/*.md`) contain **only publishable content** — internal editorial/provenance notes go in `content/editorial-notes.md`, never in the draft body, because the publish pipeline renders the entire body. — the 07-11 posts published their staging notes verbatim, leaking "rotate the WP App Password" on public pages for ~2 days (found + fixed run 34 via `ops/update-wp-post.mjs`); a convention, not a code gate, so every future draft must follow it.
 - §7 ramp pacing: during the supervised ramp, machine posts cap at **one per platform per day**, fired in daytime/early-evening America/Chicago, varying platform/content across posts 2–5 — the Board gets a real spot-check window between posts. — run 32 (00:30Z Sat night, 3h after post 1, post 1 un-spot-checked) would otherwise have posted again; back-to-back late-night posts on the shared account read bot-like and outrun the ramp's calibration purpose.
 
 ## 2026-07-12

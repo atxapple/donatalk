@@ -192,16 +192,3 @@ template. It's a better offer.
 
 **What if every sales call you made also helped a non-profit?**
 [See how DonaTalk works →](https://donatalk.com)
-
----
-
-*Editorial note (staging): first-party claims (mechanism, 4.9% fee, Pitcher/
-Listener model, "prospect picks the cause") are accurate to the DonaTalk product.
-The cold-email reply-rate figures are sourced from the 2026 benchmark pass
-(`docs/company/research/2026-07-10-keywords.md`): platform-average ~5.1% (2024) →
-~3.4% (2026, Instantly), with 1–3% the range warm-outreach guides cite for cold —
-kept as a range per source. Framing follows the sourced "average is collapsing"
-angle (not "cold email is dead," which the same research flags as clickbait to
-this audience). Third-party approaches are described at the category level to stay
-truthful and non-defamatory per Charter Sec 6. Do not publish until the WordPress
-App Password is rotated (Backlog blocker).*
