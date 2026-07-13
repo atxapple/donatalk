@@ -67,3 +67,18 @@ defamatory per Charter Sec 6; DonaTalk is framed by its concrete differentiators
 "only." Do not publish until the WordPress App Password is rotated (Backlog
 blocker).*
 
+
+## Publish log — book-meetings-without-cold-email.md (2026-07-13, run 37)
+
+*Published live 2026-07-13 ~18:40Z via `ops/publish-wp.mjs --publish` → WP post
+165, https://donatalk.com/book-meetings-without-cold-email/ (verified 200, all 5
+hub links render, no internal-note leak, title clean). Fresh-eyes pass done
+pre-publish: stats per pinned convention, category section name-free, no
+"first/only." Same run, reciprocal hub links UP were added to all three live
+posts (156/157/158) via `ops/update-wp-post.mjs --apply` — one contextual link
+each (closing section / "no mutual connection" FAQ / closing paragraph) — and
+the explainer's `/blog/how-to-get-warm-introductions` link was re-pointed to the
+canonical `/how-to-get-warm-introductions/` (was a needless 301 hop). All three
+re-verified live: 200, hub link present, no `/blog/` links remain. GSC index
+request for the new URL + the 3 changed posts = Backlog #29 (human/ops-browser
+step).*

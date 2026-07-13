@@ -144,7 +144,7 @@ A warm introduction relies on a mutual connection vouching for you. Donation-bas
 outreach creates a warm reason to connect when you *don't* have that mutual
 connection — by funding a cause the prospect values. (For the fundamentals of
 classic intros, see our guide on
-[how to get warm introductions](https://donatalk.com/blog/how-to-get-warm-introductions).)
+[how to get warm introductions](https://donatalk.com/how-to-get-warm-introductions/).)
 
 **Does the prospect have to accept?**
 No. It's an offer, not a purchase. The Listener chooses whether to accept the
@@ -159,7 +159,9 @@ chosen non-profit.
 Cold email still works for the teams that run it as a system, but the average is
 eroding, and "please give me your time" is a weaker ask every quarter. Donation-
 based outreach answers the one question cold email never does: *what's in it for
-the person on the other end?*
+the person on the other end?* To see how it stacks up against the other six warm
+channels, read
+[how to book B2B meetings without cold email](https://donatalk.com/book-meetings-without-cold-email/).
 
 **What if every sales call you made also helped a non-profit?**
 [See how DonaTalk works →](https://donatalk.com)
