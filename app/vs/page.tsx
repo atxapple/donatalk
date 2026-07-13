@@ -4,9 +4,12 @@
 // Static server component — no data reads, safe to prerender. Compares three
 // *approaches* (cold email, paid gifting, donation-based outreach) at the
 // category level; it never names or disparages a specific competitor product,
-// per the Charter Sec 6 content rules (truthful, non-defamatory). First-party
-// claims (donation-to-book, listener picks the cause, 4.9% fee, decline = no
-// charge) mirror the live product.
+// per the Charter Sec 6 content rules (truthful, non-defamatory). This
+// includes the curated-vs-self-serve section: other donation-for-meeting
+// platforms exist (curated/enterprise), so we describe that model honestly at
+// category level and never claim "first/only". First-party claims
+// (donation-to-book, listener picks the cause, 4.9% fee, decline = no charge)
+// mirror the live product.
 
 import Link from 'next/link';
 import type { Metadata } from 'next';
@@ -33,6 +36,8 @@ export const metadata: Metadata = {
     'authentic sales outreach',
     'AI outreach alternative',
     'outbound is dead alternatives',
+    'donation for a meeting',
+    'executive meetings for charity',
   ],
   alternates: { canonical: '/vs' },
   openGraph: {
@@ -139,6 +144,21 @@ const DIFFERENTIATORS: { icon: string; title: string; body: string }[] = [
   },
 ];
 
+const MODELS: { icon: string; title: string; body: string }[] = [
+  {
+    icon: '🏛️',
+    title: 'Curated executive marketplaces',
+    body:
+      "Some donation-for-meeting platforms are curated: a vetted, invite-only panel of senior executives takes fixed-price discovery meetings — often several hundred dollars each — with a share of the fee passed to the executive's chosen charity. A strong fit if you sell to enterprises and the exact executive you need is on the panel.",
+  },
+  {
+    icon: '🚀',
+    title: 'Self-serve, any seller — DonaTalk',
+    body:
+      'DonaTalk is the self-serve take on the same idea: anyone can list themselves as a listener, any seller in any vertical can pitch, and you set the donation (from $10) to a cause the recipient chooses. No panel to be accepted into, no fixed price — and if the meeting is declined, nothing is charged. DonaTalk keeps a 4.9% fee on committed donations.',
+  },
+];
+
 const STEPS: string[] = [
   'Find a person on DonaTalk and a cause they support that you want to back.',
   'Commit a donation (from $10) to request 15 minutes of their time.',
@@ -157,6 +177,10 @@ const FAQ: { q: string; a: string }[] = [
   {
     q: 'Is this just paid gifting with extra steps?',
     a: "No. Paid gifting rewards the recipient personally, which can feel transactional and may conflict with corporate gifting policies. A donation goes to a non-profit the recipient selects, so the value lands on a cause rather than a person.",
+  },
+  {
+    q: 'Are there other donation-for-meeting platforms?',
+    a: 'Yes — trading a charitable donation for a business meeting also exists in curated, enterprise-focused forms, where a vetted panel of executives takes fixed-price meetings (often several hundred dollars, with a share going to the executive’s chosen charity). DonaTalk is the self-serve version of the model: any listener can join and any seller can pitch in any vertical, you set the donation amount (from $10) to a cause the recipient chooses, and nothing is charged if the meeting is declined.',
   },
   {
     q: 'What does it cost, and what if the meeting is declined?',
@@ -413,6 +437,17 @@ export default function VsPage() {
               <DiffIcon aria-hidden>{d.icon}</DiffIcon>
               <DiffTitle>{d.title}</DiffTitle>
               <DiffBody>{d.body}</DiffBody>
+            </DiffCard>
+          ))}
+        </CardGrid>
+
+        <SectionHeading>Within the category: curated vs. self-serve</SectionHeading>
+        <CardGrid>
+          {MODELS.map((m) => (
+            <DiffCard key={m.title}>
+              <DiffIcon aria-hidden>{m.icon}</DiffIcon>
+              <DiffTitle>{m.title}</DiffTitle>
+              <DiffBody>{m.body}</DiffBody>
             </DiffCard>
           ))}
         </CardGrid>
