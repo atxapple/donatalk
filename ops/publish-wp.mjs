@@ -17,13 +17,36 @@
 //   node ops/publish-wp.mjs docs/company/content/<draft>.md --dry-run  # offline preview
 //   node ops/publish-wp.mjs docs/company/content/<draft>.md --publish  # go live (guarded)
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 import { draftToWp } from './lib/md-to-wp.mjs';
 
 function fail(msg, code = 1) {
   console.error(`ERROR: ${msg}`);
   process.exit(code);
 }
+
+// Load KEY=VALUE pairs from the repo-root .env.local into process.env (without
+// overriding anything already set). Keeps secrets in the gitignored file - the
+// runner/host env still wins if it provides them. No dotenv dependency.
+function loadEnvLocal() {
+  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+  const file = path.join(root, '.env.local');
+  if (!existsSync(file)) return;
+  for (const line of readFileSync(file, 'utf8').split(/\r?\n/)) {
+    const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/);
+    if (!m || line.trimStart().startsWith('#')) continue;
+    const key = m[1];
+    if (process.env[key] !== undefined) continue;
+    let val = m[2].trim();
+    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+      val = val.slice(1, -1);
+    }
+    process.env[key] = val;
+  }
+}
+loadEnvLocal();
 
 const args = process.argv.slice(2);
 const file = args.find((a) => !a.startsWith('--'));
