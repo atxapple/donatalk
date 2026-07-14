@@ -3,6 +3,13 @@
 All notable changes to DonaTalk are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/). Versioning follows [SemVer](https://semver.org/).
 
+## [0.21.0] - 2026-07-14
+
+### Added (SEO — Cluster D listener-side landing page `/for-listeners`)
+- `app/for-listeners/page.tsx` — new static landing surface for the person being pitched (the Listener ICP). The 2026-07-13 research pass found 8/8 listener-intent queries ("get paid to take sales meetings" family) unanswered anywhere on the web, while the app's only listener-adjacent page (`/listeners`) greets that visitor with a seller-facing "Browse people to pitch" CTA. The new page carries: H1 on the Tier-B head phrase ("Get paid in donations to take sales meetings"), subhead "Your time funds your cause", an exec-pain section in the community's verbatim vocabulary (vendor meeting overload, "inbox is not a sales funnel", AI-written outreach), a 3-step listener-side how-it-works, four value cards (donation-as-filter, cause funding, nothing-paid-to-you vs expert networks, accept/decline control), a category-level contrast vs expert networks and curated platforms (no competitor named, per the v0.20.0 convention), and the #1 objection FAQ ("Is this a bribe?") answered with product mechanics only — no tax/legal/compliance representations (Charter §3b.5). Full metadata (canonical/OG/Twitter/keywords) + WebPage/BreadcrumbList/FAQPage JSON-LD, matching the `/pitchers` convention. All claims first-party and product-true (§6): cause chosen by the listener, donation request from $10, committed only on accept, decline = no charge, 4.9% fee on committed donations, listeners never pay.
+- `app/sitemap.ts` — `/for-listeners` added (priority 0.8, monthly), symmetric with `/pitchers`.
+- `components/Footer.tsx` — site-wide footer link to `/for-listeners` ("Get paid in donations to take meetings") for crawl path + human discovery.
+
 ## [0.20.0] - 2026-07-13
 
 ### Added (SEO — `/vs` made aware of the curated donation-for-meeting category)
