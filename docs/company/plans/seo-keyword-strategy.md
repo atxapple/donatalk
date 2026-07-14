@@ -6,7 +6,18 @@
 > **updated 2026-07-12** (post-publish SERP check; **MeetMagic competitor correction**; Gated risk note;
 > "book meetings without cold email" target; trust-recession hook; see `research/2026-07-12-keywords.md`) ·
 > **updated 2026-07-13** (**NEW Cluster D — Listener-side**, first deep pass; leaked-editorial-note fix on
-> the 3 live posts; day-2 indexation delta; see `research/2026-07-13-keywords.md`)
+> the 3 live posts; day-2 indexation delta; see `research/2026-07-13-keywords.md`) ·
+> **updated 2026-07-14** (**NEW Cluster E — Meeting economics**, first deep pass; day-3 indexation delta;
+> listener-side backlink family; see `research/2026-07-14-keywords.md`)
+
+**2026-07-14 — Cluster E (Meeting economics) added.** First deep pass on the "cost per B2B sales meeting"
+family (the vocabulary behind `/calculator` and the hub's comparison table): every ranking page is an
+appointment-setting agency reciting unattributed ranges; the most-recycled figure ("Clutch $550–$1,700")
+**has no traceable primary source**; benchmark publishers demonstrably become citation magnets
+(FirstPageSage → sopro/martal/cleverzebo). **And no ungated buyer-side cost-per-meeting calculator exists**
+— the "cost per meeting calculator" SERP is 100% internal-meeting-time tools; the one sales-CPM calculator
+found is email-gated. Two-surface opportunity: a methodology-transparent benchmarks page (WP) + `/calculator`
+vocabulary uplift (app). Cluster/tiers in §1b; backlog #33.
 
 **2026-07-13 — Cluster D (Listener-side) added + publish-hygiene fix.** First deep pass on the
 listener-acquisition family flagged 07-12: **8/8 SERP checks on "get paid to take sales meetings"-family
@@ -102,6 +113,37 @@ framing ("Turn Your Expertise Into Impact") but ranks for nothing generic in the
   is never tax-deductible, but a third-party donation the exec directs costs them nothing.
 - **Difficulty:** near-zero content competition; near-zero typed volume today. Strategic value: listener
   supply is the marketplace's other leg, and first mover becomes *the* LLM citation for the concept.
+- **2026-07-14 status:** target page shipped — `app.donatalk.com/for-listeners` live (v0.21.0, run 40),
+  H1 on the Tier-B head phrase; GSC index requested same-run. Not yet indexed (expected, <24h).
+
+### Cluster E — Meeting economics: "cost per B2B sales meeting" (NEW 2026-07-14 — linkable-asset play)
+The vocabulary behind `/calculator` and the hub's cost-per-meeting table (first deep pass,
+`research/2026-07-14-keywords.md` §3). SERPs owned end-to-end by appointment-setting agencies (Belkins,
+SalesHive, Cleverly, Salesar, RevNew…) writing annual "Pricing Guide + table + FAQ" pages that funnel to
+their own service; **no independent/primary source exists** — the niche's most-recycled stat ("Clutch
+$550–$1,700/appointment") is untraceable to any primary page, and vendors cite each other. Proven citation
+flywheel: FirstPageSage/SPOTIO-style benchmark pages get cited across independent domains.
+- **Tier A (real demand today — autocomplete-present; enter via comparison/alternative angle, SERP
+  saturated):** b2b appointment setting cost · appointment setting cost per appointment · pay per meeting
+  (lead generation / agency / service). DonaTalk is literally a pay-per-meeting variant where the payment
+  is a donation to the prospect's cause — the natural differentiated entry.
+- **Tier B (latent but vendor-contested — the benchmarks asset):** cost per booked meeting b2b · average
+  cost per sales meeting · how much does a b2b sales meeting cost · should you pay for sales meetings
+  (weak neutral-content SERPs; cover the question forms as FAQ, not standalone posts).
+- **Watch:** "ai appointment setter cost" (emerging autocomplete) — pairs with the 07-11 costly-signal
+  wedge ("an AI SDR still can't put $50 on the line for your cause").
+- **Term collisions (avoid in titles):** "cost per meeting" bare = internal-meeting-time intent
+  (Koalendar/MeetGeek own it) · "cost per appointment" = healthcare · bare "appointment setting"
+  autocomplete = job-seeker intent · "cost per SQL" = MS SQL Server licensing noise.
+- **Citable-numbers bank** (provenance-flagged, for the asset): fully-loaded SDR ~$142.5k/yr →
+  ~$1,083–$1,354/held meeting (SalesHive worked example; RepVue comp = third-party) · SDR cold outbound
+  $3,222/SQL vs referral $163 (GrowthSpree, methodology undisclosed) · FirstPageSage $1,357/SQL ·
+  PPA menus $50–$750 · show-rate 70–80% correction · the r/sales **$15k/17 ≈ $880/meeting** conference
+  comp (quote bank). Full table in research §3c.
+- **Difficulty:** medium (saturated vendor SERPs on Tier A) / low-medium on Tier B — but the win condition
+  is being the only methodology-transparent node, not outranking head-on. Strategic value: citation
+  magnet (KR2-3 do-follow links from the very agency blogs that need numbers), calculator feeder, and
+  substantiation for the hub's comparison table.
 
 ## 2. Cluster → target page
 
@@ -110,7 +152,8 @@ framing ("Turn Your Expertise Into Impact") but ranks for nothing generic in the
 | A — Cold email alternatives | blog listicle `donatalk.com/blog/cold-email-alternatives` | **WordPress** | Winning format is an editorial listicle; DonaTalk is the differentiated entry, funnels to app. |
 | B — Warm introductions | pillar + template `donatalk.com/blog/how-to-get-warm-introductions` (+ `/warm-intro-email-template`) | **WordPress** | Informational = blog pillar + cluster; internal-link to app `/listeners`, `/pitchers`. |
 | C — Donation-based outreach | `app.donatalk.com/listeners`, `/pitchers`, future `/vs` + impact calculator | **App** (+ thin WP explainer) | Transactional intent belongs on the product; own exact-match terms, convert directly. |
-| D — Listener-side (NEW 07-13) | **listener-side landing surface** (backlog candidate — `/listeners` as fetched today shows a seller-facing "Browse People to Pitch" CTA to a listener arriving from these queries) + one Tier-A blog post ("vendor meeting fatigue") funneling to it | **App** (+ WP support post) | H1 on the null-SERP head phrase ("Get paid in donations to take sales meetings"); pain section in verbatim exec vocabulary; "Is this a bribe?" objection/FAQ block; contrast vs expert networks + curated platforms. |
+| D — Listener-side (NEW 07-13) | **listener-side landing surface** (backlog candidate — `/listeners` as fetched today shows a seller-facing "Browse People to Pitch" CTA to a listener arriving from these queries) + one Tier-A blog post ("vendor meeting fatigue") funneling to it | **App** (+ WP support post) | H1 on the null-SERP head phrase ("Get paid in donations to take sales meetings"); pain section in verbatim exec vocabulary; "Is this a bribe?" objection/FAQ block; contrast vs expert networks + curated platforms. **✅ shipped 07-14: `/for-listeners` (v0.21.0); support post = backlog #32.** |
+| E — Meeting economics (NEW 07-14) | WP benchmarks asset **"What a B2B sales meeting really costs (2026 benchmarks)"** + `/calculator` copy/metadata uplift to speak "cost per booked meeting" vocabulary (currently framed as cold-outreach cost only) + hub-table cross-cite | **WordPress** (asset) + **App** (calculator) | Only methodology-transparent page in a self-citing vendor graph → citation magnet (KR2-3) + the sole ungated buyer-side calculator surface. Backlog #33. |
 
 Rule: informational + listicle → WordPress; commercial/transactional + category-defining → app.
 
@@ -159,6 +202,13 @@ Rule: informational + listicle → WordPress; commercial/transactional + categor
   community framing (intent drifting our way); "book meetings without cold email" confirmed weakest —
   top results answer the *opposite* intent; winning H2 outline recorded in research §4. MeetMagic still
   publishes zero category content — window open.
+- **Day-3 delta (2026-07-14, research §1–2):** still 0/4 posts indexed; `/for-listeners` not yet indexed
+  (<24h, expected); "Backup1" cached homepage title persists 3+ days post-fix — if still unindexed ~07-16,
+  escalate to a site-level quality-signal investigation (#23 site title + #31 hello-world stub are the known
+  hygiene items). `/for-listeners` SSR verified by curl (WebFetch sparse-render was a false alarm). Cluster A
+  SERP snippets keep drifting toward warm-intro/community framing; prospeo.io/coffee.ai newly surfaced.
+  MeetMagic static (no content, no new press; homepage now self-reports $1.4M / 2,900+ connections / 3,500+
+  decision-makers — track the connections counter). New-entrant sweep: null.
 - **The gap DonaTalk owns:** no one sits at the intersection. Cold-email listicles never mention donation-based outreach; warm-intro guides never mention you can *buy* a warm intro by funding a cause. **Wedge: "donation-based / charitable warm outreach for everyday B2B sellers."**
 
 ## 5. First three pieces of content (prioritized)
@@ -175,4 +225,8 @@ Update transcript (2026-07-12) → `research/2026-07-12-keywords.md`: **meetmagi
 goldpenguin.org (Gated shutdown), post-publish SERP checks (breakcold, commsor, introhive, gravyty et al.),
 instantly.ai 2026 benchmark, forrester (trust recession), talkspresso (expert-call category), charitybuzz/glide
 (charity-auction category); new backlink outlets → `research/backlink-targets.md` (2026-07-12 additions).
+Update transcript (2026-07-14) → `research/2026-07-14-keywords.md`: appointment-setting pricing SERPs
+(salesar, cleverly, saleshive, belkins, danishleadco, demandnexus et al.), firstpagesage + growthspreeofficial
+(benchmark citation flywheel), outboundsalespro (gated calculator), Google-suggest probes, meetmagic.org
+(day-3 watch); listener-side backlink outlets → `research/backlink-targets.md` (2026-07-14 additions).
 Update transcript (2026-07-11) → `research/2026-07-11-keywords.md`: **commsor.com (Warm Intro Gap Report 2026 — primary)**, getboomerang.ai (Norwest 65% / Gartner 75% / compromised-playbook), cirrusinsight.com (Gong 344, Cognism 2.7%, RAIN 82%), marketbetter.ai (SoPro 18%v9%); cause/CSR + podcast/newsletter backlink outlets → appended to `research/backlink-targets.md` (2026-07-11 additions).

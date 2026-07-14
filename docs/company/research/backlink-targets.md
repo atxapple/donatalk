@@ -272,6 +272,63 @@ byline found (300–1,200 words, contributor bio + links).
 
 ---
 
+## 2026-07-14 additions (growth-research pass — sourced; transcript in `research/2026-07-14-keywords.md`)
+
+**NEW audience family: LISTENER-side venues** — where the `/for-listeners` audience (CIOs/CISOs,
+procurement, EAs/chiefs-of-staff who gatekeep exec calendars) gathers. The "turn vendor meetings into
+charity donations" story is natively interesting here and closed to generic sales tools — same defensible
+edge as Tier 5a. Verification legend: **V** = path page fetched this pass; **S** = search-confirmed
+(site 403s automated fetch — re-verify in a browser before pitching); **U** = unverified, direct outreach.
+
+### Tier 12 — CIO/CISO publications & exec communities
+| Venue | Path | Note |
+|---|---|---|
+| **CIO.com / Foundry Expert Contributor Network** | [expert-contributor-network](https://www.cio.com/expert-contributor-network/) **V** — free; email pitch + writer agreement; 1,200–1,500 w first-person "lived experience" | Highest authority in family (publishes across CIO/CSO/Computerworld/Network World). Angle: exec first-person "the only cold outreach I'd say yes to" |
+| **CIO Dive** (Industry Dive) | [submit-opinion form](https://www.ciodive.com/opinion/submit-opinion/) **V** — free; ~1,000 w; 30-day exclusive; no AI text; fact-checked | Op-ed: "vendor fatigue is a governance problem." Same form family exists at Supply Chain Dive (procurement beat — U) |
+| **The National CIO Review** | [contribute](https://nationalcioreview.com/contribute-to-the-national-cio-review/) + [guidelines](https://nationalcioreview.com/contributor-guidelines-and-terms/) **S** — free; 400–1,000 w; strict vendor-neutrality + financial-ties disclosure | DonaTalk can't be the article's "solution" here — playbook piece with the model as one filter. Paid sponsored route exists → flag |
+| **The CIO Magazine** | [content-contribution](https://www.theciomagazine.com/content-contribution/) **V** — free pitch; 800–1,200 w; vendor-neutral | Lower DA than CIO.com/CIO Dive; sponsored category exists (flag if steered there) |
+| **Gartner Peer Community** (ex-Pulse) | [home](https://www.gartner.com/peer-community/home) + Ambassadors **S** — free, verified execs, give-to-get | NOT a backlink venue (UGC/nofollow) — audience-presence play: seed polls like "what would make you take a cold vendor meeting?" |
+| **CISO Series** | [participate](https://cisoseries.com/participate-in-ciso-series/) **S** — explicitly **no guest posts**; free = questions/"What's Worse?" scenarios/vendor game; on-air vendor slot = [sponsorship](https://cisoseries.com/podcast-sponsorship/) (paid → Board) | Highest thematic fit in family — vendor-outreach fatigue is their recurring beat. Free paths yield mentions, not links |
+| **Audience 1st** (Dani Woolf) | [audience1st.fm](https://audience1st.fm/) **V** — no public guest app; pitch dani@ / Calendly; [sponsor route](https://audience1st.fm/c/sponsor) = paid | Best single thematic match: security-BUYER interviews cataloging hated vendor outreach. Pitch the free editorial angle ("would you take a meeting that funds your charity?"); expect commercial pressure |
+| CISO Tradecraft · CISO Stories (SC Media) · The New CISO (Exabeam) | **U** — no public guest forms | Direct-outreach tier; The New CISO is vendor-owned → deprioritize |
+| Spiceworks Community | **U** | IT-admin (not exec) density; low priority |
+
+### Tier 13 — Procurement / vendor-management (the "vendor fatigue" beat, buyer side)
+| Venue | Path | Note |
+|---|---|---|
+| **Spend Matters** | [guest-post category exists](https://spendmatters.com/category/guest-post/) **S** — no public guidelines; pitch via contact | Leading procurement-tech pub. Angle: "a new currency in vendor access" analysis, not product PR |
+| **Procurious** | members publish on-platform ([their blog-writing post](https://www.procurious.com/procurement-news/writing-brilliant-blogs)) **V-partial** | UGC → assume nofollow; audience/referral value |
+| **Public Spend Forum** | [guest-author guidelines](https://www.publicspendforum.net/blogs/admin/2021/01/06/public-spend-forum-govshop-quick-guidelines-for-guest-authors/) **V** — free; 500–1,000 w | Public-sector ethics make the pitch tricky (gift rules) — careful angle or deprioritize |
+| **Art of Procurement** | [podcast](https://artofprocurement.com/podcast) **V** — no public guest app; formal vendor route = [marketing services](https://artofprocurement.com/marketing-services) (paid → Board) | Top procurement podcast; free guest = cold pitch |
+| Procurement Foundry · TPRA | **U** — vendor entry appears membership/sponsorship-gated | Direct email; flag paid tiers |
+
+### Tier 14 — EA / chief-of-staff media (the calendar gatekeepers — angle nobody else covers)
+| Venue | Path | Note |
+|---|---|---|
+| **The Leader Assistant Podcast** (Jeremy Burrows) | [open guest invite](https://goburrows.com/podcast/) **V** — email podcast@leaderassistant.com | 300+ episodes, top EA show. Angle: "EAs enforce the donation gate" — turn meeting requests into charity |
+| **Chief of Staff Network** | [/contribute form](https://www.chiefofstaff.network/contribute) **V** — blog/Knowledge Hub contributions; partnership route = paid | CoS manage principal calendars; "donation-gated calendar policy" piece |
+| The Assistant Room | [writer page](https://www.theassistantroom.com/become-a-writer-at-the-assistant-room/) — **404 on fetch, indexed URL may have moved** → follow up via homepage | They treat vendors as "service providers" — may get commercial handling |
+| Executive Support Magazine · Ask a Chief of Staff · ASAP | **U** — no public paths; direct editorial outreach | Training-angle pieces |
+
+### Anti-targets (2026-07-14)
+- **CIOReview** (+ Industry Era, MyTechMag) — ~$3k pay-for-profile / vanity awards; [BBB complaints](https://www.bbb.org/us/fl/fort-lauderdale/profile/publishers-magazine/cioreview-0633-90553284) ·
+  [HN thread](https://news.ycombinator.com/item?id=33092000) · [alloycrew scam roundup](https://alloycrew.com/resources/4-pay-for-play-scams-tech-pr-must-avoid). Avoid entirely.
+- **Forbes Technology Council** (and the FC Executive Board / Entrepreneur Leadership Network /
+  Newsweek Expert Forum category) — paid-membership publishing ($1.5–5k/yr reported), nofollow-history;
+  low SEO ROI ([councils.forbes.com](https://councils.forbes.com/forbestechcouncil)).
+- **Evanta / Chief / YPO-type networks as content targets** — legit communities, no contributor path;
+  vendor door = paid sponsorship only.
+- **Enterprise CIO (TechForge)** — free path exists ([write-for-us](https://www.enterprise-cio.com/write-for-us/) **V**)
+  but recycled boilerplate guidelines = low editorial rigor/authority; near-zero benefit.
+
+> Priority order for this family when §7 outreach capacity opens: CIO.com Foundry → CIO Dive →
+> Leader Assistant Podcast → Chief of Staff Network → CISO Series free participation + Audience 1st
+> editorial pitch. All are outbound content submissions → **§7 posting lane** (drafts-first,
+> Board-visible; supervised ramp currently 2/5). No venue states an explicit dofollow policy;
+> Industry Dive + Foundry historically allow author-bio links.
+
+---
+
 ## Sources
 salesassembly.com · redditagency.com · unboundb2b.com · seeresponse.com · nethunt.com · growthsalad.com ·
 huntmeleads.com · peppercloud.com · datadab.com · getintel.ai · bigideasdb.com · indiehackers.com ·
@@ -289,3 +346,8 @@ philanthropy.org · bloomerang.com · donorbox.org · nten.org · nptechforgood.
 top1.fm · sellingpower.com · sellbetter.xyz · hackernoon.com · techcrunch.com · nickwolny.com ·
 eu-startups.com · salespop.net · partners.salesandmarketing.com · marketingsherpa.com ·
 marketingprofs.com · growmeorganic.com · findlight.net · nonprofithub.org. (URLs inline above.)
+2026-07-14: cio.com · ciodive.com · nationalcioreview.com · theciomagazine.com · gartner.com · evanta.com ·
+cisoseries.com · audience1st.fm · cisotradecraft.com · scworld.com · exabeam.com · spendmatters.com ·
+procurious.com · publicspendforum.net · artofprocurement.com · procurementfoundry.com · tprassociation.org ·
+goburrows.com · chiefofstaff.network · theassistantroom.com · askachiefofstaff.com · asaporg.com ·
+bbb.org · news.ycombinator.com · alloycrew.com · councils.forbes.com · enterprise-cio.com. (URLs inline above.)
