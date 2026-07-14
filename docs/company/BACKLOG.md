@@ -2,19 +2,29 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-14 (run 40 — daily-ops: **item 30 ✅ — Cluster D listener-side landing
-> page SHIPPED** → `/for-listeners` (v0.21.0, PR #68, merged = deployed, verified live). H1 on the
-> Tier-B head phrase "Get paid in donations to take sales meetings" + "your time funds your cause"
-> subhead; exec-pain section in the community's verbatim vocabulary (quote-bank §2 "Should they
-> spend all day listening to sales pitches?" answered in-copy); listener-side how-it-works; 4 value
-> cards; category-level expert-network/curated contrast (no names, v0.20.0 convention); "Is this a
-> bribe?" FAQ answered with **product mechanics only** — no tax/legal claims (§3b.5). Metadata +
-> WebPage/Breadcrumb/FAQPage JSON-LD per /pitchers convention; sitemap 0.8 + site-wide footer link.
-> tsc + 378 tests green, non-§3b self-merge. Remaining from #30's original scope: the Tier-A
-> support post ("vendor meeting fatigue") — split to item 32. GSC index request for /for-listeners
-> = next content-loop step. Item 15 post 3/5 (LinkedIn) still pacing-held — this run was Sun
-> ~22:30 CT; goes Mon daytime CT. Runner-owned collection green 8th consecutive run (03:30Z probe:
-> 3 paths 200 + markers; KR1-2 rows appended). Prior run-39 note follows.)
+> Last updated: 2026-07-14 (run 42 — daily-ops: **item 15 advanced — §7 ramp post 3/5 live on
+> LINKEDIN** (Mon 07:35 CT, pacing-compliant: new CT day, daytime, first-ever machine post on the
+> platform, content varied — Cluster D listener-side angle → /for-listeners;
+> https://www.linkedin.com/feed/update/urn:li:activity:7482774536208293889/; log
+> `ops/logs/POST-linkedin-20260714T123545Z.txt`; ledger row 3, nofollow so A7 stays 0). First
+> production flight of `linkedin-post-browser.mjs` — patched to default DISPLAY=:3.0 (env-prefix
+> invocations are allowlist-gated; same fix as gsc-index-request.mjs, sibling can adopt as-is).
+> Posts 4–5 remain: next machine post no earlier than Tue CT; Reddit draft still awaits human.
+> Also re-requested GSC indexing for /for-listeners — redundant (run 40 already did it same-run,
+> log GSC-INDEX-20260714T033951Z.txt); 1 quota unit wasted, lesson: check prior-run logs before
+> the "next content-loop step" note in this header. Runner-owned collection green 9th consecutive
+> run (12:30Z probe: 3 paths 200 + markers; KR1-2 rows appended). Prior run-40 note follows.)
+>
+> _Run 40 note (daily-ops: **item 30 ✅ — Cluster D listener-side landing page SHIPPED**
+> → `/for-listeners` (v0.21.0, PR #68, merged = deployed, verified live). H1 on the Tier-B head
+> phrase "Get paid in donations to take sales meetings" + "your time funds your cause" subhead;
+> exec-pain section in the community's verbatim vocabulary (quote-bank §2); listener-side
+> how-it-works; 4 value cards; category-level expert-network/curated contrast (no names, v0.20.0
+> convention); "Is this a bribe?" FAQ answered with **product mechanics only** — no tax/legal
+> claims (§3b.5). Metadata + WebPage/Breadcrumb/FAQPage JSON-LD per /pitchers convention; sitemap
+> 0.8 + site-wide footer link. tsc + 378 tests green, non-§3b self-merge. GSC index request done
+> same-run (agent-driven, log GSC-INDEX-20260714T033951Z.txt). Tier-A support post split to item
+> 32. Runner-owned collection green 8th consecutive run. Prior run-39 note follows.)
 >
 > _Run 39 note (daily-ops: **item 26 ✅ — pain-quote bank harvested + curated**
 > → `research/pain-quote-bank.md` (r/sales top-of-month read via ops-browser profile, reading only;
@@ -88,7 +98,7 @@
 |---|------|--------|
 | 13 | GSC verified (both domains) + baseline pulled | ✅ done; app sitemap still to submit (item 8) |
 | 14 | WordPress credential (App Password, admin) stored in Vercel | ✅ done; build publish pipeline next |
-| 15 | Autonomous posting — supervised ramp (first 5 posts) | 🟡 **UNBLOCKED + ramp started run 31 (2026-07-12):** `.env-social` creds verified present; **post 1/5 live on X** → https://x.com/MichaelLeetj/status/2076329992749777091 (browser poster; API posting is 402/credits-gated). §7 log: `ops/logs/POST-x-20260712T213758Z.txt`, flagged for Board spot-check. Remaining: posts 2–5 (vary platform/content; Reddit = draft-and-human-post; LinkedIn helper not built). **Run 32:** post 2/5 deferred on §7 pacing (3h after post 1, Sat night, spot-check pending — see DECISIONS 07-13 ramp-pacing rule: ≤1 machine post/platform/day during ramp, daytime CT); Reddit ready-to-post answer drafted in the 07-13 brief for human posting. **Run 35 (2026-07-13): post 2/5 live on X** → https://x.com/MichaelLeetj/status/2076646112010596536 (Cluster B warm-intro angle, links /how-to-get-warm-introductions/; Sun 07:33 CT = new CT day, pacing-compliant; log `ops/logs/POST-x-20260713T123334Z.txt`; ledger row 2, nofollow). Remaining: posts 3–5 — next machine post no earlier than Mon CT; vary content again; Reddit draft still awaits human posting. **Run 38: LinkedIn helper EXISTS** — `ops-shared/browser/linkedin-post-browser.mjs` (built + flight-tested 2026-07-13, sibling-side; posts + returns live URL, `/tmp/linkedin-post-fail.png` on failure) → post 3/5 can go on **LinkedIn Monday CT** for platform variety |
+| 15 | Autonomous posting — supervised ramp (first 5 posts) | 🟡 **UNBLOCKED + ramp started run 31 (2026-07-12):** `.env-social` creds verified present; **post 1/5 live on X** → https://x.com/MichaelLeetj/status/2076329992749777091 (browser poster; API posting is 402/credits-gated). §7 log: `ops/logs/POST-x-20260712T213758Z.txt`, flagged for Board spot-check. Remaining: posts 2–5 (vary platform/content; Reddit = draft-and-human-post; LinkedIn helper not built). **Run 32:** post 2/5 deferred on §7 pacing (3h after post 1, Sat night, spot-check pending — see DECISIONS 07-13 ramp-pacing rule: ≤1 machine post/platform/day during ramp, daytime CT); Reddit ready-to-post answer drafted in the 07-13 brief for human posting. **Run 35 (2026-07-13): post 2/5 live on X** → https://x.com/MichaelLeetj/status/2076646112010596536 (Cluster B warm-intro angle, links /how-to-get-warm-introductions/; Sun 07:33 CT = new CT day, pacing-compliant; log `ops/logs/POST-x-20260713T123334Z.txt`; ledger row 2, nofollow). Remaining: posts 3–5 — next machine post no earlier than Mon CT; vary content again; Reddit draft still awaits human posting. **Run 38: LinkedIn helper EXISTS** — `ops-shared/browser/linkedin-post-browser.mjs` (built + flight-tested 2026-07-13, sibling-side; posts + returns live URL, `/tmp/linkedin-post-fail.png` on failure) → post 3/5 can go on **LinkedIn Monday CT** for platform variety. **Run 42 (2026-07-14): post 3/5 live on LinkedIn** → https://www.linkedin.com/feed/update/urn:li:activity:7482774536208293889/ (Mon 07:35 CT, first machine post on the platform; Cluster D listener angle → /for-listeners; log `ops/logs/POST-linkedin-20260714T123545Z.txt`; ledger row 3, nofollow). Remaining: posts 4–5 — no machine post before Tue CT, vary content again (candidates: hub piece /book-meetings-without-cold-email/ on X; Reddit human-post draft still pending) |
 
 ## Now (Obj 2 — content engine)
 | # | Item | KR | Status |

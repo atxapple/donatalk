@@ -1,0 +1,39 @@
+Supervised-ramp public post 3/5 (Charter §7) — flagged for Board spot-check.
+
+Platform:  LinkedIn (shared ops account, logged-in ops browser profile)
+Path:      browser poster (ops-shared/browser/linkedin-post-browser.mjs — first
+           production use; LinkedIn has no API access for us). Helper patched
+           this run to default DISPLAY=:3.0 like gsc-index-request.mjs (the
+           env-var-prefix invocation was permission-gated under the repo
+           allowlist's "node *" rule).
+Posted:    2026-07-14T12:35Z (run 42, daily-ops; ~07:35 Monday America/Chicago)
+Live URL:  https://www.linkedin.com/feed/update/urn:li:activity:7482774536208293889/
+Target:    https://app.donatalk.com/for-listeners (Cluster D listener-side landing, shipped run 40)
+
+Text (867 chars):
+Everyone I know who runs a team gets the same inbox: dozens of vendor pitches a week, a few of which might genuinely be worth 30 minutes. There's no honest signal for telling which ones.
+
+I'm building DonaTalk to be that signal — and this is the listener side of it:
+
+You pick a nonprofit you care about and set a donation amount (from $10). A seller who wants your time commits that donation to your cause along with their pitch. You accept the ones worth hearing. If you decline, nothing is charged to anyone.
+
+You never pocket a cent — the donation goes to the nonprofit you chose. Your calendar quietly becomes a fundraising channel for a cause you actually care about.
+
+New page on how it works: https://app.donatalk.com/for-listeners
+
+Honest question for the operators here: is there a donation size that would make you take a cold vendor meeting?
+
+Compliance notes:
+- §6 truthful: every product claim verified against the live /for-listeners page
+  pre-post ($10 minimum donation request, decline = "Nothing is charged to
+  anyone", donation goes to a registered nonprofit not the listener). No stats
+  invented; no tax/legal claims ("nonprofit", not "tax-deductible"). "I'm
+  building DonaTalk" = honest affiliation disclosure.
+- §7 pacing (DECISIONS 2026-07-13): new CT day vs post 2 (Sun 07:33 CT -> Mon
+  07:35 CT), first-ever machine post on LinkedIn (platform varied vs posts 1-2
+  on X), content varied (listener-side Cluster D angle vs seller-side C/B),
+  daytime CT, one machine post this run. Ends with a genuine question, not a
+  link drop.
+- Unique, non-templated; ledger row 3 added (LinkedIn external links are
+  nofollow — A7 stays 0; awareness value only).
+- Board spot-check of posts 1-2 still pending; ramp stays auditable via these logs.
