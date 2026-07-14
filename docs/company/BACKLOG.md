@@ -2,7 +2,19 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-13 (run 38 — daily-ops: **item 29 ✅ — GSC indexing requested for all 5 URLs,
+> Last updated: 2026-07-14 (run 39 — daily-ops: **item 26 ✅ — pain-quote bank harvested + curated**
+> → `research/pain-quote-bank.md` (r/sales top-of-month read via ops-browser profile, reading only;
+> reusable helper `ops-shared/browser/harvest-quotes.mjs`). Keepers: channel-collapse thread w/
+> "infrastructure tuned to treat outreach as a threat by default"; exec-wall quotes for item 30
+> ("Should they spend all day listening to sales pitches?"); **$15k/17-meetings (~$880/meeting)
+> conference paid-meeting comp** for /calculator + hub; trust/costly-signal corroboration; null
+> confirmed (no one proposes donation-mediated meetings). **Bravado half NOT harvested** — bravado.co
+> TCP-refused from this host (curl-confirmed, not an automation block); retry opportunistically.
+> Item 15 post 3/5 (LinkedIn) still pacing-held to Mon CT — this run was Sun 19:30 CT. Item 30 is
+> the next content build and now has its verbatim quote layer. Runner-owned collection green 7th
+> consecutive run (00:30Z probe: 3 paths 200 + markers; KR1-2 rows appended). Prior run-38 note follows.)
+>
+> _Run 38 note (daily-ops: **item 29 ✅ — GSC indexing requested for all 5 URLs,
 > agent-driven** (new hub + homepage + 3 changed posts, 5/5 "priority crawl queue"; log
 > `ops/logs/GSC-INDEX-20260713T214445Z.txt`). The step assumed to need a human is now autonomous:
 > shared helper `gsc-index-request.mjs` parameterized + hidden-dialog fix. Also: item 15's LinkedIn
@@ -32,11 +44,7 @@
 > collection green 3rd consecutive run (12:30Z probe: 3 paths 200 + markers; KR1-2 rows appended).
 > No code shipped this run. Prior run-33 note follows.)
 >
-> _Run 33 note (daily-ops: **item 24 ✅ — `/vs` curated-vs-self-serve category context live** (PR #63, v0.20.0): 2-card section + FAQ entry (FAQPage JSON-LD) + 2 category keywords, category-honest per §6 (no competitor named, no "first/only"); tsc + 378 tests green; merged→deployed, verified live. **Run-32's delegation check passed:** the 03:30Z cron pre-flight artifact shows `"markers":"checked"` — `check-site.sh`→`ops/check-site.mjs` delegation works under cron; runner-owned collection green 2nd consecutive run. Item 15 post 2/5 still §7-pacing-deferred (22:30 Sat CT = same CT day as post 1; next daytime-CT run posts it). Prior run-32 note follows.)
->
-> _Run 32 note (daily-ops: **item 21 ✅ — probe content-marker checks ported to Linux** (PR #62 merged: repo-owned `ops/check-site.mjs` asserts 200 + marker per critical path, same artifact shape/ALERT/exit as the shared probe; pure logic in tested `ops/lib/site-probe.mjs`, +9 tests → suite 28 files/378; live-verified green; host-side `check-site.sh` now delegates to it when present, curl loop kept as fallback — delegation gets its first cron exercise run 33). **Runner collector pre-flight VERIFIED working** — first run after PR #61: log shows "probe collected. / metrics collected.", fresh 00:30Z artifact + 07-13 rows; the 3-run collector gap is closed. Item 15 post 2/5 **deferred on §7 pacing** (would have been 3h after post 1, Sat night, Board spot-check still pending — new DECISIONS 07-13 ramp-pacing rule); Reddit ready-to-post draft written into the 07-13 brief instead. Prior run-31 note follows.)
->
-<!-- Run 21-31 notes trimmed (runs 21-23 on 2026-07-11 by run 26; runs 24-26 by run 30; run 28 by run 31; run 29 by run 32; runs 30-31 by run 36) per Charter §11 — narrative lives in reports/; run-28/29/30 outcomes captured in items 19/20/27; run-31 outcomes in item 15 + DECISIONS 07-12 -->
+<!-- Run 21-33 notes trimmed (runs 21-23 on 2026-07-11 by run 26; runs 24-26 by run 30; run 28 by run 31; run 29 by run 32; runs 30-31 by run 36; runs 32-33 by run 39) per Charter §11 — narrative lives in reports/; run-28/29/30 outcomes captured in items 19/20/27; run-31 outcomes in item 15 + DECISIONS 07-12; run-32/33 outcomes in items 21/24/15 + DECISIONS 07-12/07-13 -->
 
 ## Now (Obj 1 — the machine)
 | # | Item | KR | Status |
@@ -118,7 +126,7 @@ impressions in the awareness log.
 | 23 | Fix WP **site title** — currently "Donatalk - DonaTalk creates…" (brand duplicated, description used as title). WP settings REST change; needs WP creds (post-rotation) | 2-2 | ⬜ (creds-gated with the rotation) |
 | 24 | **MeetMagic-aware content refresh**: add curated-vs-self-serve comparison context to `/vs` (+ keep explainer category-honest). MeetMagic = live donation-for-meeting competitor found 07-12; never claim "first/only" (live content already complies — verified) | 2-1 | ✅ done run 33 (2026-07-13, PR #63, v0.20.0): `/vs` gained a "Within the category: curated vs. self-serve" section (2 cards) + FAQ entry (in FAQPage JSON-LD) + 2 category keywords ("donation for a meeting", "executive meetings for charity") — category-level per the page's §6 convention (no competitor named, no first/only). tsc + 378 tests green; merged = deployed (Vercel git integration), verified live post-merge |
 | 25 | Draft Cluster A tail piece: **"How to book B2B meetings without cold email"** — weakest SERP of our five targets, no direct answer exists; best next-content ROI | 2-1 | ✅ drafted run 36 (2026-07-13): `docs/company/content/book-meetings-without-cold-email.md` per the research-§4 winning outline — intent-match hub (validates the searcher's premise the incumbents deny), snippet-bait 7-channel list, **qualitative** comparison table (numeric rates only where sourced: warm 20–40% vs cold 1–3%; no invented benchmarks, §6), situation guide (founder/SDR/agency), curated-vs-self-serve section (category-level, no names), PAA FAQ; links down to all 3 live posts + app `/vs` + `/calculator` (hub role). Stats per pinned convention; provenance in `content/editorial-notes.md` (07-13 rule — nothing internal in the body). md→WP conversion dry-run-verified. **✅ PUBLISHED LIVE run 37 (2026-07-13)** → https://donatalk.com/book-meetings-without-cold-email/ (WP post 165; fresh-eyes pass done; verified 200, 5 hub links render, no note leak). **Hub links UP added same run** to all 3 live posts via `update-wp-post.mjs --apply` (one contextual link each; explainer's `/blog/` link also re-pointed to canonical; all re-verified live). Remaining: GSC index request → bundled into #29 |
-| 26 | Harvest verbatim pain quotes from Bravado War Room threads + r/sales top-month via the logged-in ops browser profile (reading only — NOT posting; automation-blocked sites) | 2-1 | ⬜ (5-min, needs browser session) |
+| 26 | Harvest verbatim pain quotes from Bravado War Room threads + r/sales top-month via the logged-in ops browser profile (reading only — NOT posting; automation-blocked sites) | 2-1 | ✅ done run 39 (2026-07-14): **`research/pain-quote-bank.md`** — r/sales top-of-month harvested + curated into 6 sections (channel collapse; exec wall for item 30; ~$880/meeting conference paid-meeting price anchor; trust/costly-signal; emotional register; nulls). Reusable read-only helper `ops-shared/browser/harvest-quotes.mjs`. **Bravado half skipped:** bravado.co TCP connection refused from this host (curl-confirmed, not an automation block) — retry opportunistically; if persistent, likely IP-blocking → human path |
 
 <!-- duplicate item-27 row removed run 38: the deploy-web.mjs hardening it described was done run 30 (PR #60) — see item 27 in the Obj-1 table above -->
 
@@ -127,7 +135,7 @@ impressions in the awareness log.
 |---|------|----|--------|
 | 28 | **Leaked editorial notes on the 3 live posts — FOUND + FIXED same-run.** All three published pages rendered their internal *"Editorial note (staging)… Do not publish until the WordPress App Password is rotated"* block (draft-quality signal to Google + public disclosure of an internal security item). Fix: notes moved to `content/editorial-notes.md` (internal), new **`ops/update-wp-post.mjs`** (updates existing post by slug from the cleaned draft; dry-run default, `--apply` gated, creds env-only), applied to posts 156/157/158, verified clean by re-fetch. §3a own-surface content fix, §6-truthful | 2-2 | ✅ done (run 34) |
 | 29 | **Re-request GSC indexing** — now **4 posts + homepage**: the 3 originals (content changed twice: #28 leak fix + run-37 hub uplinks) **+ the new hub piece** `/book-meetings-without-cold-email/` (published run 37, unknown to Google) + homepage recrawl ("Backup1" cached title). UI-only → human/ops-browser 5-min step, same path as #22 | 2-2 | ✅ done run 38 (2026-07-13, **agent-driven** — no human needed): all **5/5 REQUESTED** ("priority crawl queue") via `ops-shared/browser/gsc-index-request.mjs` on the ops profile; log `ops/logs/GSC-INDEX-20260713T214445Z.txt`. Helper now parameterized (`<property> <url...>`) + hidden-dialog visibility fix — GSC index requests are a repeatable autonomous step from here (5 of ~10-12/day quota used) |
-| 30 | **Listener-side landing surface (Cluster D)** — first deep pass shows 8/8 listener-intent queries unanswered anywhere + autocomplete-null head terms (category creation). `/listeners` currently greets that visitor with a seller-facing "Browse People to Pitch" CTA. Build: H1 "Get paid in donations to take sales meetings", exec-pain section (verbatim vocabulary), "Is this a bribe?" objection FAQ, contrast vs expert networks/curated platforms; + one Tier-A support post ("vendor meeting fatigue") | 2-1 | ⬜ |
+| 30 | **Listener-side landing surface (Cluster D)** — first deep pass shows 8/8 listener-intent queries unanswered anywhere + autocomplete-null head terms (category creation). `/listeners` currently greets that visitor with a seller-facing "Browse People to Pitch" CTA. Build: H1 "Get paid in donations to take sales meetings", exec-pain section (verbatim vocabulary), "Is this a bribe?" objection FAQ, contrast vs expert networks/curated platforms; + one Tier-A support post ("vendor meeting fatigue") | 2-1 | ⬜ — verbatim-quote layer ready (run 39: `research/pain-quote-bank.md` §2 exec-wall + §3 price-anchor) |
 | 31 | Delete/draft the `/hello-world/` default WP stub (live + sitemap-listed, thin-content noise) — WP-creds step, bundle with #23 site-title fix post-rotation | 2-2 | ⬜ (creds-gated) |
 
 ## Later
