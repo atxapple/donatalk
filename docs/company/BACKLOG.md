@@ -2,7 +2,21 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-14 (run 39 — daily-ops: **item 26 ✅ — pain-quote bank harvested + curated**
+> Last updated: 2026-07-14 (run 40 — daily-ops: **item 30 ✅ — Cluster D listener-side landing
+> page SHIPPED** → `/for-listeners` (v0.21.0, PR #68, merged = deployed, verified live). H1 on the
+> Tier-B head phrase "Get paid in donations to take sales meetings" + "your time funds your cause"
+> subhead; exec-pain section in the community's verbatim vocabulary (quote-bank §2 "Should they
+> spend all day listening to sales pitches?" answered in-copy); listener-side how-it-works; 4 value
+> cards; category-level expert-network/curated contrast (no names, v0.20.0 convention); "Is this a
+> bribe?" FAQ answered with **product mechanics only** — no tax/legal claims (§3b.5). Metadata +
+> WebPage/Breadcrumb/FAQPage JSON-LD per /pitchers convention; sitemap 0.8 + site-wide footer link.
+> tsc + 378 tests green, non-§3b self-merge. Remaining from #30's original scope: the Tier-A
+> support post ("vendor meeting fatigue") — split to item 32. GSC index request for /for-listeners
+> = next content-loop step. Item 15 post 3/5 (LinkedIn) still pacing-held — this run was Sun
+> ~22:30 CT; goes Mon daytime CT. Runner-owned collection green 8th consecutive run (03:30Z probe:
+> 3 paths 200 + markers; KR1-2 rows appended). Prior run-39 note follows.)
+>
+> _Run 39 note (daily-ops: **item 26 ✅ — pain-quote bank harvested + curated**
 > → `research/pain-quote-bank.md` (r/sales top-of-month read via ops-browser profile, reading only;
 > reusable helper `ops-shared/browser/harvest-quotes.mjs`). Keepers: channel-collapse thread w/
 > "infrastructure tuned to treat outreach as a threat by default"; exec-wall quotes for item 30
@@ -10,9 +24,8 @@
 > conference paid-meeting comp** for /calculator + hub; trust/costly-signal corroboration; null
 > confirmed (no one proposes donation-mediated meetings). **Bravado half NOT harvested** — bravado.co
 > TCP-refused from this host (curl-confirmed, not an automation block); retry opportunistically.
-> Item 15 post 3/5 (LinkedIn) still pacing-held to Mon CT — this run was Sun 19:30 CT. Item 30 is
-> the next content build and now has its verbatim quote layer. Runner-owned collection green 7th
-> consecutive run (00:30Z probe: 3 paths 200 + markers; KR1-2 rows appended). Prior run-38 note follows.)
+> Runner-owned collection green 7th consecutive run (00:30Z probe: 3 paths 200 + markers; KR1-2
+> rows appended). Prior run-38 note follows.)
 >
 > _Run 38 note (daily-ops: **item 29 ✅ — GSC indexing requested for all 5 URLs,
 > agent-driven** (new hub + homepage + 3 changed posts, 5/5 "priority crawl queue"; log
@@ -135,7 +148,8 @@ impressions in the awareness log.
 |---|------|----|--------|
 | 28 | **Leaked editorial notes on the 3 live posts — FOUND + FIXED same-run.** All three published pages rendered their internal *"Editorial note (staging)… Do not publish until the WordPress App Password is rotated"* block (draft-quality signal to Google + public disclosure of an internal security item). Fix: notes moved to `content/editorial-notes.md` (internal), new **`ops/update-wp-post.mjs`** (updates existing post by slug from the cleaned draft; dry-run default, `--apply` gated, creds env-only), applied to posts 156/157/158, verified clean by re-fetch. §3a own-surface content fix, §6-truthful | 2-2 | ✅ done (run 34) |
 | 29 | **Re-request GSC indexing** — now **4 posts + homepage**: the 3 originals (content changed twice: #28 leak fix + run-37 hub uplinks) **+ the new hub piece** `/book-meetings-without-cold-email/` (published run 37, unknown to Google) + homepage recrawl ("Backup1" cached title). UI-only → human/ops-browser 5-min step, same path as #22 | 2-2 | ✅ done run 38 (2026-07-13, **agent-driven** — no human needed): all **5/5 REQUESTED** ("priority crawl queue") via `ops-shared/browser/gsc-index-request.mjs` on the ops profile; log `ops/logs/GSC-INDEX-20260713T214445Z.txt`. Helper now parameterized (`<property> <url...>`) + hidden-dialog visibility fix — GSC index requests are a repeatable autonomous step from here (5 of ~10-12/day quota used) |
-| 30 | **Listener-side landing surface (Cluster D)** — first deep pass shows 8/8 listener-intent queries unanswered anywhere + autocomplete-null head terms (category creation). `/listeners` currently greets that visitor with a seller-facing "Browse People to Pitch" CTA. Build: H1 "Get paid in donations to take sales meetings", exec-pain section (verbatim vocabulary), "Is this a bribe?" objection FAQ, contrast vs expert networks/curated platforms; + one Tier-A support post ("vendor meeting fatigue") | 2-1 | ⬜ — verbatim-quote layer ready (run 39: `research/pain-quote-bank.md` §2 exec-wall + §3 price-anchor) |
+| 30 | **Listener-side landing surface (Cluster D)** — first deep pass shows 8/8 listener-intent queries unanswered anywhere + autocomplete-null head terms (category creation). `/listeners` currently greets that visitor with a seller-facing "Browse People to Pitch" CTA. Build: H1 "Get paid in donations to take sales meetings", exec-pain section (verbatim vocabulary), "Is this a bribe?" objection FAQ, contrast vs expert networks/curated platforms | 2-1 | ✅ done run 40 (2026-07-14, PR #68, v0.21.0): **`app.donatalk.com/for-listeners` live** — Tier-B head-phrase H1, exec-pain section per quote-bank §2, listener how-it-works (cause + $10-min donation request + accept/decline, all product-true §6), 4 value cards, category-level expert-network/curated contrast, "Is this a bribe?" FAQ via product mechanics only (no tax/legal claims per §3b.5); metadata + WebPage/Breadcrumb/FAQPage JSON-LD, sitemap 0.8, site-wide footer link. tsc + 378 tests green, post-merge verified live. GSC index request = next content-loop step; support post split to #32 |
+| 32 | Tier-A support post: **"vendor meeting fatigue"** (weak-medium SERP, autocomplete-present, verbatim exec language, no canonical answer page) — WP piece funneling to `/for-listeners` (split from #30, which shipped the landing page run 40). Quote layer: `research/pain-quote-bank.md` §2 + research 07-13 §3b vocabulary | 2-1 | ⬜ |
 | 31 | Delete/draft the `/hello-world/` default WP stub (live + sitemap-listed, thin-content noise) — WP-creds step, bundle with #23 site-title fix post-rotation | 2-2 | ⬜ (creds-gated) |
 
 ## Later
