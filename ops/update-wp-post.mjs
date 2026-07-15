@@ -11,11 +11,14 @@
 //   - Default is DRY-RUN (shows the resolved post + new content size, writes
 //     nothing). A live update requires the explicit --apply flag.
 //   - Only `content` (and excerpt, if set in frontmatter) is updated; title,
-//     slug, and status are left untouched on the live post.
+//     slug, and status are left untouched on the live post — unless the
+//     explicit --with-title flag is passed, which also sends the frontmatter
+//     title (slug/status stay untouched always).
 //
 // Usage:
 //   node ops/update-wp-post.mjs docs/company/content/<draft>.md            # dry-run
 //   node ops/update-wp-post.mjs docs/company/content/<draft>.md --apply    # write
+//   node ops/update-wp-post.mjs <draft>.md --apply --with-title            # write incl. title
 //
 // Exit codes: 0 ok · 2 usage · 3 WP REST error · 4 post not found by slug
 
@@ -30,6 +33,7 @@ function fail(msg, code = 1) {
 const args = process.argv.slice(2);
 const file = args.find((a) => !a.startsWith('--'));
 const apply = args.includes('--apply');
+const withTitle = args.includes('--with-title');
 
 if (!file) fail('Usage: node ops/update-wp-post.mjs <draft.md> [--apply]', 2);
 
@@ -62,10 +66,14 @@ const post = matches[0];
 
 const update = { content: payload.content };
 if (payload.excerpt) update.excerpt = payload.excerpt;
+if (withTitle) {
+  if (!payload.title || payload.title === '(untitled)') fail('--with-title: draft frontmatter has no title', 2);
+  update.title = payload.title;
+}
 
 console.log(`draft:   ${file}`);
 console.log(`post:    id=${post.id} status=${post.status} ${post.link}`);
-console.log(`content: ${payload.content.length} chars of HTML (title/slug/status untouched)`);
+console.log(`content: ${payload.content.length} chars of HTML (${withTitle ? `title -> '${update.title}'; slug/status untouched` : 'title/slug/status untouched'})`);
 
 if (!apply) {
   console.log('\ndry-run: no write made. Re-run with --apply to update the live post.');

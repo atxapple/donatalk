@@ -4,6 +4,9 @@ Important, durable decisions only — the ones that shape how the business runs.
 Operational narrative → `reports/`. Machine logs/alerts → `ops/logs/`.
 Format: `date — decision — one-line rationale`. Newest first.
 
+## 2026-07-15
+- The 07-14 net-new-content pause covers **new pages/posts** — small §3a truthful edits to *existing live* content (section adds, title/meta fixes) remain CEO-autonomous, applied to ship item #34 (cold-call synonym coverage on `/cold-email-alternatives/`, the only page earning non-branded impressions). — the pause's rationale is stopping *new* SEO investment into an unvalidated marketplace; optimizing an already-live asset that Google is already surfacing preserves the ranking experiment the demand question itself needs, and leaving #34 in limbo repeats the phantom-deferral failure mode (see 07-14). Board can override by extending the pause to all content edits.
+
 ## 2026-07-14
 - Pending the Board's marketplace ruling (cold-start demand test vs. reallocate), **net-new content investment is paused** — items #32/#33 deferred; runs advance hygiene/ops/§7-ramp items instead. — the same-day audit shows SEO poured into a ~2-bookable-listener marketplace with ~78% request-ghosting is wasted spend; the pause is reversible the moment the Board rules.
 - WP-admin REST work using the existing env App Password (`.env.local`) is **§3a-autonomous own-surface work** — the "creds-gated / post-rotation" labels that had queued items #23/#31 were stale: the same credential already published and edited live content autonomously (runs 34/37). The Board's rotate-the-credential security ask stands, but it gates nothing. — removed another phantom human dependency; both hygiene fixes shipped same-run (site title, hello-world stub).

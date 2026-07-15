@@ -1,0 +1,14 @@
+GSC indexing request — backlog #34 (run 46, 2026-07-15 ~15:36-15:38Z)
+Property: sc-domain:donatalk.com
+Driver: ops-shared/browser/gsc-index-request.mjs (logged-in ops profile, agent-driven)
+
+Outcome:
+  https://donatalk.com/cold-email-alternatives/ -> REQUESTED ("priority crawl queue")
+    Reason: content changed this run (item #34) — new title (cold-call synonym),
+    updated meta description, new "Searching for cold call alternatives instead?"
+    H2 + 3-question FAQ section. First attempt returned "clicked-unclear";
+    immediate retry confirmed REQUESTED.
+
+Quota: 1-2 of GSC's ~10-12/day used (first attempt may or may not have registered).
+Note for tomorrow's indexation escalation (due 07-16 if still 0/5 indexed):
+URL Inspection reads are the tool there, not more index requests.
