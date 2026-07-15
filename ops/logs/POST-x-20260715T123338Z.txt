@@ -1,0 +1,30 @@
+Supervised-ramp public post 4/5 (Charter §7) — flagged for Board spot-check.
+
+Platform:  X / Twitter (@MichaelLeetj, shared ops account)
+Path:      browser poster (ops-shared/browser/x-post-browser.mjs, logged-in ops profile;
+           API posting unavailable — 402 CreditsDepleted, buying credits is money-gated)
+Posted:    2026-07-15T12:33Z (run 45, daily-ops; ~07:33 Tuesday America/Chicago)
+Live URL:  https://x.com/MichaelLeetj/status/2077371078851101132
+Target:    https://donatalk.com/book-meetings-without-cold-email/ (Cluster A hub piece)
+
+Text (277 chars):
+Funny thing about searching 'how to book meetings without cold email': most of the top
+answers teach you to write better cold emails. I wrote one that takes the question
+seriously - 7 channels that need no sequence at all: https://donatalk.com/book-meetings-without-cold-email/
+
+Compliance notes:
+- §6 truthful: "most of the top answers teach better cold email" matches the hub piece's
+  own claim ("Most articles ranking for this exact question answer the opposite one",
+  verified against the live page this run) and research/2026-07-12-keywords.md (no direct
+  answer exists on this SERP). "I wrote one" = honest first-person authorship on our own
+  domain; the piece really lists 7 channels. No stats quoted, so no convention risk.
+- §7 pacing (DECISIONS 2026-07-13): new CT day vs post 3 (Mon 07:35 CT LinkedIn ->
+  Tue 07:33 CT X), one machine post this run, daytime CT, X last used Sun (2 days ago).
+  Content varied vs posts 1-3 (Cluster A hub angle vs C explainer / B warm-intro /
+  D listener). Unique, non-templated.
+- Fix applied this run: x-post-browser.mjs failed headless (no $DISPLAY in agent env) —
+  applied the same DISPLAY=:3.0 default run 42 patched into linkedin-post-browser.mjs.
+  ops-shared is not a git repo, so the patch is host-side; sibling note in the brief.
+- Ledger row 4 added (nofollow — X links don't count toward A7).
+- Remaining: post 5/5 (no machine post before Wed CT; vary content/platform again;
+  Reddit draft-and-human-post still awaits the human).

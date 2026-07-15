@@ -2,7 +2,19 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-15 (run 44 — growth-research: **first non-branded GSC impression ever —
+> Last updated: 2026-07-15 (run 45 — daily-ops: **item 15 advanced — §7 ramp post 4/5 live on X**
+> (Tue 07:33 CT, pacing-compliant: new CT day, daytime, X last used Sun; content varied — Cluster A
+> hub angle → /book-meetings-without-cold-email/;
+> https://x.com/MichaelLeetj/status/2077371078851101132; log `ops/logs/POST-x-20260715T123338Z.txt`;
+> ledger row 4, nofollow so A7 stays 0). Only post 5/5 remains: no machine post before Wed CT; Reddit
+> draft still awaits human. Fix: `x-post-browser.mjs` failed headless (no $DISPLAY in agent env) —
+> applied the run-42 DISPLAY=:3.0 default patch (host-side, ops-shared not a repo; sibling can adopt).
+> Net-new content (#32/#33/#35) still paused pending the Board marketplace ruling; indexation
+> escalation via GSC URL Inspection due next run (07-16) if still 0/5. Runner-owned collection green
+> 11th consecutive run (12:30Z probe: 3 paths 200 + markers; KR1-2 rows appended). Prior run-44 note
+> follows.)
+>
+> _Run 44 note (growth-research: **first non-branded GSC impression ever —
 > "cold call alternatives"** (0c/1i; cleaner channel-intent SERP than our head term → serve from the
 > existing post, new item #34). **Cluster D competitor correction:** Influence Board actively runs the
 > exact listener-side donation-for-meeting model (2026, 150+ charities, $100k self-reported) — concept
@@ -15,7 +27,7 @@
 > packages, founder-time only). **Indexation day 4: still 0/5; "Backup1" persists → escalation DUE
 > 07-16** via GSC URL Inspection (not `site:` — GSC served our impression for a page `site:` hides).
 > Backlink targets +1 family (paid-expertise/fractional venues, 07-15 additions). Metrics rows appended
-> (research). Prior run-43 note follows.)
+> (research). Prior run-43 note follows.)_
 >
 > _Run 43 note (daily-ops: **items 23 + 31 ✅ — WP site title fixed +
 > `/hello-world` stub trashed**, live via authenticated WP REST (env creds): site title
@@ -126,7 +138,7 @@
 |---|------|--------|
 | 13 | GSC verified (both domains) + baseline pulled | ✅ done; app sitemap still to submit (item 8) |
 | 14 | WordPress credential (App Password, admin) stored in Vercel | ✅ done; build publish pipeline next |
-| 15 | Autonomous posting — supervised ramp (first 5 posts) | 🟡 **UNBLOCKED + ramp started run 31 (2026-07-12):** `.env-social` creds verified present; **post 1/5 live on X** → https://x.com/MichaelLeetj/status/2076329992749777091 (browser poster; API posting is 402/credits-gated). §7 log: `ops/logs/POST-x-20260712T213758Z.txt`, flagged for Board spot-check. Remaining: posts 2–5 (vary platform/content; Reddit = draft-and-human-post; LinkedIn helper not built). **Run 32:** post 2/5 deferred on §7 pacing (3h after post 1, Sat night, spot-check pending — see DECISIONS 07-13 ramp-pacing rule: ≤1 machine post/platform/day during ramp, daytime CT); Reddit ready-to-post answer drafted in the 07-13 brief for human posting. **Run 35 (2026-07-13): post 2/5 live on X** → https://x.com/MichaelLeetj/status/2076646112010596536 (Cluster B warm-intro angle, links /how-to-get-warm-introductions/; Sun 07:33 CT = new CT day, pacing-compliant; log `ops/logs/POST-x-20260713T123334Z.txt`; ledger row 2, nofollow). Remaining: posts 3–5 — next machine post no earlier than Mon CT; vary content again; Reddit draft still awaits human posting. **Run 38: LinkedIn helper EXISTS** — `ops-shared/browser/linkedin-post-browser.mjs` (built + flight-tested 2026-07-13, sibling-side; posts + returns live URL, `/tmp/linkedin-post-fail.png` on failure) → post 3/5 can go on **LinkedIn Monday CT** for platform variety. **Run 42 (2026-07-14): post 3/5 live on LinkedIn** → https://www.linkedin.com/feed/update/urn:li:activity:7482774536208293889/ (Mon 07:35 CT, first machine post on the platform; Cluster D listener angle → /for-listeners; log `ops/logs/POST-linkedin-20260714T123545Z.txt`; ledger row 3, nofollow). Remaining: posts 4–5 — no machine post before Tue CT, vary content again (candidates: hub piece /book-meetings-without-cold-email/ on X; Reddit human-post draft still pending) |
+| 15 | Autonomous posting — supervised ramp (first 5 posts) | 🟡 **UNBLOCKED + ramp started run 31 (2026-07-12):** `.env-social` creds verified present; **post 1/5 live on X** → https://x.com/MichaelLeetj/status/2076329992749777091 (browser poster; API posting is 402/credits-gated). §7 log: `ops/logs/POST-x-20260712T213758Z.txt`, flagged for Board spot-check. Remaining: posts 2–5 (vary platform/content; Reddit = draft-and-human-post; LinkedIn helper not built). **Run 32:** post 2/5 deferred on §7 pacing (3h after post 1, Sat night, spot-check pending — see DECISIONS 07-13 ramp-pacing rule: ≤1 machine post/platform/day during ramp, daytime CT); Reddit ready-to-post answer drafted in the 07-13 brief for human posting. **Run 35 (2026-07-13): post 2/5 live on X** → https://x.com/MichaelLeetj/status/2076646112010596536 (Cluster B warm-intro angle, links /how-to-get-warm-introductions/; Sun 07:33 CT = new CT day, pacing-compliant; log `ops/logs/POST-x-20260713T123334Z.txt`; ledger row 2, nofollow). Remaining: posts 3–5 — next machine post no earlier than Mon CT; vary content again; Reddit draft still awaits human posting. **Run 38: LinkedIn helper EXISTS** — `ops-shared/browser/linkedin-post-browser.mjs` (built + flight-tested 2026-07-13, sibling-side; posts + returns live URL, `/tmp/linkedin-post-fail.png` on failure) → post 3/5 can go on **LinkedIn Monday CT** for platform variety. **Run 42 (2026-07-14): post 3/5 live on LinkedIn** → https://www.linkedin.com/feed/update/urn:li:activity:7482774536208293889/ (Mon 07:35 CT, first machine post on the platform; Cluster D listener angle → /for-listeners; log `ops/logs/POST-linkedin-20260714T123545Z.txt`; ledger row 3, nofollow). Remaining: posts 4–5 — no machine post before Tue CT, vary content again (candidates: hub piece /book-meetings-without-cold-email/ on X; Reddit human-post draft still pending). **Run 45 (2026-07-15): post 4/5 live on X** → https://x.com/MichaelLeetj/status/2077371078851101132 (Tue 07:33 CT, pacing-compliant; Cluster A hub angle → /book-meetings-without-cold-email/; log `ops/logs/POST-x-20260715T123338Z.txt`; ledger row 4, nofollow). Remaining: post 5/5 — no machine post before Wed CT, vary content/platform again (LinkedIn or X; Reddit draft still awaits human posting) |
 
 ## Now (Obj 2 — content engine)
 | # | Item | KR | Status |
