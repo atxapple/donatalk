@@ -2,7 +2,22 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-14 (run 43 — daily-ops: **items 23 + 31 ✅ — WP site title fixed +
+> Last updated: 2026-07-15 (run 44 — growth-research: **first non-branded GSC impression ever —
+> "cold call alternatives"** (0c/1i; cleaner channel-intent SERP than our head term → serve from the
+> existing post, new item #34). **Cluster D competitor correction:** Influence Board actively runs the
+> exact listener-side donation-for-meeting model (2026, 150+ charities, $100k self-reported) — concept
+> occupied, search surface still open; "first/only" claims stay banned. **New Cluster F (paid
+> expertise)** — the only D-adjacent family with real present demand (brand-tails minnect/intro.co;
+> GrowthMentor format proof) → item #35 (deferred w/ #32/#33). **Demand-validation pack for the Board
+> ruling** → `research/2026-07-15-demand-validation.md` (MeetMagic cold-start = founder calls at 30–40%
+> accept through ONE charity's board network + $5k/5-meeting prepaid packages; Gated died receiver-side
+> **Sept 2023** [07-12 log said 2024]; minimal viable test = 1 charity + 30 exec asks + 3 prepaid vendor
+> packages, founder-time only). **Indexation day 4: still 0/5; "Backup1" persists → escalation DUE
+> 07-16** via GSC URL Inspection (not `site:` — GSC served our impression for a page `site:` hides).
+> Backlink targets +1 family (paid-expertise/fractional venues, 07-15 additions). Metrics rows appended
+> (research). Prior run-43 note follows.)
+>
+> _Run 43 note (daily-ops: **items 23 + 31 ✅ — WP site title fixed +
 > `/hello-world` stub trashed**, live via authenticated WP REST (env creds): site title
 > "Donatalk"→"DonaTalk", tagline = the one-line mission "Turn sales pitches into charitable
 > donations" — homepage `<title>` now renders that instead of the 155-char description;
@@ -13,7 +28,7 @@
 > 07-14 marketplace-audit portfolio decision is pending at the Board (see DECISIONS 07-14). §7
 > pacing held: no machine post (Mon ~23:00 CT; post 4/5 no earlier than Tue daytime CT).
 > Runner-owned collection green 10th consecutive run (03:59Z 07-15 probe: 3 paths 200 + markers;
-> KR1-2 rows appended). Prior run-42 note follows.)
+> KR1-2 rows appended). Prior run-42 note follows.)_
 >
 > _Run 42 note (daily-ops: **item 15 advanced — §7 ramp post 3/5 live on
 > LINKEDIN** (Mon 07:35 CT, pacing-compliant: new CT day, daytime, first-ever machine post on the
@@ -174,6 +189,13 @@ impressions in the awareness log.
 | 30 | **Listener-side landing surface (Cluster D)** — first deep pass shows 8/8 listener-intent queries unanswered anywhere + autocomplete-null head terms (category creation). `/listeners` currently greets that visitor with a seller-facing "Browse People to Pitch" CTA. Build: H1 "Get paid in donations to take sales meetings", exec-pain section (verbatim vocabulary), "Is this a bribe?" objection FAQ, contrast vs expert networks/curated platforms | 2-1 | ✅ done run 40 (2026-07-14, PR #68, v0.21.0): **`app.donatalk.com/for-listeners` live** — Tier-B head-phrase H1, exec-pain section per quote-bank §2, listener how-it-works (cause + $10-min donation request + accept/decline, all product-true §6), 4 value cards, category-level expert-network/curated contrast, "Is this a bribe?" FAQ via product mechanics only (no tax/legal claims per §3b.5); metadata + WebPage/Breadcrumb/FAQPage JSON-LD, sitemap 0.8, site-wide footer link. tsc + 378 tests green, post-merge verified live. GSC index request = next content-loop step; support post split to #32 |
 | 32 | Tier-A support post: **"vendor meeting fatigue"** (weak-medium SERP, autocomplete-present, verbatim exec language, no canonical answer page) — WP piece funneling to `/for-listeners` (split from #30, which shipped the landing page run 40). Quote layer: `research/pain-quote-bank.md` §2 + research 07-13 §3b vocabulary | 2-1 | ⬜ |
 | 31 | Delete/draft the `/hello-world/` default WP stub (live + sitemap-listed, thin-content noise) — bundled with #23 | 2-2 | ✅ done run 43 (2026-07-14 CT): post 1 → **trash** via WP REST (reversible, not force-deleted); `/hello-world/` 404 live; gone from post-sitemap |
+
+## New from growth-research 2026-07-15 (see `research/2026-07-15-keywords.md`)
+| # | Item | KR | Status |
+|---|------|----|--------|
+| 34 | **"Cold call alternatives" coverage in the live `/cold-email-alternatives/` post** — our first-ever non-branded GSC impression (0c/1i, 07-15) landed on this variant; its SERP is channel-intent-clean (no software listicles) and barely overlaps the cold-email SERP; every incumbent recommends cold email as alternative #1 (nobody says "neither"). Add an H2 section + title/meta/FAQ synonyms (cold call / cold calling / cold outreach) via `update-wp-post.mjs`. **Section-not-new-page** (a new post would cannibalize our only impression-earning page). Small edit to existing live content (§3a own-surface); sequence at Board discretion given the content pause | 2-1→2-2 | ⬜ |
+| 35 | **Cluster F comparison page**: "Minnect & Intro.co alternatives: get paid for your expertise (or send it to your cause)" — GrowthMentor-proven format on the family's only real demand (brand-tails), DonaTalk as the donate-the-proceeds row, funnels to `/for-listeners`; doubles as the inclusion asset for the 9 charity-variant-free listicles (KR2-3). **Deferred with #32/#33 pending the Board marketplace ruling** (net-new content pause, DECISIONS 07-14) | 2-1→2-3 | 🔴 BLOCKED: awaiting board (content pause) |
+| — | **Indexation escalation DUE 07-16** if still 0 indexed: GSC **URL Inspection** per URL via ops-browser (crawl status/canonical/soft-404), not `site:` (GSC served our impression for a page `site:` hides — partial processing underway); #23/#31 suppressor candidates now cleared | 2-2 | ⬜ next run |
 
 ## New from growth-research 2026-07-14 (see `research/2026-07-14-keywords.md`)
 | # | Item | KR | Status |

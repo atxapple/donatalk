@@ -329,6 +329,31 @@ edge as Tier 5a. Verification legend: **V** = path page fetched this pass; **S**
 
 ---
 
+## 2026-07-15 additions (growth-research pass — sourced; transcript in `research/2026-07-15-keywords.md`)
+
+**New family: paid-expertise / portfolio-career venues** — where the Cluster F/D audience (advisors,
+fractional execs, expert-network earners) gathers. All paths verified this pass.
+
+| Venue | What it is | Path | Free? | Angle for DonaTalk |
+|---|---|---|---|---|
+| **Side Hustle Nation** ([sidehustlenation.com/pitch](https://www.sidehustlenation.com/pitch)) | Top side-hustle podcast/blog; already covers Clarity.fm + expert networks | Podcast guest form ("no PR companies"); guest posts explicitly NOT accepted | ✅ | Founder-story / "listeners earn for their cause" angle |
+| **inex.one ENcyclopedia** ([expert-network directory](https://www.inex.one/expert-network-directory)) | Directory of 177 expert networks, buyer/expert audience | Contact-us listing request ("listing does not imply affiliation") | ✅ plausible | Get DonaTalk listed as the charity-payout variant |
+| **expertopportunities.com** | 20+ expert-network reviews (Mitchel Harad); exactly Cluster D's persona | Site contact — pitch a DonaTalk review | ✅ | Review = brand-tail SERP presence + link |
+| **expertnetworkcalls.com** | Platform reviews (GLG, Clarity.fm…) | Site contact | ✅ | Same as above |
+| **The Portfolio Collective** ([portfolio-collective.com](https://portfolio-collective.com)) | 16k+ portfolio-career professionals (UK-weighted) | Free "Explorer" membership → community hub + profile | ✅ | Participation-first; no guest-post form found |
+| **Six-Figure Secrets of Fractional Experts** ([talks.co](https://talks.co/six-figure-secrets-of-fractional-experts/)) | Podcast for fractional leaders | Open guest application | ✅ | "Monetize expertise for your cause" guest angle |
+| **The Fractional Practice Podcast** (contacts via [rephonic](https://rephonic.com/podcasts/the-fractional-practice-podcast)) | Fractional-exec audience | Pitch via listed contacts | ✅ | Same |
+| **Listicle-editor outreach** — makingsenseofcents.com · projectuntethered.com · gigworker.com · outandbeyond.com (+ hearmefolks, dreamshala, jumptask, realwaystoearnmoneyonline, theoffbeatlife) | The "get paid to give advice" listicles that own Cluster F Tier-A SERPs | Cold email, no forms | ✅ | **None includes a charity/donation variant — genuine-novelty inclusion pitch**, best made once the Cluster F comparison page exists (#35) |
+
+**Anti-targets (pay-to-play):** Fractionals United partner program ($100/event → $1,000/mo,
+[fractionalsunited.com/partner](https://www.fractionalsunited.com/partner) — no free path) ·
+success.com / investing.com "Studios" contributor placements (sponsored content — this is Influence
+Board's PR route; low SEO value, wrong signal).
+
+> Priority when §7 capacity opens: inex.one directory listing (lowest friction, standing asset) →
+> expertopportunities.com review pitch → Side Hustle Nation guest form → fractional podcasts.
+> Listicle-editor asks wait for the #35 page. All outbound → §7 lane (drafts-first, Board-visible).
+
 ## Sources
 salesassembly.com · redditagency.com · unboundb2b.com · seeresponse.com · nethunt.com · growthsalad.com ·
 huntmeleads.com · peppercloud.com · datadab.com · getintel.ai · bigideasdb.com · indiehackers.com ·
@@ -351,3 +376,7 @@ cisoseries.com · audience1st.fm · cisotradecraft.com · scworld.com · exabeam
 procurious.com · publicspendforum.net · artofprocurement.com · procurementfoundry.com · tprassociation.org ·
 goburrows.com · chiefofstaff.network · theassistantroom.com · askachiefofstaff.com · asaporg.com ·
 bbb.org · news.ycombinator.com · alloycrew.com · councils.forbes.com · enterprise-cio.com. (URLs inline above.)
+2026-07-15: sidehustlenation.com · inex.one · expertopportunities.com · expertnetworkcalls.com ·
+portfolio-collective.com · talks.co · rephonic.com · makingsenseofcents.com · projectuntethered.com ·
+gigworker.com · outandbeyond.com · hearmefolks.com · dreamshala.com · jumptask.io ·
+realwaystoearnmoneyonline.com · theoffbeatlife.com · fractionalsunited.com. (URLs inline above.)

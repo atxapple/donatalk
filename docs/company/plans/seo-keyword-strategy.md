@@ -8,7 +8,31 @@
 > **updated 2026-07-13** (**NEW Cluster D — Listener-side**, first deep pass; leaked-editorial-note fix on
 > the 3 live posts; day-2 indexation delta; see `research/2026-07-13-keywords.md`) ·
 > **updated 2026-07-14** (**NEW Cluster E — Meeting economics**, first deep pass; day-3 indexation delta;
-> listener-side backlink family; see `research/2026-07-14-keywords.md`)
+> listener-side backlink family; see `research/2026-07-14-keywords.md`) ·
+> **updated 2026-07-15** (**first non-branded GSC impression — "cold call alternatives"**; **NEW Cluster F —
+> Paid expertise**; **Cluster D competitor correction: Influence Board**; day-4 indexation delta;
+> demand-validation pack for the Board → `research/2026-07-15-demand-validation.md`;
+> see `research/2026-07-15-keywords.md`)
+
+**2026-07-15 — first non-branded impression + Cluster F + Influence Board correction.** GSC logged our
+**first-ever non-branded impression: "cold call alternatives"** (0c/1i — note *call*, not email). That SERP
+is a *cleaner* intent match than our head term (pure channel-listicles — Close/HubSpot/SoPro/Commsor — vs
+the ~60–70% software-listicle pollution on "cold email alternatives"), and the two families barely overlap
+in ranking domains. Play: **a section + synonym coverage in the existing `/cold-email-alternatives/` post,
+NOT a new page** (Google already routes the page there; a new post risks cannibalizing our only
+impression-earning page) → backlog #34. **Cluster D correction:** [Influence Board](https://influenceboard.com)
+actively runs the exact listener-side donation-for-meeting model in 2026 (Time Value Calculator, 150+
+charities, $100k raised *self-reported*, explicitly sales-outreach-framed) — the 07-13 "zero charity
+variants anywhere" claim is falsified; Intro.co (donate 5–100% of proceeds) and Guidepoint (T&Cs allow
+charity payment) also have charity options. **The concept is occupied; only the search surface is open**
+(Influence Board's visibility is sponsored PR, not organic). "Charity alternative to Minnect/Intro" is
+defensible copy; "first/only" is not — now triply confirmed. **New Cluster F (Paid expertise)** in §1c:
+the only Cluster-D-adjacent family with real present demand ("get paid to give advice" = richest
+autocomplete found; brand-tails minnect/intro.co/clarity.fm; two dead brands' residual demand unowned;
+GrowthMentor proves a tiny domain wins "alternatives" pages). Demand-validation intelligence for the
+pending Board marketplace ruling → `research/2026-07-15-demand-validation.md` (MeetMagic cold-start
+mechanics, Gated postmortem correction — shut down Sept **2023** — willingness-to-pay evidence, minimal
+viable test).
 
 **2026-07-14 — Cluster E (Meeting economics) added.** First deep pass on the "cost per B2B sales meeting"
 family (the vocabulary behind `/calculator` and the hub's comparison table): every ranking page is an
@@ -67,6 +91,11 @@ Strategy: harvest adjacent demand at the top, funnel into the category DonaTalk 
 People who feel the pain DonaTalk solves (1% reply rates) and are shopping for a different approach. High commercial intent, high volume, most competitive.
 - **Head:** cold email alternatives
 - **Long-tails:** alternatives to cold calling · cold outreach alternatives · cold email vs cold call · what to do instead of cold email · cold email is dead alternatives · better ways to book B2B meetings · fill pipeline without cold email
+- **2026-07-15 — "cold call alternatives" variant promoted:** our first-ever non-branded GSC impression
+  (0c/1i). Distinct SERP from the head term (near-zero domain overlap; channel-intent-clean — no software
+  listicles), owned by salesbread/vieu/sopro/commsor/close/hubspot. Every ranking post recommends *cold
+  email* as alternative #1 — nobody says "neither." Serve it from the **existing** post via an H2 section
+  + title/meta/FAQ synonyms (cold call / cold calling / cold outreach), not a new page (#34).
 - **Est. volume (US):** head ~1–3k; "alternatives to cold calling" ~2–5k; long-tails 100–800 each. *Confirm.*
 - **Difficulty:** Medium-High. Saturated SaaS listicles (Breakcold, Prospeo, SmartReach, Saleshandy, Commsor, Abstrakt, Vida). Long-tails are softer and winnable with a differentiated angle.
 - **Intent:** Commercial-investigational → informational.
@@ -96,8 +125,13 @@ The acquisition side no prior cluster addressed: the prospect/executive who *tak
 (first deep pass, `research/2026-07-13-keywords.md` §3): every literal query misdirects (pay-per-appointment
 = seller-pays-agency; call-QA gig work; employment law), autocomplete is null on the head phrases, and the
 adjacent "monetize your time" vocabulary is owned by expert networks (GLG "paid consulting opportunities",
-Minnect/Clarity/Office Hours) with **zero charity variants anywhere**. MeetMagic uses our exact exec-side
-framing ("Turn Your Expertise Into Impact") but ranks for nothing generic in the US.
+Minnect/Clarity/Office Hours) with ~~zero charity variants anywhere~~ **[corrected 2026-07-15: the charity
+variant EXISTS — Influence Board runs the exact listener-side model, active 2026, plus Intro.co's
+donate-your-proceeds feature and Guidepoint's charity-payment T&Cs; the concept is occupied, the search
+surface is not — see the 07-15 header note]**. MeetMagic uses our exact exec-side
+framing ("Turn Your Expertise Into Impact") but ranks for nothing generic in the US. Non-charity
+watch-comp (07-15): [DemoLoot](https://demoloot.com) — "get paid to take demo calls" for gift cards;
+closest non-charity Cluster-D analog, may create the vendor-call query family we're watching.
 - **Tier A (real demand today, funnels in):** vendor fatigue / vendor meeting fatigue (weak-medium SERP;
   term ambiguous — half the corpus = vendors' DD fatigue) · expert network side hustle / get paid for
   advice calls (medium-strong; enter as "the charity-powered alternative") · vendor spam / stop vendor
@@ -145,6 +179,27 @@ flywheel: FirstPageSage/SPOTIO-style benchmark pages get cited across independen
   magnet (KR2-3 do-follow links from the very agency blogs that need numbers), calculator feeder, and
   substantiation for the hub's comparison table.
 
+### Cluster F — Paid expertise: "get paid for your advice/expertise" (NEW 2026-07-15 — Cluster D's demand bridge)
+The monetize-your-time family adjacent to Cluster D — the only one with *real, present* demand (first deep
+pass, `research/2026-07-15-keywords.md` §3). Platforms: Minnect (80% payout, 170k+ users *self-rep.*),
+Intro.co (30% commission, $100–$2k/hr, **donate-5–100% feature**), Office Hours, stagnant Clarity.fm,
+dead Superpeer (Skillshare sunset 12/2024) + AnyQuestion (→ whoop.com). Charity angle absent from every
+ranking listicle → genuine-novelty inclusion pitch.
+- **Tier A (real demand now):** get paid to give advice (online/app — richest autocomplete in the family) ·
+  get paid for your expertise/knowledge · **brand-tails:** minnect cost/prices/alternatives · intro.co
+  reviews/alternatives · clarity.fm legit/alternatives · superpeer alternative (dead-brand demand, unowned).
+- **Tier B (latent):** expert network side gig (null autocomplete but real review ecosystem:
+  expertopportunities.com, expertnetworkcalls.com, forum.inex.one) · donate expert call earnings to charity
+  (Guidepoint/GLG behavior exists, zero content serves it).
+- **Watch:** get paid to take demo calls / vendor calls (DemoLoot + gift-card-demo trend; hostile
+  inverted-intent SERP today — no primary pages on these phrasings yet).
+- **Format proof:** [growthmentor.com/intro-co-alternative/](https://www.growthmentor.com/intro-co-alternative/)
+  ranks #1 for "Intro.co alternatives" over G2/CB Insights — a tiny domain wins this format.
+- **Difficulty:** low-medium (listicles + product pages; Intro.co's own page ranks for "get paid to give
+  advice" — product pages CAN rank here). Strategic value: real search demand that funnels to
+  `/for-listeners`, plus the listicle/directory ecosystem doubles as KR2-3 backlink targets
+  (see `backlink-targets.md` 07-15 additions).
+
 ## 2. Cluster → target page
 
 | Cluster | Target page | Surface | Why |
@@ -154,6 +209,7 @@ flywheel: FirstPageSage/SPOTIO-style benchmark pages get cited across independen
 | C — Donation-based outreach | `app.donatalk.com/listeners`, `/pitchers`, future `/vs` + impact calculator | **App** (+ thin WP explainer) | Transactional intent belongs on the product; own exact-match terms, convert directly. |
 | D — Listener-side (NEW 07-13) | **listener-side landing surface** (backlog candidate — `/listeners` as fetched today shows a seller-facing "Browse People to Pitch" CTA to a listener arriving from these queries) + one Tier-A blog post ("vendor meeting fatigue") funneling to it | **App** (+ WP support post) | H1 on the null-SERP head phrase ("Get paid in donations to take sales meetings"); pain section in verbatim exec vocabulary; "Is this a bribe?" objection/FAQ block; contrast vs expert networks + curated platforms. **✅ shipped 07-14: `/for-listeners` (v0.21.0); support post = backlog #32.** |
 | E — Meeting economics (NEW 07-14) | WP benchmarks asset **"What a B2B sales meeting really costs (2026 benchmarks)"** + `/calculator` copy/metadata uplift to speak "cost per booked meeting" vocabulary (currently framed as cold-outreach cost only) + hub-table cross-cite | **WordPress** (asset) + **App** (calculator) | Only methodology-transparent page in a self-citing vendor graph → citation magnet (KR2-3) + the sole ungated buyer-side calculator surface. Backlog #33. |
+| F — Paid expertise (NEW 07-15) | Comparison page **"Minnect & Intro.co alternatives: get paid for your expertise (or send it to your cause)"** (Minnect/Intro/Clarity/Office Hours/expert networks × fees/effort/payout destination, DonaTalk = donate-the-proceeds row) funneling to `/for-listeners`; doubles as the asset pitched to the 9 listicle editors | **WordPress** | The GrowthMentor-proven format on the family's only real demand (brand-tails); backlink twofer. Backlog #35 (deferred w/ #32/#33 pending Board ruling). |
 
 Rule: informational + listicle → WordPress; commercial/transactional + category-defining → app.
 
@@ -209,6 +265,12 @@ Rule: informational + listicle → WordPress; commercial/transactional + categor
   SERP snippets keep drifting toward warm-intro/community framing; prospeo.io/coffee.ai newly surfaced.
   MeetMagic static (no content, no new press; homepage now self-reports $1.4M / 2,900+ connections / 3,500+
   decision-makers — track the connections counter). New-entrant sweep: null.
+- **Day-4 delta (2026-07-15, research §1–2):** still 0/5 target URLs in `site:` results; "Backup1" cached
+  homepage title persists (4+ days post-fix, 1 day post-#23) — **escalation due 07-16**: quality-signal
+  investigation via GSC **URL Inspection** on the ops-browser, not `site:` (unreliable oracle — GSC served
+  the "cold call alternatives" impression for a page `site:` doesn't show, so partial processing is
+  underway). First non-branded impression logged (see 07-15 header). MeetMagic counters static 2 days;
+  unconfirmed "six countries" snippet to re-check; new-entrant sweep null again.
 - **The gap DonaTalk owns:** no one sits at the intersection. Cold-email listicles never mention donation-based outreach; warm-intro guides never mention you can *buy* a warm intro by funding a cause. **Wedge: "donation-based / charitable warm outreach for everyday B2B sellers."**
 
 ## 5. First three pieces of content (prioritized)
@@ -229,4 +291,12 @@ Update transcript (2026-07-14) → `research/2026-07-14-keywords.md`: appointmen
 (salesar, cleverly, saleshive, belkins, danishleadco, demandnexus et al.), firstpagesage + growthspreeofficial
 (benchmark citation flywheel), outboundsalespro (gated calculator), Google-suggest probes, meetmagic.org
 (day-3 watch); listener-side backlink outlets → `research/backlink-targets.md` (2026-07-14 additions).
+Update transcript (2026-07-15) → `research/2026-07-15-keywords.md`: GSC pull (first non-branded impression),
+cold-call-alternatives SERP set (salesbread, vieu, sopro, commsor, close, hubspot), paid-expertise landscape
+(minnect, intro.co, clarity.fm, officehours, glg/guidepoint, demoloot, **influenceboard.com — Cluster D
+competitor correction**, giv.co), growthmentor (format proof), listicle set (makingsenseofcents et al.),
+meetmagic.org (day-4 watch); demand-validation pack → `research/2026-07-15-demand-validation.md`
+(jeffbullas.com founder podcast, itnews.com.au, businesses.com.au, goldpenguin.org, cnbc/glide/macrumors/
+fortune, lennysnewsletter, stripe.com/atlas, cdixon.org, techcrunch); paid-expertise backlink outlets →
+`research/backlink-targets.md` (2026-07-15 additions).
 Update transcript (2026-07-11) → `research/2026-07-11-keywords.md`: **commsor.com (Warm Intro Gap Report 2026 — primary)**, getboomerang.ai (Norwest 65% / Gartner 75% / compromised-playbook), cirrusinsight.com (Gong 344, Cognism 2.7%, RAIN 82%), marketbetter.ai (SoPro 18%v9%); cause/CSR + podcast/newsletter backlink outlets → appended to `research/backlink-targets.md` (2026-07-11 additions).
