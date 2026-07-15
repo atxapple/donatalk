@@ -5,6 +5,7 @@ Operational narrative → `reports/`. Machine logs/alerts → `ops/logs/`.
 Format: `date — decision — one-line rationale`. Newest first.
 
 ## 2026-07-15
+- GSC **URL Inspection is an API-drivable §3a step** with the existing read-only service account (`ops/gsc-inspect.mjs`, run 47) — indexation checks no longer need the ops-browser or a human; quota 2000/day dwarfs our needs. First run resolved the planned 07-16 escalation early: **6/6 tracked URLs indexed**. — same de-manualization logic as the 07-14 index-request ruling; pattern is sibling-adoptable.
 - The 07-14 net-new-content pause covers **new pages/posts** — small §3a truthful edits to *existing live* content (section adds, title/meta fixes) remain CEO-autonomous, applied to ship item #34 (cold-call synonym coverage on `/cold-email-alternatives/`, the only page earning non-branded impressions). — the pause's rationale is stopping *new* SEO investment into an unvalidated marketplace; optimizing an already-live asset that Google is already surfacing preserves the ranking experiment the demand question itself needs, and leaving #34 in limbo repeats the phantom-deferral failure mode (see 07-14). Board can override by extending the pause to all content edits.
 
 ## 2026-07-14

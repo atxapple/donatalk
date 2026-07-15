@@ -2,7 +2,20 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-15 (run 46 — daily-ops: **item 34 ✅ — cold-call coverage live on
+> Last updated: 2026-07-15 (run 47 — daily-ops: **indexation escalation RESOLVED a day early —
+> 6/6 URLs "Submitted and indexed"** (homepage + 4 posts + /for-listeners; crawls 07-12→07-15, the
+> #34 page recrawled 15:38Z today ~right after run 46's reindex ask). Found via new
+> **`ops/gsc-inspect.mjs`** — the GSC **URL Inspection API works with the existing read-only
+> service account** (same JWT auth as gsc-pull.mjs, 2000 inspections/day quota), so indexation
+> checks are now a repeatable API call, not an ops-browser session (DECISIONS 07-15; sibling can
+> adopt the pattern as-is). Log `ops/logs/GSC-INSPECT-20260715T183308Z.txt`. The "Backup1" stale
+> homepage title concern is moot (homepage crawled 07-13, indexed). Next content-loop watch:
+> impressions/position on the now-indexed pages (A4/A5), not indexation. §7 pacing held (post 5/5
+> no earlier than Wed CT); net-new content still paused pending the Board marketplace ruling.
+> Runner-owned collection green 13th consecutive run (18:30Z probe: 3 paths 200 + markers; KR1-2
+> rows appended). tsc + 378 tests green. Prior run-46 note follows.)
+>
+> _Run 46 note (daily-ops: **item 34 ✅ — cold-call coverage live on
 > `/cold-email-alternatives/`**: title → "11 Cold Email & Cold Calling Alternatives…", meta desc
 > synonym, new "Searching for cold call alternatives instead?" H2 (channel-swap irony: each cold
 > channel's guides recommend the other) + 3-Q FAQ; applied via `update-wp-post.mjs` (new opt-in
@@ -221,7 +234,7 @@ impressions in the awareness log.
 |---|------|----|--------|
 | 34 | **"Cold call alternatives" coverage in the live `/cold-email-alternatives/` post** — our first-ever non-branded GSC impression (0c/1i, 07-15) landed on this variant; its SERP is channel-intent-clean (no software listicles) and barely overlaps the cold-email SERP; every incumbent recommends cold email as alternative #1 (nobody says "neither"). Add an H2 section + title/meta/FAQ synonyms (cold call / cold calling / cold outreach) via `update-wp-post.mjs`. **Section-not-new-page** (a new post would cannibalize our only impression-earning page). Small edit to existing live content (§3a own-surface) | 2-1→2-2 | ✅ done run 46 (2026-07-15): title + meta desc gained the cold-call synonym, new "Searching for cold call alternatives instead?" H2 + 3-Q FAQ live on post 156 (verified: title/sections render, hub link intact, no leak); `update-wp-post.mjs` gained opt-in `--with-title`; GSC reindex REQUESTED (log `GSC-INDEX-20260715T153828Z.txt`). Scope: existing-page edit = outside the 07-14 net-new-content pause (DECISIONS 07-15) |
 | 35 | **Cluster F comparison page**: "Minnect & Intro.co alternatives: get paid for your expertise (or send it to your cause)" — GrowthMentor-proven format on the family's only real demand (brand-tails), DonaTalk as the donate-the-proceeds row, funnels to `/for-listeners`; doubles as the inclusion asset for the 9 charity-variant-free listicles (KR2-3). **Deferred with #32/#33 pending the Board marketplace ruling** (net-new content pause, DECISIONS 07-14) | 2-1→2-3 | 🔴 BLOCKED: awaiting board (content pause) |
-| — | **Indexation escalation DUE 07-16** if still 0 indexed: GSC **URL Inspection** per URL via ops-browser (crawl status/canonical/soft-404), not `site:` (GSC served our impression for a page `site:` hides — partial processing underway); #23/#31 suppressor candidates now cleared | 2-2 | ⬜ next run |
+| — | **Indexation escalation DUE 07-16** if still 0 indexed: GSC **URL Inspection** per URL via ops-browser (crawl status/canonical/soft-404), not `site:` (GSC served our impression for a page `site:` hides — partial processing underway); #23/#31 suppressor candidates now cleared | 2-2 | ✅ RESOLVED run 47 (2026-07-15, a day early): **6/6 "Submitted and indexed"** (homepage + 4 posts + `/for-listeners`; last crawls 07-12→07-15). No escalation needed. Done via new `ops/gsc-inspect.mjs` — URL Inspection **API** with the existing read-only SA (no browser); log `GSC-INSPECT-20260715T183308Z.txt`. Watch shifts to impressions/position (A4–A6) |
 
 ## New from growth-research 2026-07-14 (see `research/2026-07-14-keywords.md`)
 | # | Item | KR | Status |
