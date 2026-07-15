@@ -1,0 +1,84 @@
+{
+  "site": "sc-domain:donatalk.com",
+  "indexed": 6,
+  "total": 6,
+  "results": [
+    {
+      "url": "https://donatalk.com/",
+      "verdict": "PASS",
+      "coverageState": "Submitted and indexed",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "robotsTxtState": "ALLOWED",
+      "lastCrawlTime": "2026-07-13T21:40:10Z",
+      "googleCanonical": "https://donatalk.com/",
+      "userCanonical": "https://rwv.dfq.temporary.site/website_9359167a/",
+      "sitemaps": [
+        "https://donatalk.com/sitemap_index.xml",
+        "https://donatalk.com/sitemap_index.xml"
+      ]
+    },
+    {
+      "url": "https://donatalk.com/cold-email-alternatives/",
+      "verdict": "PASS",
+      "coverageState": "Submitted and indexed",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "robotsTxtState": "ALLOWED",
+      "lastCrawlTime": "2026-07-15T15:38:04Z",
+      "googleCanonical": "https://donatalk.com/cold-email-alternatives/",
+      "userCanonical": "https://donatalk.com/cold-email-alternatives/",
+      "sitemaps": []
+    },
+    {
+      "url": "https://donatalk.com/how-to-get-warm-introductions/",
+      "verdict": "PASS",
+      "coverageState": "Submitted and indexed",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "robotsTxtState": "ALLOWED",
+      "lastCrawlTime": "2026-07-13T21:42:12Z",
+      "googleCanonical": "https://donatalk.com/how-to-get-warm-introductions/",
+      "userCanonical": "https://donatalk.com/how-to-get-warm-introductions/",
+      "sitemaps": []
+    },
+    {
+      "url": "https://donatalk.com/what-is-donation-based-outreach/",
+      "verdict": "PASS",
+      "coverageState": "Submitted and indexed",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "robotsTxtState": "ALLOWED",
+      "lastCrawlTime": "2026-07-12T20:46:50Z",
+      "googleCanonical": "https://donatalk.com/what-is-donation-based-outreach/",
+      "userCanonical": "https://donatalk.com/what-is-donation-based-outreach/",
+      "sitemaps": []
+    },
+    {
+      "url": "https://donatalk.com/book-meetings-without-cold-email/",
+      "verdict": "PASS",
+      "coverageState": "Submitted and indexed",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "robotsTxtState": "ALLOWED",
+      "lastCrawlTime": "2026-07-14T05:48:30Z",
+      "googleCanonical": "https://donatalk.com/book-meetings-without-cold-email/",
+      "userCanonical": "https://donatalk.com/book-meetings-without-cold-email/",
+      "sitemaps": []
+    },
+    {
+      "url": "https://app.donatalk.com/for-listeners",
+      "verdict": "PASS",
+      "coverageState": "Submitted and indexed",
+      "indexingState": "INDEXING_ALLOWED",
+      "pageFetchState": "SUCCESSFUL",
+      "robotsTxtState": "ALLOWED",
+      "lastCrawlTime": "2026-07-14T12:37:32Z",
+      "googleCanonical": "https://app.donatalk.com/for-listeners",
+      "userCanonical": "https://app.donatalk.com/login",
+      "sitemaps": [
+        "https://app.donatalk.com/sitemap.xml"
+      ]
+    }
+  ]
+}
