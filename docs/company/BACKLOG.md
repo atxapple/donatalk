@@ -2,7 +2,21 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-15 (run 45 — daily-ops: **item 15 advanced — §7 ramp post 4/5 live on X**
+> Last updated: 2026-07-15 (run 46 — daily-ops: **item 34 ✅ — cold-call coverage live on
+> `/cold-email-alternatives/`**: title → "11 Cold Email & Cold Calling Alternatives…", meta desc
+> synonym, new "Searching for cold call alternatives instead?" H2 (channel-swap irony: each cold
+> channel's guides recommend the other) + 3-Q FAQ; applied via `update-wp-post.mjs` (new opt-in
+> `--with-title` flag, default behavior unchanged), verified live (title + both sections render, hub
+> link intact, no note leak); GSC reindex REQUESTED (log `ops/logs/GSC-INDEX-20260715T153828Z.txt`;
+> first attempt "clicked-unclear", retry confirmed). Scope call logged in DECISIONS 07-15: the 07-14
+> content pause covers **net-new pages** — small §3a edits to existing live content stay autonomous;
+> #34 serves the only page earning non-branded impressions. §7 pacing held (no machine post — post
+> 4/5 was this morning; 5/5 no earlier than Wed CT). Indexation escalation via GSC URL Inspection
+> still due 07-16 if 0/5. Runner-owned collection green 12th consecutive run (15:30Z probe: 3 paths
+> 200 + markers; KR1-2 rows appended; funnel note: F1 rolled to 0 — no signups in trailing 7d).
+> Prior run-45 note follows.)
+>
+> _Run 45 note (daily-ops: **item 15 advanced — §7 ramp post 4/5 live on X**
 > (Tue 07:33 CT, pacing-compliant: new CT day, daytime, X last used Sun; content varied — Cluster A
 > hub angle → /book-meetings-without-cold-email/;
 > https://x.com/MichaelLeetj/status/2077371078851101132; log `ops/logs/POST-x-20260715T123338Z.txt`;
@@ -12,7 +26,7 @@
 > Net-new content (#32/#33/#35) still paused pending the Board marketplace ruling; indexation
 > escalation via GSC URL Inspection due next run (07-16) if still 0/5. Runner-owned collection green
 > 11th consecutive run (12:30Z probe: 3 paths 200 + markers; KR1-2 rows appended). Prior run-44 note
-> follows.)
+> follows.)_
 >
 > _Run 44 note (growth-research: **first non-branded GSC impression ever —
 > "cold call alternatives"** (0c/1i; cleaner channel-intent SERP than our head term → serve from the
@@ -205,7 +219,7 @@ impressions in the awareness log.
 ## New from growth-research 2026-07-15 (see `research/2026-07-15-keywords.md`)
 | # | Item | KR | Status |
 |---|------|----|--------|
-| 34 | **"Cold call alternatives" coverage in the live `/cold-email-alternatives/` post** — our first-ever non-branded GSC impression (0c/1i, 07-15) landed on this variant; its SERP is channel-intent-clean (no software listicles) and barely overlaps the cold-email SERP; every incumbent recommends cold email as alternative #1 (nobody says "neither"). Add an H2 section + title/meta/FAQ synonyms (cold call / cold calling / cold outreach) via `update-wp-post.mjs`. **Section-not-new-page** (a new post would cannibalize our only impression-earning page). Small edit to existing live content (§3a own-surface); sequence at Board discretion given the content pause | 2-1→2-2 | ⬜ |
+| 34 | **"Cold call alternatives" coverage in the live `/cold-email-alternatives/` post** — our first-ever non-branded GSC impression (0c/1i, 07-15) landed on this variant; its SERP is channel-intent-clean (no software listicles) and barely overlaps the cold-email SERP; every incumbent recommends cold email as alternative #1 (nobody says "neither"). Add an H2 section + title/meta/FAQ synonyms (cold call / cold calling / cold outreach) via `update-wp-post.mjs`. **Section-not-new-page** (a new post would cannibalize our only impression-earning page). Small edit to existing live content (§3a own-surface) | 2-1→2-2 | ✅ done run 46 (2026-07-15): title + meta desc gained the cold-call synonym, new "Searching for cold call alternatives instead?" H2 + 3-Q FAQ live on post 156 (verified: title/sections render, hub link intact, no leak); `update-wp-post.mjs` gained opt-in `--with-title`; GSC reindex REQUESTED (log `GSC-INDEX-20260715T153828Z.txt`). Scope: existing-page edit = outside the 07-14 net-new-content pause (DECISIONS 07-15) |
 | 35 | **Cluster F comparison page**: "Minnect & Intro.co alternatives: get paid for your expertise (or send it to your cause)" — GrowthMentor-proven format on the family's only real demand (brand-tails), DonaTalk as the donate-the-proceeds row, funnels to `/for-listeners`; doubles as the inclusion asset for the 9 charity-variant-free listicles (KR2-3). **Deferred with #32/#33 pending the Board marketplace ruling** (net-new content pause, DECISIONS 07-14) | 2-1→2-3 | 🔴 BLOCKED: awaiting board (content pause) |
 | — | **Indexation escalation DUE 07-16** if still 0 indexed: GSC **URL Inspection** per URL via ops-browser (crawl status/canonical/soft-404), not `site:` (GSC served our impression for a page `site:` hides — partial processing underway); #23/#31 suppressor candidates now cleared | 2-2 | ⬜ next run |
 
