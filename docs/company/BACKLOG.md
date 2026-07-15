@@ -2,7 +2,20 @@
 
 > Ordered work queue. Each scheduled run advances the top **unblocked** item.
 > Status: ⬜ todo · 🟡 in progress · ✅ done · 🔴 BLOCKED
-> Last updated: 2026-07-14 (run 42 — daily-ops: **item 15 advanced — §7 ramp post 3/5 live on
+> Last updated: 2026-07-14 (run 43 — daily-ops: **items 23 + 31 ✅ — WP site title fixed +
+> `/hello-world` stub trashed**, live via authenticated WP REST (env creds): site title
+> "Donatalk"→"DonaTalk", tagline = the one-line mission "Turn sales pitches into charitable
+> donations" — homepage `<title>` now renders that instead of the 155-char description;
+> hello-world (post 1) → trash (reversible), 404 live, out of the post sitemap. The
+> "creds-gated (post-rotation)" label on both was **stale** — the same env App Password has done
+> autonomous WP work since runs 34/37 (DECISIONS 07-14); the rotation stays a standing Board
+> security ask but gates nothing. **Net-new content (#32/#33) deliberately deferred** while the
+> 07-14 marketplace-audit portfolio decision is pending at the Board (see DECISIONS 07-14). §7
+> pacing held: no machine post (Mon ~23:00 CT; post 4/5 no earlier than Tue daytime CT).
+> Runner-owned collection green 10th consecutive run (03:59Z 07-15 probe: 3 paths 200 + markers;
+> KR1-2 rows appended). Prior run-42 note follows.)
+>
+> _Run 42 note (daily-ops: **item 15 advanced — §7 ramp post 3/5 live on
 > LINKEDIN** (Mon 07:35 CT, pacing-compliant: new CT day, daytime, first-ever machine post on the
 > platform, content varied — Cluster D listener-side angle → /for-listeners;
 > https://www.linkedin.com/feed/update/urn:li:activity:7482774536208293889/; log
@@ -13,7 +26,7 @@
 > Also re-requested GSC indexing for /for-listeners — redundant (run 40 already did it same-run,
 > log GSC-INDEX-20260714T033951Z.txt); 1 quota unit wasted, lesson: check prior-run logs before
 > the "next content-loop step" note in this header. Runner-owned collection green 9th consecutive
-> run (12:30Z probe: 3 paths 200 + markers; KR1-2 rows appended). Prior run-40 note follows.)
+> run (12:30Z probe: 3 paths 200 + markers; KR1-2 rows appended). Prior run-40 note follows.)_
 >
 > _Run 40 note (daily-ops: **item 30 ✅ — Cluster D listener-side landing page SHIPPED**
 > → `/for-listeners` (v0.21.0, PR #68, merged = deployed, verified live). H1 on the Tier-B head
@@ -146,7 +159,7 @@ impressions in the awareness log.
 | # | Item | KR | Status |
 |---|------|----|--------|
 | 22 | **GSC index requests** for the 3 live posts + homepage re-crawl (Google's index shows a stale "Backup1" homepage title; live title verified clean). UI-only — the service account is read-only → **human/board 5-min step** | 2-2 | ✅ DONE 2026-07-12 (operator, via logged-in ops browser profile as atxapplellc@gmail.com). All 4 URLs (homepage + 3 posts) "Indexing requested → priority crawl queue". **Root cause found:** the 3 posts were "unknown to Google" because the WP `sitemap_index.xml` was last read by GSC **Jul 9** but the posts published **Jul 11** — re-submitted the sitemap to force a re-read that will now discover them. (Note: `app.donatalk.com/sitemap.xml` = 45 pages and `donatalk.com/sitemap_index.xml` = 12 pages, both Success.) |
-| 23 | Fix WP **site title** — currently "Donatalk - DonaTalk creates…" (brand duplicated, description used as title). WP settings REST change; needs WP creds (post-rotation) | 2-2 | ⬜ (creds-gated with the rotation) |
+| 23 | Fix WP **site title** — currently "Donatalk - DonaTalk creates…" (brand duplicated, description used as title). WP settings REST change; ~~needs WP creds (post-rotation)~~ creds-gate was stale (env App Password live since runs 34/37) | 2-2 | ✅ done run 43 (2026-07-14 CT): `wp/v2/settings` set title "DonaTalk" + tagline "Turn sales pitches into charitable donations" (mission line, §6); homepage `<title>` verified live = "DonaTalk - Turn sales pitches into charitable donations" |
 | 24 | **MeetMagic-aware content refresh**: add curated-vs-self-serve comparison context to `/vs` (+ keep explainer category-honest). MeetMagic = live donation-for-meeting competitor found 07-12; never claim "first/only" (live content already complies — verified) | 2-1 | ✅ done run 33 (2026-07-13, PR #63, v0.20.0): `/vs` gained a "Within the category: curated vs. self-serve" section (2 cards) + FAQ entry (in FAQPage JSON-LD) + 2 category keywords ("donation for a meeting", "executive meetings for charity") — category-level per the page's §6 convention (no competitor named, no first/only). tsc + 378 tests green; merged = deployed (Vercel git integration), verified live post-merge |
 | 25 | Draft Cluster A tail piece: **"How to book B2B meetings without cold email"** — weakest SERP of our five targets, no direct answer exists; best next-content ROI | 2-1 | ✅ drafted run 36 (2026-07-13): `docs/company/content/book-meetings-without-cold-email.md` per the research-§4 winning outline — intent-match hub (validates the searcher's premise the incumbents deny), snippet-bait 7-channel list, **qualitative** comparison table (numeric rates only where sourced: warm 20–40% vs cold 1–3%; no invented benchmarks, §6), situation guide (founder/SDR/agency), curated-vs-self-serve section (category-level, no names), PAA FAQ; links down to all 3 live posts + app `/vs` + `/calculator` (hub role). Stats per pinned convention; provenance in `content/editorial-notes.md` (07-13 rule — nothing internal in the body). md→WP conversion dry-run-verified. **✅ PUBLISHED LIVE run 37 (2026-07-13)** → https://donatalk.com/book-meetings-without-cold-email/ (WP post 165; fresh-eyes pass done; verified 200, 5 hub links render, no note leak). **Hub links UP added same run** to all 3 live posts via `update-wp-post.mjs --apply` (one contextual link each; explainer's `/blog/` link also re-pointed to canonical; all re-verified live). Remaining: GSC index request → bundled into #29 |
 | 26 | Harvest verbatim pain quotes from Bravado War Room threads + r/sales top-month via the logged-in ops browser profile (reading only — NOT posting; automation-blocked sites) | 2-1 | ✅ done run 39 (2026-07-14): **`research/pain-quote-bank.md`** — r/sales top-of-month harvested + curated into 6 sections (channel collapse; exec wall for item 30; ~$880/meeting conference paid-meeting price anchor; trust/costly-signal; emotional register; nulls). Reusable read-only helper `ops-shared/browser/harvest-quotes.mjs`. **Bravado half skipped:** bravado.co TCP connection refused from this host (curl-confirmed, not an automation block) — retry opportunistically; if persistent, likely IP-blocking → human path |
@@ -160,7 +173,7 @@ impressions in the awareness log.
 | 29 | **Re-request GSC indexing** — now **4 posts + homepage**: the 3 originals (content changed twice: #28 leak fix + run-37 hub uplinks) **+ the new hub piece** `/book-meetings-without-cold-email/` (published run 37, unknown to Google) + homepage recrawl ("Backup1" cached title). UI-only → human/ops-browser 5-min step, same path as #22 | 2-2 | ✅ done run 38 (2026-07-13, **agent-driven** — no human needed): all **5/5 REQUESTED** ("priority crawl queue") via `ops-shared/browser/gsc-index-request.mjs` on the ops profile; log `ops/logs/GSC-INDEX-20260713T214445Z.txt`. Helper now parameterized (`<property> <url...>`) + hidden-dialog visibility fix — GSC index requests are a repeatable autonomous step from here (5 of ~10-12/day quota used) |
 | 30 | **Listener-side landing surface (Cluster D)** — first deep pass shows 8/8 listener-intent queries unanswered anywhere + autocomplete-null head terms (category creation). `/listeners` currently greets that visitor with a seller-facing "Browse People to Pitch" CTA. Build: H1 "Get paid in donations to take sales meetings", exec-pain section (verbatim vocabulary), "Is this a bribe?" objection FAQ, contrast vs expert networks/curated platforms | 2-1 | ✅ done run 40 (2026-07-14, PR #68, v0.21.0): **`app.donatalk.com/for-listeners` live** — Tier-B head-phrase H1, exec-pain section per quote-bank §2, listener how-it-works (cause + $10-min donation request + accept/decline, all product-true §6), 4 value cards, category-level expert-network/curated contrast, "Is this a bribe?" FAQ via product mechanics only (no tax/legal claims per §3b.5); metadata + WebPage/Breadcrumb/FAQPage JSON-LD, sitemap 0.8, site-wide footer link. tsc + 378 tests green, post-merge verified live. GSC index request = next content-loop step; support post split to #32 |
 | 32 | Tier-A support post: **"vendor meeting fatigue"** (weak-medium SERP, autocomplete-present, verbatim exec language, no canonical answer page) — WP piece funneling to `/for-listeners` (split from #30, which shipped the landing page run 40). Quote layer: `research/pain-quote-bank.md` §2 + research 07-13 §3b vocabulary | 2-1 | ⬜ |
-| 31 | Delete/draft the `/hello-world/` default WP stub (live + sitemap-listed, thin-content noise) — WP-creds step, bundle with #23 site-title fix post-rotation | 2-2 | ⬜ (creds-gated) |
+| 31 | Delete/draft the `/hello-world/` default WP stub (live + sitemap-listed, thin-content noise) — bundled with #23 | 2-2 | ✅ done run 43 (2026-07-14 CT): post 1 → **trash** via WP REST (reversible, not force-deleted); `/hello-world/` 404 live; gone from post-sitemap |
 
 ## New from growth-research 2026-07-14 (see `research/2026-07-14-keywords.md`)
 | # | Item | KR | Status |
